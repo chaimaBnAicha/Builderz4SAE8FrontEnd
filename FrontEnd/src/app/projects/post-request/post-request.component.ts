@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators,ReactiveFormsModule } from '@angular/forms';
 import { RequestService } from 'src/app/service/request.service';
 import { UserService } from 'src/app/service/user.service';
 import { Router } from '@angular/router';
@@ -9,12 +9,12 @@ declare var google: any; // Déclarez google comme global.
 @Component({
   selector: 'app-post-request',
   templateUrl: './post-request.component.html',
-  styleUrls: ['./post-request.component.css']
+  styleUrls: ['./post-request.component.css'],
 })
 export class PostRequestComponent implements OnInit, AfterViewInit {
-  userInfoForm!: FormGroup;
-  projectInfoForm!: FormGroup;
-  locationForm!: FormGroup;
+  userInfoForm!: FormGroup<any>;
+projectInfoForm!: FormGroup<any>;
+locationForm!: FormGroup<any>;
   userInfo: any = {};
   map: any; // Variable pour détenir l'instance de la carte
   marker: any; // Variable pour détenir le marqueur

@@ -31,7 +31,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,22 +49,21 @@ import { MatSelectModule } from '@angular/material/select';
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     HttpClientModule,
-    FormsModule,
     RouterModule,
     CommonModule,
     AppRoutingModule,
     NavbarModule,
     FooterModule,
     SidebarModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
     MatStepperModule,
     MatInputModule,
     MatButtonModule,
     MatFormFieldModule,
-    MatSelectModule
-  ],
+    MatSelectModule,
+  
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

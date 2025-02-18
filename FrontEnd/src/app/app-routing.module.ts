@@ -66,7 +66,7 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    BrowserModule,
+    
     RouterModule.forRoot(routes, {
       useHash: true, // Use hash-based routing (optional)
     }),

@@ -14,7 +14,7 @@
   </mat-step>
 
   <!-- Étape 2 : Informations du projet -->
-  <mat-step [stepControl]="projectInfoForm" label="Informations du projet">
+<mat-step [stepControl]="projectInfoForm" label="Informations du projet">
     <form [formGroup]="projectInfoForm">
       <mat-form-field appearance="outline">
         <mat-label>Nom du projet</mat-label>
@@ -37,7 +37,6 @@
       <mat-form-field appearance="outline">
         <mat-label>Durée estimée (jours)</mat-label>
         <input matInput formControlName="estimated_duration" type="number">
-
         <mat-error *ngIf="projectInfoForm.get('estimated_duration')?.invalid">Durée requise > 0.</mat-error>
       </mat-form-field>
     </form>
