@@ -1,0 +1,86 @@
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <!-- Étape 1 : Informations du client -->
+  <mat-step label="Informations du client">
+    <div *ngIf="userInfoForm">
+      <p><strong>Nom :</strong> {{ userInfoForm.value.user_first_name }}</p>
+      <p><strong>Prénom :</strong> {{ userInfoForm.value.user_last_name }}</p>
+      <p><strong>Email :</strong> {{ userInfoForm.value.user_email }}</p>
+      <p><strong>Téléphone :</strong> {{ userInfoForm.value.user_phone }}</p>
+      <p><strong>Adresse :</strong> {{ userInfoForm.value.user_address }}</p>
+    </div>
+    <div class="step-actions">
+      <button mat-button matStepperNext>Suivant</button>
+    </div>
+  </mat-step>
+
+  <!-- Étape 2 : Informations du projet -->
+  <mat-step [stepControl]="projectInfoForm" label="Informations du projet">
+    <form [formGroup]="projectInfoForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Nom du projet</mat-label>
+        <input matInput formControlName="project_name">
+        <mat-error *ngIf="projectInfoForm.get('project_name')?.invalid">Nom du projet requis.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea matInput formControlName="description"></textarea>
+        <mat-error *ngIf="projectInfoForm.get('description')?.invalid">Description requise.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Budget estimé</mat-label>
+        <input matInput formControlName="estimated_budget" type="number">
+        <mat-error *ngIf="projectInfoForm.get('estimated_budget')?.invalid">Budget doit être positif.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Durée estimée (jours)</mat-label>
+        <input matInput formControlName="estimated_duration" type="number">
+
+        <mat-error *ngIf="projectInfoForm.get('estimated_duration')?.invalid">Durée requise > 0.</mat-error>
+      </mat-form-field>
+    </form>
+    <div class="step-actions">
+      <button mat-button matStepperPrevious>Précédent</button>
+      <button mat-button matStepperNext [disabled]="projectInfoForm.invalid">Suivant</button>
+    </div>
+  </mat-step>
+
+  <!-- Étape 3 : Localisation du projet -->
+  <mat-step [stepControl]="locationForm" label="Localisation du projet">
+    <form [formGroup]="locationForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Localisation</mat-label>
+        <input matInput formControlName="geographic_location" readonly>
+        <mat-error *ngIf="locationForm.get('geographic_location')?.invalid">
+          La localisation est requise.
+        </mat-error>
+      </mat-form-field>
+    </form>
+
+    <!-- Map Container -->
+    <div id="map" style="width: 100%; height: 400px;"></div>
+
+    <div class="step-actions">
+      <button mat-button matStepperPrevious>Précédent</button>
+      <button mat-button matStepperNext [disabled]="locationForm.invalid">Suivant</button>
+    </div>
+  </mat-step>
+
+  <!-- Étape 4 : Validation -->
+  <mat-step label="Validation">
+    <h3>Résumé de la demande</h3>
+    <p><strong>Nom du projet :</strong> {{ projectInfoForm.value.project_name }}</p>
+    <p><strong>Description :</strong> {{ projectInfoForm.value.description }}</p>
+    <p><strong>Budget estimé :</strong> {{ projectInfoForm.value.estimated_budget }}</p>
+    <p><strong>Durée estimée :</strong> {{ projectInfoForm.value.estimated_duration }}</p>
+    <p><strong>Localisation :</strong> {{ locationForm.value.geographic_location }}</p>
+
+    <div class="step-actions">
+      <button mat-button matStepperPrevious>Précédent</button>
+      <button mat-button color="primary" (click)="onSubmit()">Valider</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+

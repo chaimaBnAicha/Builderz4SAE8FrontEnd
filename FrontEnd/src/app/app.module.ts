@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -22,6 +22,15 @@ import { FooterModule } from './BackOffice/shared/footer/footer.module';
 import { SidebarModule } from './BackOffice/sidebar/sidebar.module';
 import { AdminLayoutModule } from './BackOffice/layouts/admin-layout/admin-layout.module';
 import { TestComponent } from './BackOffice/test/test.component';
+import { PostRequestComponent } from './projects/post-request/post-request.component';
+import { GetAllRequestComponent } from './projects/get-all-request/get-all-request.component';
+import { UpdateRequestComponent } from './projects/update-request/update-request.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -32,10 +41,12 @@ import { TestComponent } from './BackOffice/test/test.component';
     ContactComponent,
     PortfolioComponent,
     ServiceComponent,
-    
     TeamComponent,
     AdminLayoutComponent,
-    TestComponent
+    TestComponent,
+    PostRequestComponent,
+    GetAllRequestComponent,
+    UpdateRequestComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +57,14 @@ import { TestComponent } from './BackOffice/test/test.component';
     AppRoutingModule,
     NavbarModule,
     FooterModule,
-    SidebarModule
+    SidebarModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatStepperModule,
+    MatInputModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

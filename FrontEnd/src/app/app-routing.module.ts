@@ -21,19 +21,24 @@ import { TypographyComponent } from './BackOffice/typography/typography.componen
 import { IconsComponent } from './BackOffice/icons/icons.component';
 import { NotificationsComponent } from './BackOffice/notifications/notifications.component';
 import { UpgradeComponent } from './BackOffice/upgrade/upgrade.component';
+import { PostRequestComponent } from './projects/post-request/post-request.component';
+import { GetAllRequestComponent } from './projects/get-all-request/get-all-request.component';
+import { UpdateRequestComponent } from './projects/update-request/update-request.component';
 
 // Define your routes
 const routes: Routes = [
   // FrontOffice routes
   { path: '', component: IndexComponent },
-  
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'portfolio', component: PortfolioComponent },
   { path: 'service', component: ServiceComponent },
-  
   { path: 'team', component: TeamComponent },
   { path: 'test', component: TestComponent },
+  {path:'request',component:PostRequestComponent},
+  {path:'all-request',component:GetAllRequestComponent},
+  {path:'request/:id_projet',component:UpdateRequestComponent},
+ 
 
   // BackOffice routes
   {
