@@ -49,6 +49,7 @@ import { MatSelectModule } from '@angular/material/select';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     RouterModule,

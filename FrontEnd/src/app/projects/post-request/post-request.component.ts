@@ -12,9 +12,9 @@ declare var google: any; // Déclarez google comme global.
   styleUrls: ['./post-request.component.css'],
 })
 export class PostRequestComponent implements OnInit, AfterViewInit {
-  userInfoForm!: FormGroup<any>;
-projectInfoForm!: FormGroup<any>;
-locationForm!: FormGroup<any>;
+  userInfoForm!: FormGroup;
+  projectInfoForm!: FormGroup;
+  locationForm!: FormGroup;
   userInfo: any = {};
   map: any; // Variable pour détenir l'instance de la carte
   marker: any; // Variable pour détenir le marqueur
