@@ -1,0 +1,89 @@
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">Create New Offer</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="offerForm" (ngSubmit)="onSubmit()" class="p-3">
+            <div class="mb-3">
+              <label for="Title" class="form-label">Title*</label>
+              <input
+                type="text"
+                class="form-control"
+                id="Title"
+                formControlName="Title"
+                [ngClass]="{ 'is-invalid': submitted && f['Title'].errors }"
+              />
+              <div *ngIf="submitted && f['Title'].errors" class="invalid-feedback">
+                <div *ngIf="f['Title'].errors['required']">Title is required</div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="Description" class="form-label">Description*</label>
+              <textarea
+                class="form-control"
+                id="Description"
+                formControlName="Description"
+                rows="3"
+                [ngClass]="{ 'is-invalid': submitted && f['Description'].errors }"
+              ></textarea>
+              <div *ngIf="submitted && f['Description'].errors" class="invalid-feedback">
+                <div *ngIf="f['Description'].errors['required']">Description is required</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label for="Start_Date" class="form-label">Start Date*</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="Start_Date"
+                  formControlName="Start_Date"
+                  [ngClass]="{ 'is-invalid': submitted && f['Start_Date'].errors }"
+                />
+                <div *ngIf="submitted && f['Start_Date'].errors" class="invalid-feedback">
+                  <div *ngIf="f['Start_Date'].errors['required']">Start date is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label for="End_Date" class="form-label">End Date*</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="End_Date"
+                  formControlName="End_Date"
+                  [ngClass]="{ 'is-invalid': submitted && f['End_Date'].errors }"
+                />
+                <div *ngIf="submitted && f['End_Date'].errors" class="invalid-feedback">
+                  <div *ngIf="f['End_Date'].errors['required']">End date is required</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="Typeoffer" class="form-label">Status</label>
+              <select
+                class="form-control"
+                id="Typeoffer"
+                formControlName="Typeoffer"
+              >
+                <option [ngValue]="TypeOffer.ACTIVE">Active</option>
+                <option [ngValue]="TypeOffer.INACTIVE">Inactive</option>
+              </select>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <button type="button" class="btn btn-secondary" (click)="onReset()">Reset</button>
+              <button type="submit" class="btn btn-primary">Create Offer</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

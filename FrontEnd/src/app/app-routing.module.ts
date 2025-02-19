@@ -21,7 +21,9 @@ import { TypographyComponent } from './BackOffice/typography/typography.componen
 import { IconsComponent } from './BackOffice/icons/icons.component';
 import { NotificationsComponent } from './BackOffice/notifications/notifications.component';
 import { UpgradeComponent } from './BackOffice/upgrade/upgrade.component';
-
+import { GetofferComponent } from './FrontOffice/Offer/getoffer/getoffer.component';
+import { AddofferComponent } from './FrontOffice/Offer/addoffer/addoffer.component';
+import { UpdateofferComponent } from './FrontOffice/Offer/updateoffer/updateoffer.component';
 // Define your routes
 const routes: Routes = [
   // FrontOffice routes
@@ -34,6 +36,9 @@ const routes: Routes = [
   
   { path: 'team', component: TeamComponent },
   { path: 'test', component: TestComponent },
+  { path: 'addoffer',component:AddofferComponent},
+  { path: 'getoffer',component:GetofferComponent},
+  { path: 'updateoffer',component:UpdateofferComponent},
 
   // BackOffice routes
   {

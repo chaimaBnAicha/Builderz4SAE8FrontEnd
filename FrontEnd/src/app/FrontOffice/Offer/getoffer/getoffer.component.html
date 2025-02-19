@@ -1,0 +1,55 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h3 class="mb-0">Available Offers</h3>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Price</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let offer of offers">
+                  <td>{{ offer.title }}</td>
+                  <td>{{ offer.description }}</td>
+                  <td>{{ offer.price }} DT</td>
+                  <td>{{ offer.startDate | date }}</td>
+                  <td>{{ offer.endDate | date }}</td>
+                  <td>{{ offer.quantity }}</td>
+                  <td>
+                    <span class="badge" [ngClass]="{'badge-success': offer.status === 'ACTIVE', 'badge-danger': offer.status !== 'ACTIVE'}">
+                      {{ offer.status }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="btn btn-sm btn-primary me-2" (click)="editOffer(offer.id)">
+                      <i class="fas fa-edit"></i> Edit
+                    </button>
+                    <button class="btn btn-sm btn-danger" (click)="deleteOffer(offer.id)">
+                      <i class="fas fa-trash"></i> Delete
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="offers.length === 0">
+                  <td colspan="8" class="text-center">No offers available</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

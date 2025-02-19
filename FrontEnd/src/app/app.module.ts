@@ -4,6 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,6 +23,9 @@ import { FooterModule } from './BackOffice/shared/footer/footer.module';
 import { SidebarModule } from './BackOffice/sidebar/sidebar.module';
 import { AdminLayoutModule } from './BackOffice/layouts/admin-layout/admin-layout.module';
 import { TestComponent } from './BackOffice/test/test.component';
+import { GetofferComponent } from './FrontOffice/Offer/getoffer/getoffer.component';
+import { AddofferComponent } from './FrontOffice/Offer/addoffer/addoffer.component';
+import { UpdateofferComponent } from './FrontOffice/Offer/updateoffer/updateoffer.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +39,10 @@ import { TestComponent } from './BackOffice/test/test.component';
     
     TeamComponent,
     AdminLayoutComponent,
-    TestComponent
+    TestComponent,
+    GetofferComponent,
+    AddofferComponent,
+    UpdateofferComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +53,8 @@ import { TestComponent } from './BackOffice/test/test.component';
     AppRoutingModule,
     NavbarModule,
     FooterModule,
-    SidebarModule
+    SidebarModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
