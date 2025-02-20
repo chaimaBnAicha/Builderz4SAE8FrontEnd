@@ -1,0 +1,65 @@
+/* Construction theme styling */
+.card-header {
+    background-color: #fdbe33 !important;  /* Construction yellow */
+    border: none;
+}
+
+.card-header h4 {
+    color: #030f27 !important;  /* Dark blue/black */
+    font-weight: bold;
+    margin: 0;
+}
+
+.btn-light {
+    background-color: #030f27;
+    color: #fdbe33;
+    border: 2px solid #fdbe33;
+    transition: 0.3s;
+}
+
+.btn-light:hover {
+    background-color: #fdbe33;
+    color: #030f27;
+}
+
+.table thead th {
+    background-color: #030f27;
+    color: #fdbe33;
+    border-color: #fdbe33;
+}
+
+.badge-warning {
+    background-color: #fdbe33;
+    color: #030f27;
+}
+
+.badge-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-info {
+    background-color: #fdbe33;
+    border-color: #fdbe33;
+    color: #030f27;
+}
+
+.btn-danger {
+    background-color: #030f27;
+    border-color: #030f27;
+    color: #fdbe33;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.card {
+    border: 2px solid #fdbe33;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -22,6 +22,9 @@ import { FooterModule } from './BackOffice/shared/footer/footer.module';
 import { SidebarModule } from './BackOffice/sidebar/sidebar.module';
 import { AdminLayoutModule } from './BackOffice/layouts/admin-layout/admin-layout.module';
 import { TestComponent } from './BackOffice/test/test.component';
+import { AdvanceComponent } from './FrontOffice/advance/advance/advance.component';
+import { AddAdvanceComponent } from './FrontOffice/advance/add-advance/add-advance.component';
+import { UpdateAdvanceComponent } from './FrontOffice/advance/update-advance/update-advance.component';
 
 @NgModule({
   declarations: [
@@ -35,12 +38,16 @@ import { TestComponent } from './BackOffice/test/test.component';
     
     TeamComponent,
     AdminLayoutComponent,
-    TestComponent
+    TestComponent,
+    AdvanceComponent,
+    AddAdvanceComponent,
+    UpdateAdvanceComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule,
     CommonModule,
     AppRoutingModule,

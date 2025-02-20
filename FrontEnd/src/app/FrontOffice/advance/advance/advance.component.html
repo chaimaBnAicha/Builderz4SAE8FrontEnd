@@ -1,0 +1,46 @@
+<!-- Advances Table -->
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h4>My Advances</h4>
+            <button class="btn btn-light" routerLink="/add-advance">
+                <i class="pe-7s-plus"></i> New Advance Request
+            </button>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Amount Requested</th>
+                        <th>Request Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let advance of advances">
+                        <td>{{ advance.amount_request | currency }}</td>
+                        <td>{{ advance.requestDate | date:'mediumDate' }}</td>
+                        <td>
+                            <span [ngClass]="{
+                                'badge badge-warning': advance.status === 'PENDING',
+                                'badge badge-success': advance.status === 'APPROVED',
+                                'badge badge-danger': advance.status === 'REJECTED'
+                            }">
+                                {{ advance.status }}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-info btn-sm mr-2" (click)="onEdit(advance)">
+                                <i class="pe-7s-edit"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm" (click)="onDelete(advance.id)">
+                                <i class="pe-7s-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
