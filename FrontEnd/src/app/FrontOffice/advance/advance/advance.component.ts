@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdvanceService } from 'src/app/Service/advance.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-advance',
@@ -9,7 +10,7 @@ import { AdvanceService } from 'src/app/Service/advance.service';
 export class AdvanceComponent implements OnInit {
   advances: any[] = [];
 
-  constructor(private advanceService: AdvanceService) {}
+  constructor(private advanceService: AdvanceService, private router: Router) {}
 
   ngOnInit() {
     this.loadAdvances();
@@ -27,7 +28,7 @@ export class AdvanceComponent implements OnInit {
   }
 
   onEdit(advance: any) {
-    
+    this.router.navigate(['/update-advance', advance.id]);
   }
 
   onDelete(id: number) {

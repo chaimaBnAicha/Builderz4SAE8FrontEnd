@@ -39,7 +39,7 @@ const routes: Routes = [
   { path: 'test', component: TestComponent },
   {path: 'advance', component:AdvanceComponent},
   {path: 'add-advance', component:AddAdvanceComponent},
-  {path: 'update-advance', component:UpdateAdvanceComponent},
+  {path: 'update-advance/:id', component:UpdateAdvanceComponent},
 
 
   // BackOffice routes

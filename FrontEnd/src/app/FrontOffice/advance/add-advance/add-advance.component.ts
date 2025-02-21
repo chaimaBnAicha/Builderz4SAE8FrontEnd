@@ -22,6 +22,7 @@ export class AddAdvanceComponent implements OnInit {
     this.postAdvanceForm = this.fb.group({
       amount_request: ['', [Validators.required, Validators.min(0)]],
       requestDate: [{value: today, disabled: true}],
+      reason: ['', Validators.required],
       status: ['Pending']
     });
   }
