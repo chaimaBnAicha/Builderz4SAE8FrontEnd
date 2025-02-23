@@ -41,4 +41,12 @@ export class AdvanceService {
   getAdvanceById(id: number) {
     return this.http.get(`${this.apiUrl}/retrieve-advance/${id}`);
   }
+
+  updateAdvanceStatus(id: number, status: string) {
+    return this.http.put(`${this.apiUrl}/update-status/${id}`, { status: status });
+  }
+
+  canApproveAdvance(userId: number, advanceId: number) {
+    return this.http.get<boolean>(`${this.apiUrl}/can-approve?userId=1&advanceId=${advanceId}`);
+  }
 }

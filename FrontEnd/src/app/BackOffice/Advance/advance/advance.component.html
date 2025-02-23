@@ -1,0 +1,59 @@
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h4>All Advance Requests</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Amount</th>
+                            <th>Request Date</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let advance of advances">
+                            <td>{{ advance.user?.id }}</td>
+                            <td>{{ advance.amount_request | currency }}</td>
+                            <td>{{ advance.requestDate | date:'mediumDate' }}</td>
+                            <td>
+                                <span [title]="advance.reason">
+                                    {{ advance.reason.length > 30 ? advance.reason.substring(0, 30) + '...' : advance.reason }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="badge" [ngClass]="{
+                                    'badge-warning': advance.status === 'Pending',
+                                    'badge-success': advance.status === 'Approved',
+                                    'badge-danger': advance.status === 'Rejected'
+                                }">
+                                    {{ advance.status }}
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-success btn-sm mr-2" 
+                                        (click)="onApprove(advance.id)"
+                                        [disabled]="advance.status !== 'Pending'">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button class="btn btn-danger btn-sm" 
+                                        (click)="onReject(advance.id)"
+                                        [disabled]="advance.status !== 'Pending'">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            </td>
+                        </tr>
+                        <tr *ngIf="advances.length === 0">
+                            <td colspan="6" class="text-center">No advances found</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AdvanceService } from 'src/app/Service/advance.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-advance',
@@ -10,7 +9,7 @@ import { Router } from '@angular/router';
 export class AdvanceComponent implements OnInit {
   advances: any[] = [];
 
-  constructor(private advanceService: AdvanceService, private router: Router) {}
+  constructor(private advanceService: AdvanceService) {}
 
   ngOnInit() {
     this.loadAdvances();
@@ -19,6 +18,7 @@ export class AdvanceComponent implements OnInit {
   loadAdvances() {
     this.advanceService.getAdvances().subscribe({
       next: (data) => {
+        console.log('Loaded advances:', data);
         this.advances = data;
       },
       error: (error) => {
@@ -27,18 +27,27 @@ export class AdvanceComponent implements OnInit {
     });
   }
 
-  onEdit(advance: any) {
-    this.router.navigate(['/update-advance', advance.id]);
-  }
-
-  onDelete(id: number) {
-    if (confirm('Are you sure you want to delete this advance?')) {
-      this.advanceService.deleteAdvance(id).subscribe({
+  onApprove(id: number) {
+    if (confirm('Are you sure you want to approve this advance?')) {
+      this.advanceService.updateAdvanceStatus(id, 'Approved').subscribe({
         next: () => {
           this.loadAdvances();
         },
         error: (error) => {
-          console.error('Error deleting advance:', error);
+          console.error('Error approving advance:', error);
+        }
+      });
+    }
+  }
+
+  onReject(id: number) {
+    if (confirm('Are you sure you want to reject this advance?')) {
+      this.advanceService.updateAdvanceStatus(id, 'Rejected').subscribe({
+        next: () => {
+          this.loadAdvances();
+        },
+        error: (error) => {
+          console.error('Error rejecting advance:', error);
         }
       });
     }

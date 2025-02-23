@@ -66,3 +66,22 @@
     border: 2px solid #fdbe33;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
+
+/* Add these styles */
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+    margin: 0 3px;
+    padding: 5px 10px;
+}
+
+.btn-success:hover:not([disabled]) {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-success:disabled, .btn-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

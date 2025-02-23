@@ -24,6 +24,7 @@ import { UpgradeComponent } from './BackOffice/upgrade/upgrade.component';
 import {AdvanceComponent} from './FrontOffice/advance/advance/advance.component';
 import { AddAdvanceComponent } from './FrontOffice/advance/add-advance/add-advance.component';
 import { UpdateAdvanceComponent } from './FrontOffice/advance/update-advance/update-advance.component';
+import { AdvanceBackComponent } from './BackOffice/Advance/advance-back/advance-back.component';
 
 // Define your routes
 const routes: Routes = [
@@ -42,6 +43,7 @@ const routes: Routes = [
   {path: 'update-advance/:id', component:UpdateAdvanceComponent},
 
 
+
   // BackOffice routes
   {
     path: 'admin',
@@ -56,6 +58,7 @@ const routes: Routes = [
          { path: 'maps',           component: MapsComponent },
          { path: 'notifications',  component: NotificationsComponent },
          { path: 'upgrade',        component: UpgradeComponent },
+         {path:'advanceback', component:AdvanceBackComponent},
       // Add other backoffice child routes here
       { path: '', redirectTo: 'home', pathMatch: 'full' }, // Default route under admin layout
     ],

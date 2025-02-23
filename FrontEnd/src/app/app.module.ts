@@ -25,6 +25,7 @@ import { TestComponent } from './BackOffice/test/test.component';
 import { AdvanceComponent } from './FrontOffice/advance/advance/advance.component';
 import { AddAdvanceComponent } from './FrontOffice/advance/add-advance/add-advance.component';
 import { UpdateAdvanceComponent } from './FrontOffice/advance/update-advance/update-advance.component';
+import { AdvanceBackComponent } from './BackOffice/Advance/advance-back/advance-back.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { UpdateAdvanceComponent } from './FrontOffice/advance/update-advance/upd
     TestComponent,
     AdvanceComponent,
     AddAdvanceComponent,
-    UpdateAdvanceComponent
+    UpdateAdvanceComponent,
+    AdvanceBackComponent
   ],
   imports: [
     BrowserModule,

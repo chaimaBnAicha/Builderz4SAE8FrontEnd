@@ -65,7 +65,7 @@ export const ROUTES: RouteInfo[] = [
   
   // Finance Group
   {
-    path: 'icons',
+    path: 'advanceback',
     title: 'Advance Management',
     icon: 'pe-7s-cash',
     class: '',
