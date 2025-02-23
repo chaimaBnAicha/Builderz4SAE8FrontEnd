@@ -47,12 +47,7 @@ export class AdvanceBackComponent implements OnInit {
     if (confirm('Are you sure you want to approve this advance?')) {
       this.advanceService.updateAdvanceStatus(id, 'Approved').subscribe({
         next: () => {
-          // Update local status immediately
-          const advance = this.advances.find(a => a.id === id);
-          if (advance) {
-            advance.status = 'Approved';
-          }
-          this.loadAdvances(); // Reload all advances
+          this.loadAdvances();
         },
         error: (error) => {
           console.error('Error approving advance:', error);
@@ -65,15 +60,12 @@ export class AdvanceBackComponent implements OnInit {
     if (confirm('Are you sure you want to reject this advance?')) {
       this.advanceService.updateAdvanceStatus(id, 'Rejected').subscribe({
         next: () => {
-          // Update local status immediately
-          const advance = this.advances.find(a => a.id === id);
-          if (advance) {
-            advance.status = 'Rejected';
-          }
-          this.loadAdvances(); // Reload all advances
+          this.loadAdvances();
         },
         error: (error) => {
           console.error('Error rejecting advance:', error);
+          console.error('Error details:', error.error);
+          alert('Failed to reject advance. Please try again.');
         }
       });
     }

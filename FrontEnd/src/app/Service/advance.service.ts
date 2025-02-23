@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 
 
@@ -43,7 +44,35 @@ export class AdvanceService {
   }
 
   updateAdvanceStatus(id: number, status: string) {
-    return this.http.put(`${this.apiUrl}/update-status/${id}`, { status: status });
+    // First get the existing advance
+    return this.http.get(`${this.apiUrl}/retrieve-advance/${id}`).pipe(
+      switchMap((advance: any) => {
+        // Then update its status while keeping other properties
+        const updatedAdvance = {
+          id: advance.id,
+          amount_request: advance.amount_request,
+          requestDate: advance.requestDate,
+          reason: advance.reason,
+          status: status,
+          user: { id: 1 }  // Ensure we always send a valid user ID
+        };
+        
+        console.log('Original advance:', advance);
+        console.log('Sending update:', updatedAdvance);
+        
+        // Try sending a simpler object
+        const simpleUpdate = {
+          id: id,
+          status: status,
+          amount_request: advance.amount_request,
+          reason: advance.reason,
+          requestDate: new Date(advance.requestDate),
+          user: { id: 1 }
+        };
+
+        return this.http.put(`${this.apiUrl}/modify-advance`, simpleUpdate);
+      })
+    );
   }
 
   canApproveAdvance(userId: number, advanceId: number) {
