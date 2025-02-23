@@ -15,7 +15,11 @@ export class AdvanceService {
   
 
   addAdvance(advance: any) {
-    return this.http.post(`${this.apiUrl}/add-advance`, advance);
+    const advanceWithUser = {
+      ...advance,
+      user: { id: 1 }  // Default user ID as 1
+    };
+    return this.http.post(`${this.apiUrl}/add-advance`, advanceWithUser);
   }
 
   getAdvances() {
@@ -27,7 +31,11 @@ export class AdvanceService {
   }
 
   updateAdvance(advance: any) {
-    return this.http.put(`${this.apiUrl}/modify-advance`, advance);
+    const advanceWithUser = {
+      ...advance,
+      user: { id: 1 }  // Default user ID as 1
+    };
+    return this.http.put(`${this.apiUrl}/modify-advance`, advanceWithUser);
   }
 
   getAdvanceById(id: number) {

@@ -19,6 +19,7 @@ export class AdvanceComponent implements OnInit {
   loadAdvances() {
     this.advanceService.getAdvances().subscribe({
       next: (data) => {
+        console.log('Loaded advances:', data); // Debug log
         this.advances = data;
       },
       error: (error) => {
@@ -35,7 +36,7 @@ export class AdvanceComponent implements OnInit {
     if (confirm('Are you sure you want to delete this advance?')) {
       this.advanceService.deleteAdvance(id).subscribe({
         next: () => {
-          this.loadAdvances();
+          this.loadAdvances(); // Reload the list after deletion
         },
         error: (error) => {
           console.error('Error deleting advance:', error);

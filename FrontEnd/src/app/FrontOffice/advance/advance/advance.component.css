@@ -28,31 +28,34 @@
     border-color: #fdbe33;
 }
 
+.badge {
+    padding: 8px 12px;
+    font-size: 0.9em;
+}
+
 .badge-warning {
-    background-color: #fdbe33;
-    color: #030f27;
+    background-color: #fdbe33 !important;
+    color: #030f27 !important;
 }
 
 .badge-success {
-    background-color: #28a745;
-    color: white;
+    background-color: #28a745 !important;
+    color: white !important;
 }
 
 .badge-danger {
-    background-color: #dc3545;
-    color: white;
+    background-color: #dc3545 !important;
+    color: white !important;
 }
 
-.btn-info {
-    background-color: #fdbe33;
-    border-color: #fdbe33;
-    color: #030f27;
+.btn-info, .btn-danger {
+    margin: 0 3px;
+    padding: 5px 10px;
 }
 
-.btn-danger {
-    background-color: #030f27;
-    border-color: #030f27;
-    color: #fdbe33;
+.btn-info:disabled, .btn-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 .btn:hover {

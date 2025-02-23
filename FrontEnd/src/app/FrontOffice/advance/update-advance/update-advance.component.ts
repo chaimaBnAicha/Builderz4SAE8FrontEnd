@@ -57,7 +57,8 @@ export class UpdateAdvanceComponent implements OnInit {
     if (this.updateAdvanceForm.valid) {
       const formValue = {
         ...this.updateAdvanceForm.getRawValue(),
-        id: this.advanceId
+        id: this.advanceId,
+        user: { id: 1 }  // Default user ID
       };
       
       this.advanceService.updateAdvance(formValue).subscribe({

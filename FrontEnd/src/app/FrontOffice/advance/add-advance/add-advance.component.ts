@@ -31,7 +31,8 @@ export class AddAdvanceComponent implements OnInit {
     if (this.postAdvanceForm.valid) {
       const formValue = {
         ...this.postAdvanceForm.getRawValue(),
-        requestDate: new Date().toISOString()
+        requestDate: new Date().toISOString(),
+        user: { id: 1 }  // Default user ID
       };
       this.advanceService.addAdvance(formValue).subscribe({
         next: (response) => {

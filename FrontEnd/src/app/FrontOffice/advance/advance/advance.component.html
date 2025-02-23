@@ -150,11 +150,7 @@
                         <tr *ngFor="let advance of advances">
                             <td>{{ advance.amount_request | currency }}</td>
                             <td>{{ advance.requestDate | date:'mediumDate' }}</td>
-                            <td>
-                                <span [title]="advance.reason">
-                                    {{ advance.reason.length > 30 ? advance.reason.substring(0, 30) + '...' : advance.reason }}
-                                </span>
-                            </td>
+                            <td>{{ advance.reason }}</td>
                             <td>
                                 <span class="badge" [ngClass]="{
                                     'badge-warning': advance.status === 'Pending',
@@ -166,7 +162,7 @@
                             </td>
                             <td>
                                 <button class="btn btn-info btn-sm mr-2" (click)="onEdit(advance)" 
-                                [disabled]="advance.status !== 'Pending'">
+                                        [disabled]="advance.status !== 'Pending'">
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button class="btn btn-danger btn-sm" (click)="onDelete(advance.id)"
