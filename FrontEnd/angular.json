@@ -22,7 +22,18 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/slick-carousel/slick/fonts/",
+                "output": "./assets/fonts/",
+                "ignore": ["**/slick.svg"]
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/pdfmake/build/",
+                "output": "/assets/pdfmake/"
+              }
             ],
             "styles": [
               "node_modules/slick-carousel/slick/slick.css",
@@ -51,7 +62,9 @@
               "src/assets/Counter-Up-master/jquery.counterup.min.js",
               "node_modules/isotope-layout/dist/isotope.pkgd.min.js",
               "node_modules/owl.carousel/dist/owl.carousel.min.js",
-              "src/assets/js/main.js"
+              "src/assets/js/main.js",
+              "node_modules/pdfmake/build/pdfmake.js",
+  "node_modules/pdfmake/build/vfs_fonts.js"
             ]
           },
           "configurations": {

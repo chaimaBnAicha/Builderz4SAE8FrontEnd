@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AdminLayoutComponent } from './BackOffice/layouts/admin-layout/admin-layout.component';
 import { IndexComponent } from './FrontOffice/index/index.component';
@@ -21,6 +23,11 @@ import { TypographyComponent } from './BackOffice/typography/typography.componen
 import { IconsComponent } from './BackOffice/icons/icons.component';
 import { NotificationsComponent } from './BackOffice/notifications/notifications.component';
 import { UpgradeComponent } from './BackOffice/upgrade/upgrade.component';
+import { PostTacheComponent } from './tache/post-tache/post-tache.component';
+import { GetAllTacheComponent } from './tache/get-all-tache/get-all-tache.component';
+import { UpdateTacheComponent } from './tache/update-tache/update-tache.component';
+import { KanbanComponent } from './tache/kanban/kanban.component';
+import { TacheResponseComponent } from './tache/tache-response/tache-response.component';
 
 // Define your routes
 const routes: Routes = [
@@ -34,7 +41,10 @@ const routes: Routes = [
   
   { path: 'team', component: TeamComponent },
   { path: 'test', component: TestComponent },
-
+  {path:'tache',component:PostTacheComponent},
+  {path:'get-all-tache',component:GetAllTacheComponent},
+  {path:'tache/:id',component:UpdateTacheComponent},
+{path:'kanban',component:KanbanComponent},
   // BackOffice routes
   {
     path: 'admin',
@@ -60,12 +70,10 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    CommonModule,
-    BrowserModule,
     RouterModule.forRoot(routes, {
-      useHash: true, // Use hash-based routing (optional)
-    }),
+      useHash: true
+    })
   ],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

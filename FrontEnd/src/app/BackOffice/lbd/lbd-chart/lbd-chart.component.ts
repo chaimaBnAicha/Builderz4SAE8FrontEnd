@@ -1,6 +1,7 @@
 import {Component, Input, OnInit, AfterViewInit, ChangeDetectionStrategy} from '@angular/core';
 import * as Chartist from 'chartist';
 import { LineChart, PieChart, BarChart } from 'chartist';
+import { CommonModule } from '@angular/common';
 
 export interface LegendItem {
   title: string;
@@ -16,7 +17,9 @@ export enum ChartType {
 @Component({
   selector: 'lbd-chart',
   templateUrl: './lbd-chart.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [CommonModule]
 })
 export class LbdChartComponent implements OnInit, AfterViewInit {
   static currentId = 1;
