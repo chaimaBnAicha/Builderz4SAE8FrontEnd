@@ -40,15 +40,6 @@
                             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
                                 <h3 class="mb-0">Available Offers</h3>
                                 <div class="d-flex align-items-center">
-                                    <!-- Add search bar -->
-                                    <div class="search-box me-3">
-                                        <input 
-                                            type="text" 
-                                            class="form-control" 
-                                            placeholder="Search offers..." 
-                                            (input)="onSearch($event)"
-                                        >
-                                    </div>
                                     <button class="btn btn-light" (click)="navigateToAddOffer()">
                                         <i class="fas fa-plus"></i> Add New Offer
                                     </button>
@@ -59,12 +50,76 @@
                                     <table class="table table-hover table-striped">
                                         <thead class="bg-light">
                                             <tr>
-                                                <th class="py-3">Title</th>
-                                                <th class="py-3">Description</th>
-                                                <th class="py-3">Start Date</th>
-                                                <th class="py-3">End Date</th>
-                                                <th class="py-3">Type</th>
-                                                <th class="py-3">Status</th>
+                                                <th class="py-3">
+                                                    <div class="d-flex flex-column">
+                                                        <span>Title</span>
+                                                        <input 
+                                                            type="text" 
+                                                            class="form-control form-control-sm mt-2" 
+                                                            placeholder="Filter title..."
+                                                            (input)="onSearch('title', $event)"
+                                                        >
+                                                    </div>
+                                                </th>
+                                                <th class="py-3">
+                                                    <div class="d-flex flex-column">
+                                                        <span>Description</span>
+                                                        <input 
+                                                            type="text" 
+                                                            class="form-control form-control-sm mt-2" 
+                                                            placeholder="Filter description..."
+                                                            (input)="onSearch('description', $event)"
+                                                        >
+                                                    </div>
+                                                </th>
+                                                <th class="py-3">
+                                                    <div class="d-flex flex-column">
+                                                        <span>Start Date</span>
+                                                        <input 
+                                                            type="date" 
+                                                            class="form-control form-control-sm mt-2"
+                                                            (input)="onSearch('startDate', $event)"
+                                                        >
+                                                    </div>
+                                                </th>
+                                                <th class="py-3">
+                                                    <div class="d-flex flex-column">
+                                                        <span>End Date</span>
+                                                        <input 
+                                                            type="date" 
+                                                            class="form-control form-control-sm mt-2"
+                                                            (input)="onSearch('endDate', $event)"
+                                                        >
+                                                    </div>
+                                                </th>
+                                                <th class="py-3">
+                                                    <div class="d-flex flex-column">
+                                                        <span>Type</span>
+                                                        <select 
+                                                            class="form-control form-control-sm mt-2"
+                                                            (change)="onSearch('type', $event)"
+                                                        >
+                                                            <option value="">All</option>
+                                                            <option value="Insurance">Insurance</option>
+                                                            <option value="Bonus">Bonus</option>
+                                                            <option value="Compensation">Compensation</option>
+                                                            <option value="Training">Training</option>
+                                                        </select>
+                                                    </div>
+                                                </th>
+                                                <th class="py-3">
+                                                    <div class="d-flex flex-column">
+                                                        <span>Status</span>
+                                                        <select 
+                                                            class="form-control form-control-sm mt-2"
+                                                            (change)="onSearch('status', $event)"
+                                                        >
+                                                            <option value="">All</option>
+                                                            <option value="ACTIVE">Active</option>
+                                                            <option value="INACTIVE">Inactive</option>
+                                                        </select>
+                                                    </div>
+                                                </th>
                                                 <th class="py-3 text-center">Actions</th>
                                             </tr>
                                         </thead>

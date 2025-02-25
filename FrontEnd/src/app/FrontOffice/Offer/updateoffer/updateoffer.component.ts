@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OfferServiceService } from '../../Services/offer-service.service';
 import { TypeOffer, OfferStatus } from '../../Models/offer.model';
@@ -15,6 +15,7 @@ export class UpdateofferComponent implements OnInit {
   submitted = false;
   TypeOffer = TypeOffer;
   OfferStatus = OfferStatus;
+  today: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -22,12 +23,16 @@ export class UpdateofferComponent implements OnInit {
     private router: Router,
     private offerService: OfferServiceService
   ) {
+    this.today = new Date().toISOString().split('T')[0];
+    
     this.offerForm = this.formBuilder.group({
       title: ['', [Validators.required]],
       description: ['', [Validators.required]],
-      start_Date: ['', [Validators.required]],
+      start_Date: [this.today, [Validators.required]],
       end_Date: ['', [Validators.required]],
       typeoffer: ['Insurance']
+    }, {
+      validators: this.dateValidator
     });
   }
 
@@ -116,5 +121,37 @@ export class UpdateofferComponent implements OnInit {
   onReset() {
     this.submitted = false;
     this.loadOfferData();
+  }
+
+  // Custom validator for dates
+  dateValidator(group: FormGroup): ValidationErrors | null {
+    const start = group.get('start_Date')?.value;
+    const end = group.get('end_Date')?.value;
+
+    if (start && end) {
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      
+      if (endDate <= startDate) {
+        return { dateError: 'End date must be after start date' };
+      }
+    }
+    return null;
+  }
+
+  // Add this method to handle end date min value
+  onStartDateChange() {
+    const startDateInput = this.offerForm.get('start_Date')?.value;
+    if (startDateInput) {
+      const endDateInput = document.getElementById('end_Date') as HTMLInputElement;
+      if (endDateInput) {
+        endDateInput.min = startDateInput;
+      }
+    }
+  }
+
+  // Update the dateError display in template
+  getDateErrorMessage(): string {
+    return this.offerForm.errors?.['dateError'] || '';
   }
 }

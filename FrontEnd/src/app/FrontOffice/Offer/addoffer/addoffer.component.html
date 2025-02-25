@@ -82,6 +82,8 @@
                   class="form-control"
                   id="Start_Date"
                   formControlName="Start_Date"
+                  [min]="today"
+                  (change)="onStartDateChange()"
                   [ngClass]="{ 'is-invalid': submitted && f['Start_Date'].errors }"
                 />
                 <div *ngIf="submitted && f['Start_Date'].errors" class="invalid-feedback">
@@ -96,10 +98,11 @@
                   class="form-control"
                   id="End_Date"
                   formControlName="End_Date"
-                  [ngClass]="{ 'is-invalid': submitted && f['End_Date'].errors }"
+                  [ngClass]="{ 'is-invalid': submitted && (f['End_Date'].errors || offerForm.errors?.['dateError']) }"
                 />
-                <div *ngIf="submitted && f['End_Date'].errors" class="invalid-feedback">
-                  <div *ngIf="f['End_Date'].errors['required']">End date is required</div>
+                <div *ngIf="submitted && (f['End_Date'].errors || offerForm.errors?.['dateError'])" class="invalid-feedback">
+                  <div *ngIf="f['End_Date'].errors?.['required']">End date is required</div>
+                  <div *ngIf="offerForm.errors?.['dateError']">{{getDateErrorMessage()}}</div>
                 </div>
               </div>
             </div>

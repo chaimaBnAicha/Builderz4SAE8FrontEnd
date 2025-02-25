@@ -11,6 +11,14 @@ import { Offer, TypeOffer, OfferStatus } from '../../Models/offer.model';
 export class GetofferComponent implements OnInit {
   offers: Offer[] = [];
   filteredOffers: Offer[] = [];
+  filters = {
+    title: '',
+    description: '',
+    startDate: '',
+    endDate: '',
+    type: '',
+    status: ''
+  };
   searchTerm: string = '';
   TypeOffer = TypeOffer;
   OfferStatus = OfferStatus;
@@ -49,14 +57,23 @@ export class GetofferComponent implements OnInit {
     });
   }
 
-  // Add search method
-  onSearch(event: any) {
-    const searchTerm = event.target.value.toLowerCase();
-    this.filteredOffers = this.offers.filter(offer => 
-      offer.Title.toLowerCase().includes(searchTerm) ||
-      offer.Description.toLowerCase().includes(searchTerm) ||
-      offer.Typeoffer.toLowerCase().includes(searchTerm)
-    );
+  applyFilters() {
+    this.filteredOffers = this.offers.filter(offer => {
+      return (
+        offer.Title.toLowerCase().includes(this.filters.title.toLowerCase()) &&
+        offer.Description.toLowerCase().includes(this.filters.description.toLowerCase()) &&
+        (this.filters.startDate ? new Date(offer.Start_Date!) >= new Date(this.filters.startDate) : true) &&
+        (this.filters.endDate ? new Date(offer.End_Date!) <= new Date(this.filters.endDate) : true) &&
+        (this.filters.type ? offer.Typeoffer === this.filters.type : true) &&
+        (this.filters.status ? offer.Status === this.filters.status : true)
+      );
+    });
+  }
+
+  onSearch(field: string, event: Event): void {
+    const value = (event.target as HTMLInputElement | HTMLSelectElement).value;
+    this.filters[field as keyof typeof this.filters] = value;
+    this.applyFilters();
   }
 
   // Navigate to edit page
