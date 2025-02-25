@@ -80,7 +80,7 @@ export const ROUTES: RouteInfo[] = [
   },
 
   {
-    path: 'icons',
+    path: 'getoffer',
     title: 'Offer Management',
     icon: 'pe-7s-check',
     class: '',

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OfferServiceService } from '../../Services/offer-service.service';
-import { TypeOffer } from '../../Models/offer.model';
+import { TypeOffer, OfferStatus } from '../../Models/offer.model';
 
 @Component({
   selector: 'app-updateoffer',
@@ -13,6 +13,8 @@ export class UpdateofferComponent implements OnInit {
   offerForm: FormGroup;
   offerId: number = 0;
   submitted = false;
+  TypeOffer = TypeOffer;
+  OfferStatus = OfferStatus;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -21,41 +23,49 @@ export class UpdateofferComponent implements OnInit {
     private offerService: OfferServiceService
   ) {
     this.offerForm = this.formBuilder.group({
-      Title: ['', [Validators.required]],
-      Description: ['', [Validators.required]],
-      Start_Date: ['', [Validators.required]],
-      End_Date: ['', [Validators.required]],
-      Typeoffer: [TypeOffer.ACTIVE]
+      title: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      start_Date: ['', [Validators.required]],
+      end_Date: ['', [Validators.required]],
+      typeoffer: ['Insurance']
     });
   }
 
-  ngOnInit(): void {
-    // Get the offer ID from the route parameters
-    this.route.params.subscribe(params => {
-      this.offerId = +params['id']; // Convert string to number using +
-      this.loadOfferData();
-    });
-  }
-
-  // Getter for easy access to form fields
   get f() {
     return this.offerForm.controls;
+  }
+
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      if (params['id']) {
+        this.offerId = +params['id'];
+        this.loadOfferData();
+      } else {
+        console.error('No ID provided');
+        this.router.navigate(['/admin/getoffer']);
+      }
+    });
   }
 
   loadOfferData() {
     this.offerService.getOfferById(this.offerId).subscribe({
       next: (offer) => {
-        // Format dates to YYYY-MM-DD for input type="date"
-        const startDate = new Date(offer.Start_Date).toISOString().split('T')[0];
-        const endDate = new Date(offer.End_Date).toISOString().split('T')[0];
+        console.log('Received offer:', offer);
+        // Format dates for the form
+        const startDate = offer.Start_Date ? 
+          new Date(offer.Start_Date).toISOString().split('T')[0] : '';
+        const endDate = offer.End_Date ? 
+          new Date(offer.End_Date).toISOString().split('T')[0] : '';
         
         this.offerForm.patchValue({
-          Title: offer.Title,
-          Description: offer.Description,
-          Start_Date: startDate,
-          End_Date: endDate,
-          Typeoffer: offer.Typeoffer
+          title: offer.Title,
+          description: offer.Description,
+          start_Date: startDate,
+          end_Date: endDate,
+          typeoffer: offer.Typeoffer
         });
+
+        console.log('Form values after patch:', this.offerForm.value);
       },
       error: (error) => {
         console.error('Error loading offer:', error);
@@ -70,30 +80,41 @@ export class UpdateofferComponent implements OnInit {
       return;
     }
 
-    // Format the dates to match backend expectations
-    const formValue = {
-      ...this.offerForm.value,
-      Start_Date: new Date(this.offerForm.value.Start_Date).toISOString(),
-      End_Date: new Date(this.offerForm.value.End_Date).toISOString()
+    const formattedOffer = {
+      id_offer: this.offerId,
+      user: {
+        id: 1  // Default user id
+      },
+      description: this.offerForm.value.description,
+      title: this.offerForm.value.title,
+      status: "ACTIVE",
+      start_Date: new Date(this.offerForm.value.start_Date).toISOString(),
+      typeoffer: this.offerForm.value.typeoffer,
+      end_Date: new Date(this.offerForm.value.end_Date).toISOString()
     };
 
-    this.offerService.updateOffer(this.offerId, formValue).subscribe({
-      next: (response) => {
-        console.log('Offer updated successfully', response);
-        this.router.navigate(['/getoffer']);
+    console.log('Submitting offer:', JSON.stringify(formattedOffer, null, 2));
+
+    this.offerService.updateOffer(this.offerId, formattedOffer).subscribe({
+      next: () => {
+        console.log('Offer updated successfully');
+        this.router.navigate(['/admin/getoffer']);
       },
       error: (error) => {
         console.error('Error updating offer:', error);
+        if (error.error) {
+          console.error('Server error:', error.error);
+        }
       }
     });
   }
 
-  onReset() {
-    this.submitted = false;
-    this.loadOfferData(); // Reload the original data
+  onCancel() {
+    this.router.navigate(['/admin/getoffer']);
   }
 
-  onCancel() {
-    this.router.navigate(['/getoffer']);
+  onReset() {
+    this.submitted = false;
+    this.loadOfferData();
   }
 }

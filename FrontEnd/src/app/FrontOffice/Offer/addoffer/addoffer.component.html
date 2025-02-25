@@ -1,12 +1,51 @@
-<div class="container mt-4">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
-      <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-          <h3 class="mb-0">Create New Offer</h3>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Builderz - Construction Company Website Template</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="Construction Company Website Template" name="keywords">
+        <meta content="Construction Company Website Template" name="description">
+        <!-- Include jQuery (required for CounterUp) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Include CounterUp -->
+<script src="https://cdn.rawgit.com/barskins/jquery-countTo/master/jquery.counterup.min.js"></script>
+
+
+        <!-- Favicon -->
+        <link href="assets/img/favicon.ico" rel="icon">
+
+        <!-- Google Font -->
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+        <!-- CSS Libraries -->
+        <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/src/assets/lib/flaticon/font/flaticon.css">
+        <link rel="stylesheet" href="/src/assets/lib/animate/animate.min.css">
+        <link rel="stylesheet" href="/src/assets/lib/owlcarousel/assets/owl.carousel.min.css">
+        <link rel="stylesheet" href="/src/assets/lib/lightbox/css/lightbox.min.css">
+        <link rel="stylesheet" href="/src/assets/lib/slick/slick.css">
+        <link rel="stylesheet" href="/src/assets/lib/slick/slick-theme.css">
+        <link rel="stylesheet" href="/src/assets/css/style.css">
+    </head>
+
+    <body>
+        <div class="wrapper">
+             
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+          <h3 class="mb-0">Add New Offer</h3>
+          <button class="btn btn-light" (click)="onCancel()">
+            <i class="fas fa-arrow-left"></i> Back to Offers
+          </button>
         </div>
         <div class="card-body">
-          <form [formGroup]="offerForm" (ngSubmit)="onSubmit()" class="p-3">
+          <form [formGroup]="offerForm" (ngSubmit)="onSubmit()">
             <div class="mb-3">
               <label for="Title" class="form-label">Title*</label>
               <input
@@ -26,8 +65,8 @@
               <textarea
                 class="form-control"
                 id="Description"
-                formControlName="Description"
                 rows="3"
+                formControlName="Description"
                 [ngClass]="{ 'is-invalid': submitted && f['Description'].errors }"
               ></textarea>
               <div *ngIf="submitted && f['Description'].errors" class="invalid-feedback">
@@ -66,24 +105,124 @@
             </div>
 
             <div class="mb-3">
-              <label for="Typeoffer" class="form-label">Status</label>
+              <label for="Typeoffer" class="form-label">Type*</label>
               <select
                 class="form-control"
                 id="Typeoffer"
                 formControlName="Typeoffer"
               >
-                <option [ngValue]="TypeOffer.ACTIVE">Active</option>
-                <option [ngValue]="TypeOffer.INACTIVE">Inactive</option>
+                <option [ngValue]="TypeOffer.Insurance">Insurance</option>
+                <option [ngValue]="TypeOffer.Bonus">Bonus</option>
+                <option [ngValue]="TypeOffer.Compensation">Compensation</option>
+                <option [ngValue]="TypeOffer.Training">Training</option>
               </select>
             </div>
 
             <div class="d-flex justify-content-between mt-4">
-              <button type="button" class="btn btn-secondary" (click)="onReset()">Reset</button>
-              <button type="submit" class="btn btn-primary">Create Offer</button>
+              <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+              <div>
+                <button type="button" class="btn btn-warning me-2" (click)="onReset()">Reset</button>
+                <button type="submit" class="btn btn-primary">Create Offer</button>
+              </div>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+<style>
+.card {
+  border: none;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.card-header {
+  border-radius: 10px 10px 0 0 !important;
+  background-color: #fdbe33 !important;
+  border-bottom: none;
+}
+
+.card-header h3 {
+  color: #030f27 !important;
+  font-weight: 700;
+}
+
+.btn-light {
+  background-color: #030f27;
+  border: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s;
+  color: #fdbe33;
+}
+
+.btn-light:hover {
+  background-color: #fdbe33;
+  color: #030f27;
+}
+
+.form-label {
+  color: #030f27;
+  font-weight: 500;
+}
+
+.form-control {
+  border-color: #eeeeee;
+  padding: 0.75rem;
+}
+
+.form-control:focus {
+  border-color: #fdbe33;
+  box-shadow: 0 0 0 0.2rem rgba(253, 190, 51, 0.25);
+}
+
+.btn-primary {
+  background-color: #fdbe33;
+  border-color: #fdbe33;
+  color: #030f27;
+}
+
+.btn-primary:hover {
+  background-color: #030f27;
+  border-color: #030f27;
+  color: #fdbe33;
+}
+
+.btn-secondary {
+  background-color: #030f27;
+  border-color: #030f27;
+  color: #fdbe33;
+}
+
+.btn-secondary:hover {
+  background-color: #fdbe33;
+  border-color: #fdbe33;
+  color: #030f27;
+}
+
+.btn-warning {
+  background-color: transparent;
+  border-color: #fdbe33;
+  color: #030f27;
+}
+
+.btn-warning:hover {
+  background-color: #fdbe33;
+  color: #030f27;
+}
+
+.invalid-feedback {
+  color: #dc3545;
+}
+
+.shadow-lg {
+  box-shadow: 0 0.5rem 1rem rgba(3, 15, 39, 0.15) !important;
+}
+</style>
+
+ 
+<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 </div>

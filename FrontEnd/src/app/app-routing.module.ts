@@ -36,10 +36,7 @@ const routes: Routes = [
   
   { path: 'team', component: TeamComponent },
   { path: 'test', component: TestComponent },
-  { path: 'addoffer',component:AddofferComponent},
-  { path: 'getoffer',component:GetofferComponent},
-  { path: 'updateoffer',component:UpdateofferComponent},
-
+ 
   // BackOffice routes
   {
     path: 'admin',
@@ -54,6 +51,10 @@ const routes: Routes = [
          { path: 'maps',           component: MapsComponent },
          { path: 'notifications',  component: NotificationsComponent },
          { path: 'upgrade',        component: UpgradeComponent },
+         { path: 'addoffer',component:AddofferComponent},
+         { path: 'getoffer',component:GetofferComponent},
+         { path: 'updateoffer/:id', component: UpdateofferComponent },
+       
       // Add other backoffice child routes here
       { path: '', redirectTo: 'home', pathMatch: 'full' }, // Default route under admin layout
     ],
