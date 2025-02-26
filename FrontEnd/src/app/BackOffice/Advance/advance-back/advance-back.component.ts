@@ -47,6 +47,15 @@ export class AdvanceBackComponent implements OnInit {
     if (confirm('Are you sure you want to approve this advance?')) {
       this.advanceService.updateAdvanceStatus(id, 'Approved').subscribe({
         next: () => {
+          // Send notification email
+          this.advanceService.notifyUser(id, 'Approved' , "Syrinezaier283@gmail.com").subscribe({
+            next: () => {
+              console.log('Notification sent successfully');
+            },
+            error: (error) => {
+              console.error('Error sending notification:', error);
+            }
+          });
           this.loadAdvances();
         },
         error: (error) => {
@@ -60,12 +69,19 @@ export class AdvanceBackComponent implements OnInit {
     if (confirm('Are you sure you want to reject this advance?')) {
       this.advanceService.updateAdvanceStatus(id, 'Rejected').subscribe({
         next: () => {
+          // Send notification email
+          this.advanceService.notifyUser(id, 'Rejected', "Syrinezaier283@gmail.com").subscribe({
+            next: () => {
+              console.log('Notification sent successfully');
+            },
+            error: (error) => {
+              console.error('Error sending notification:', error);
+            }
+          });
           this.loadAdvances();
         },
         error: (error) => {
           console.error('Error rejecting advance:', error);
-          console.error('Error details:', error.error);
-          alert('Failed to reject advance. Please try again.');
         }
       });
     }

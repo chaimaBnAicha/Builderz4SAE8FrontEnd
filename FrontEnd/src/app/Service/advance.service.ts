@@ -78,4 +78,37 @@ export class AdvanceService {
   canApproveAdvance(userId: number, advanceId: number) {
     return this.http.get<boolean>(`${this.apiUrl}/can-approve?userId=1&advanceId=${advanceId}`);
   }
+
+  sendStatusEmail(advanceId: number, status: string, userEmail: string) {
+    return this.http.post(`${this.apiUrl}/send-status-email`, {
+      advanceId: advanceId,
+      status: status,
+      email: userEmail
+    });
+  }
+
+  sendStatusNotification(advanceId: number, status: string, userId: number) {
+    return this.http.post(`${this.apiUrl}/notify-status`, {
+      advanceId: advanceId,
+      status: status,
+      userId: userId
+    });
+  }
+
+  
+
+  notifyUser(advanceId: number, status: string, userEmail: string): Observable<any> {
+    const subject = "Status Update";
+    const message = `Your advance request has been ${status.toLowerCase()}`;
+  
+    return this.http.post(`${this.apiUrl}/send`, null, {
+      params: {
+        to: userEmail,
+        subject: subject,
+        body: message
+      },
+      responseType: 'text' // Since Spring Boot returns a plain string message
+    });
+  }
+  
 }
