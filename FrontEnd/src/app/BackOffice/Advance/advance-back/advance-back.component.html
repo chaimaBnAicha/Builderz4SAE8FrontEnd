@@ -4,6 +4,36 @@
             <h4>All Advance Requests</h4>
         </div>
         <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="input-group shadow-sm">
+                        
+                        <input 
+                            type="text" 
+                            class="form-control border-left-0"
+                            style="border-right: none;"
+                            placeholder="Search by amount or reason..." 
+                            [(ngModel)]="searchTerm"
+                            (keyup)="onSearch()">
+                        <div class="input-group-append" *ngIf="searchTerm">
+                            <button class="btn btn-outline-secondary border-left-0" 
+                                    (click)="clearSearch()">
+                                <i class="pe-7s-close"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select class="form-control shadow-sm" 
+                            [(ngModel)]="statusFilter" 
+                            (change)="onStatusFilter()">
+                        <option value="">Filter by Status</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Approved">Approved</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                </div>
+            </div>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>

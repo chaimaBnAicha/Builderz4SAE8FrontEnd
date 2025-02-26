@@ -85,3 +85,31 @@
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+.input-group input:focus {
+    box-shadow: none;
+    border-color: #ced4da;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #ced4da;
+}
+
+.shadow-sm {
+    transition: all 0.3s ease;
+}
+
+.shadow-sm:hover {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important;
+}
+
+.btn-outline-secondary {
+    border-color: #ced4da;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #f8f9fa;
+    color: #dc3545;
+}

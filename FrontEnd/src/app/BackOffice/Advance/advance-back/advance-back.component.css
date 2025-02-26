@@ -156,3 +156,25 @@
     font-style: italic;
     padding: 20px 0;
 }
+
+.input-group-text {
+    border-right: none;
+}
+
+.input-group input:focus {
+    box-shadow: none;
+    border-color: #ced4da;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    border-color: #ced4da;
+}
+
+.shadow-sm {
+    transition: all 0.3s ease;
+}
+
+.shadow-sm:hover {
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important;
+}

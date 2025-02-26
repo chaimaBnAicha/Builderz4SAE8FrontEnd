@@ -9,6 +9,9 @@ import { AdvanceService } from 'src/app/Service/advance.service';
 export class AdvanceBackComponent implements OnInit {
   advances: any[] = [];
   approvalStatus: { [key: number]: boolean } = {};  // Store approval status for each advance
+  originalAdvances: any[] = [];
+  searchTerm: string = '';
+  statusFilter: string = '';
 
   constructor(private advanceService: AdvanceService) {}
 
@@ -21,6 +24,7 @@ export class AdvanceBackComponent implements OnInit {
       next: (data) => {
         console.log('Loaded advances:', data);
         this.advances = data;
+        this.originalAdvances = [...data]; // Store original data
         // Check approval status for each advance
         this.advances.forEach(advance => {
           this.checkApprovalStatus(advance.id);
@@ -85,5 +89,36 @@ export class AdvanceBackComponent implements OnInit {
         }
       });
     }
+  }
+
+  onSearch() {
+    this.filterAdvances();
+  }
+
+  onStatusFilter() {
+    this.filterAdvances();
+  }
+
+  filterAdvances() {
+    this.advances = [...this.originalAdvances]; // Start with original data
+
+    if (this.searchTerm) {
+      const searchLower = this.searchTerm.toLowerCase();
+      this.advances = this.advances.filter(advance => 
+        advance.reason.toLowerCase().includes(searchLower) ||
+        advance.amount_request.toString().includes(searchLower)
+      );
+    }
+
+    if (this.statusFilter) {
+      this.advances = this.advances.filter(advance => 
+        advance.status === this.statusFilter
+      );
+    }
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
+    this.filterAdvances();
   }
 }

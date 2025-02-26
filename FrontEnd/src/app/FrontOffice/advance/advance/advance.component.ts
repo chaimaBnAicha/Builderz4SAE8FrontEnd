@@ -9,6 +9,9 @@ import { Router } from '@angular/router';
 })
 export class AdvanceComponent implements OnInit {
   advances: any[] = [];
+  searchTerm: string = '';
+  statusFilter: string = '';
+  originalAdvances: any[] = [];
 
   constructor(private advanceService: AdvanceService, private router: Router) {}
 
@@ -20,9 +23,10 @@ export class AdvanceComponent implements OnInit {
     this.advanceService.getAdvances().subscribe({
       next: (data) => {
         this.advances = data;
+        this.originalAdvances = [...data]; // Store original data
       },
       error: (error) => {
-        console.error('Error fetching advances:', error);
+        console.error('Error loading advances:', error);
       }
     });
   }
@@ -42,5 +46,36 @@ export class AdvanceComponent implements OnInit {
         }
       });
     }
+  }
+
+  onSearch() {
+    this.filterAdvances();
+  }
+
+  onStatusFilter() {
+    this.filterAdvances();
+  }
+
+  filterAdvances() {
+    this.advances = [...this.originalAdvances]; // Start with original data
+
+    if (this.searchTerm) {
+      const searchLower = this.searchTerm.toLowerCase();
+      this.advances = this.advances.filter(advance => 
+        advance.reason.toLowerCase().includes(searchLower) ||
+        advance.amount_request.toString().includes(searchLower)
+      );
+    }
+
+    if (this.statusFilter) {
+      this.advances = this.advances.filter(advance => 
+        advance.status === this.statusFilter
+      );
+    }
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
+    this.filterAdvances();
   }
 }
