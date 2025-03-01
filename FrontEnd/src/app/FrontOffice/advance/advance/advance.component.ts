@@ -78,4 +78,11 @@ export class AdvanceComponent implements OnInit {
     this.searchTerm = '';
     this.filterAdvances();
   }
+  p: number = 1;
+  itemsPerPage: number = 10;
+
+  // Add this method
+  onItemsPerPageChange() {
+    this.p = 1; // Reset to first page when items per page changes
+  }
 }

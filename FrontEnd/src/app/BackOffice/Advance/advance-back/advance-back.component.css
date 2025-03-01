@@ -178,3 +178,18 @@
 .shadow-sm:hover {
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.1)!important;
 }
+.my-pagination ::ng-deep .ngx-pagination {
+    margin: 0;
+    padding: 0;
+}
+
+.my-pagination ::ng-deep .ngx-pagination .current {
+    background: #fdbe33;
+    border-radius: 4px;
+}
+
+.my-pagination ::ng-deep .ngx-pagination a:hover {
+    background: #030f27;
+    color: #fdbe33;
+    border-radius: 4px;
+}

@@ -113,3 +113,18 @@
     background-color: #f8f9fa;
     color: #dc3545;
 }
+.my-pagination ::ng-deep .ngx-pagination {
+    margin: 0;
+    padding: 0;
+}
+
+.my-pagination ::ng-deep .ngx-pagination .current {
+    background: #fdbe33;
+    border-radius: 4px;
+}
+
+.my-pagination ::ng-deep .ngx-pagination a:hover {
+    background: #030f27;
+    color: #fdbe33;
+    border-radius: 4px;
+}

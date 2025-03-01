@@ -47,7 +47,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let advance of advances">
+                        <tr *ngFor="let advance of advances | paginate: { itemsPerPage: itemsPerPage, currentPage: p, totalItems: advances.length }">
                             
                             <td>{{ advance.amount_request | currency }}</td>
                             <td>{{ advance.requestDate | date:'mediumDate' }}</td>
@@ -79,6 +79,22 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div>
+                        <select class="form-control" [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
+                            <option value="5">5 items</option>
+                            <option value="10">10 items</option>
+                            <option value="20">20 items</option>
+                        </select>
+                    </div>
+                    <pagination-controls
+                        (pageChange)="p = $event"
+                        previousLabel="Previous"
+                        nextLabel="Next"
+                        [responsive]="true"
+                        class="my-pagination">
+                    </pagination-controls>
+                </div>
             </div>
         </div>
     </div>
