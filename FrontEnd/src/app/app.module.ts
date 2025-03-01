@@ -26,6 +26,8 @@ import { AdvanceComponent } from './FrontOffice/advance/advance/advance.componen
 import { AddAdvanceComponent } from './FrontOffice/advance/add-advance/add-advance.component';
 import { UpdateAdvanceComponent } from './FrontOffice/advance/update-advance/update-advance.component';
 import { AdvanceBackComponent } from './BackOffice/Advance/advance-back/advance-back.component';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import { AdvanceBackComponent } from './BackOffice/Advance/advance-back/advance-
     AdvanceComponent,
     AddAdvanceComponent,
     UpdateAdvanceComponent,
-    AdvanceBackComponent
+    AdvanceBackComponent,
+    SafeHtmlPipe
   ],
   imports: [
     BrowserModule,
@@ -55,9 +58,12 @@ import { AdvanceBackComponent } from './BackOffice/Advance/advance-back/advance-
     AppRoutingModule,
     NavbarModule,
     FooterModule,
-    SidebarModule
+    SidebarModule,
+    EditorModule
   ],
-  providers: [],
+  providers: [
+    {provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

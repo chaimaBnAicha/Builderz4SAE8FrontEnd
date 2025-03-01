@@ -179,7 +179,7 @@
                         <tr *ngFor="let advance of advances">
                             <td>{{ advance.amount_request | currency }}</td>
                             <td>{{ advance.requestDate | date:'mediumDate' }}</td>
-                            <td>{{ advance.reason }}</td>
+                            <td [innerHTML]="advance.reason | safeHtml"></td>
                             <td>
                                 <span class="badge" [ngClass]="{
                                     'badge-warning': advance.status === 'Pending',

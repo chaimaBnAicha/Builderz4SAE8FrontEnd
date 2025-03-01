@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { Advance } from '../models/advance.model';
 
 
 
@@ -24,23 +25,19 @@ export class AdvanceService {
   }
 
   getAdvances() {
-    return this.http.get<any[]>(`${this.apiUrl}/retrieve-all-advances`);
+    return this.http.get<Advance[]>(`${this.apiUrl}/retrieve-all-advances`);
   }
 
   deleteAdvance(id: number) {
     return this.http.delete(`${this.apiUrl}/remove-advance/${id}`);
   }
 
-  updateAdvance(advance: any) {
-    const advanceWithUser = {
-      ...advance,
-      user: { id: 1 }  // Default user ID as 1
-    };
-    return this.http.put(`${this.apiUrl}/modify-advance`, advanceWithUser);
+  updateAdvance(advance: Advance) {
+    return this.http.put(`${this.apiUrl}/modify-advance`, advance);
   }
 
   getAdvanceById(id: number) {
-    return this.http.get(`${this.apiUrl}/retrieve-advance/${id}`);
+    return this.http.get<Advance>(`${this.apiUrl}/retrieve-advance/${id}`);
   }
 
   updateAdvanceStatus(id: number, status: string) {

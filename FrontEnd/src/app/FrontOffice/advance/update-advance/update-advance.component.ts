@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdvanceService } from 'src/app/Service/advance.service';
+import { Advance } from 'src/app/models/advance.model';
 
 @Component({
   selector: 'app-update-advance',
@@ -12,6 +13,23 @@ export class UpdateAdvanceComponent implements OnInit {
   updateAdvanceForm!: FormGroup;
   advanceId!: number;
 
+  editorConfig = {
+    base_url: '/tinymce',
+    suffix: '.min',
+    height: 300,
+    menubar: false,
+    plugins: [
+      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+      'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+      'insertdatetime', 'media', 'table', 'help', 'wordcount'
+    ],
+    toolbar: 'undo redo | formatselect | ' +
+      'bold italic forecolor backcolor | alignleft aligncenter ' +
+      'alignright alignjustify | bullist numlist outdent indent | ' +
+      'removeformat | help',
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+  };
+
   constructor(
     private fb: FormBuilder,
     private advanceService: AdvanceService,
@@ -20,30 +38,26 @@ export class UpdateAdvanceComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Get advance ID from route parameter
-    this.advanceId = this.route.snapshot.params['id'];
-    
-    // Initialize form
     this.updateAdvanceForm = this.fb.group({
-      id: [''],
       amount_request: ['', [Validators.required, Validators.min(0)]],
-      requestDate: [{value: '', disabled: true}],
       reason: ['', Validators.required],
-      status: ['']
+      status: ['Pending']
     });
 
-    // Load advance data
-    this.loadAdvance();
+    // Get the advance ID from the route parameters
+    this.route.params.subscribe(params => {
+      this.advanceId = +params['id'];
+      this.loadAdvance();
+    });
   }
 
   loadAdvance() {
     this.advanceService.getAdvanceById(this.advanceId).subscribe({
-      next: (advance: any) => {
+      next: (advance: Advance) => {
+        const cleanReason = this.stripHtmlTags(advance.reason);
         this.updateAdvanceForm.patchValue({
-          id: advance.id,
           amount_request: advance.amount_request,
-          requestDate: advance.requestDate,
-          reason: advance.reason,
+          reason: cleanReason,
           status: advance.status
         });
       },
@@ -56,11 +70,12 @@ export class UpdateAdvanceComponent implements OnInit {
   onSubmit() {
     if (this.updateAdvanceForm.valid) {
       const formValue = {
-        ...this.updateAdvanceForm.getRawValue(),
+        ...this.updateAdvanceForm.value,
         id: this.advanceId,
-        user: { id: 1 }  // Default user ID
+        requestDate: new Date().toISOString(),
+        user: { id: 1 }
       };
-      
+
       this.advanceService.updateAdvance(formValue).subscribe({
         next: () => {
           this.router.navigate(['/advance']);
@@ -74,5 +89,11 @@ export class UpdateAdvanceComponent implements OnInit {
 
   onCancel() {
     this.router.navigate(['/advance']);
+  }
+
+  // Helper function to strip HTML tags
+  private stripHtmlTags(html: string): string {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || '';
   }
 }

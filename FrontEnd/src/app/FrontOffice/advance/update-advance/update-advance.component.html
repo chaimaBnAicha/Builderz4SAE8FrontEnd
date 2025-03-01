@@ -21,12 +21,11 @@
 
                 <div class="form-group">
                     <label for="reason">Reason</label>
-                    <textarea 
-                        class="form-control" 
+                    <editor
+                        [init]="editorConfig"
+                        [formControlName]="'reason'"
                         id="reason"
-                        formControlName="reason"
-                        rows="3"
-                    ></textarea>
+                    ></editor>
                     <div class="text-danger" *ngIf="updateAdvanceForm.get('reason')?.touched && updateAdvanceForm.get('reason')?.errors?.['required']">
                         <small>Reason is required</small>
                     </div>

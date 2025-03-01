@@ -52,7 +52,7 @@ export class AdvanceBackComponent implements OnInit {
       this.advanceService.updateAdvanceStatus(id, 'Approved').subscribe({
         next: () => {
           // Send notification email
-          this.advanceService.notifyUser(id, 'Approved' , "Syrinezaier283@gmail.com").subscribe({
+          this.advanceService.notifyUser(id, 'Approved' , "Syrine.zaier@esprit.tn").subscribe({
             next: () => {
               console.log('Notification sent successfully');
             },
@@ -74,7 +74,7 @@ export class AdvanceBackComponent implements OnInit {
       this.advanceService.updateAdvanceStatus(id, 'Rejected').subscribe({
         next: () => {
           // Send notification email
-          this.advanceService.notifyUser(id, 'Rejected', "Syrinezaier283@gmail.com").subscribe({
+          this.advanceService.notifyUser(id, 'Rejected', "Syrine.zaier@esprit.tn").subscribe({
             next: () => {
               console.log('Notification sent successfully');
             },
