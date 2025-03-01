@@ -96,16 +96,42 @@ export class AdvanceService {
 
   notifyUser(advanceId: number, status: string, userEmail: string): Observable<any> {
     const subject = "Status Update";
-    const message = `Your advance request has been ${status.toLowerCase()}`;
+    const logoUrl = "https://i.imgur.com/YX34wNO.png";
+    const message = `
+  <div style="font-family: Arial, sans-serif; background-color: #f3f4f6; padding: 40px; text-align: center;">
+    <div style="background-color: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); display: inline-block; text-align: center; max-width: 600px;">
+      <img src="${logoUrl}" alt="App Logo" style="max-width: 120px; margin-bottom: 20px; border-radius: 5%; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+      
+      <h2 style="color: #4CAF50; margin-bottom: 10px;">Advance Request Update</h2>
+      
+      <p style="color: #333; font-size: 16px; margin-bottom: 20px;">
+        Your advance request has been 
+        <strong style="color: ${status.toLowerCase() === 'approved' ? '#4CAF50' : '#FF5733'};">
+          ${status.toLowerCase()}
+        </strong>.
+      </p>
+      
+      <p style="font-size: 14px; color: #666;">Thank you for trusting us. We are always here to serve you!</p>
+      
+      <a href="http://localhost:4200" style="background-color: #4CAF50; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; display: inline-block; margin-top: 20px;">
+        Visit Our App
+      </a>
+      
+      <p style="font-size: 12px; color: #999; margin-top: 30px;">If you have any questions, contact our support team.</p>
+    </div>
+  </div>
+`;
   
     return this.http.post(`${this.apiUrl}/send`, null, {
       params: {
         to: userEmail,
         subject: subject,
-        body: message
+        body: message,
+        isHtml: 'true' // Add this parameter if your backend needs to differentiate HTML content
       },
-      responseType: 'text' // Since Spring Boot returns a plain string message
+      responseType: 'text'
     });
   }
+  
   
 }
