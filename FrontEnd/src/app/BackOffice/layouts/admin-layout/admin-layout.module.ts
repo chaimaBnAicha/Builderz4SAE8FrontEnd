@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgChartsModule } from 'ng2-charts';
 
 import { LbdModule } from '../../lbd/lbd.module';
 import { NguiMapModule } from '@ngui/map';
@@ -19,6 +20,7 @@ import { UpgradeComponent } from '../../upgrade/upgrade.component';
 import { NavbarModule } from "../../shared/navbar/navbar.module";
 import { FooterModule } from "../../shared/footer/footer.module";
 import { SidebarModule } from "../../sidebar/sidebar.module";
+import { PieChartComponent } from '../../AdvanceCharts/pie-chart/pie-chart.component';
 
 @NgModule({
   imports: [
@@ -26,20 +28,21 @@ import { SidebarModule } from "../../sidebar/sidebar.module";
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
     ReactiveFormsModule,
-    LbdModule, HomeComponent,
+    LbdModule,
+    HomeComponent,
     NavbarModule,
     FooterModule,
-    SidebarModule
-],
+    SidebarModule,
+    NgChartsModule
+  ],
   declarations: [
-    
     UserComponent,
     TablesComponent,
     TypographyComponent,
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-    UpgradeComponent
+    UpgradeComponent,
   ]
 })
 export class AdminLayoutModule {}

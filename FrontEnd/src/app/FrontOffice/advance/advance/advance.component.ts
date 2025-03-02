@@ -79,7 +79,7 @@ export class AdvanceComponent implements OnInit {
     this.filterAdvances();
   }
   p: number = 1;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 5;
 
   // Add this method
   onItemsPerPageChange() {

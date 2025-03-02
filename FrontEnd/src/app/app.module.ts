@@ -29,6 +29,9 @@ import { UpdateAdvanceComponent } from './FrontOffice/advance/update-advance/upd
 import { AdvanceBackComponent } from './BackOffice/Advance/advance-back/advance-back.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { NgChartsModule } from 'ng2-charts';
+import { PieChartComponent } from './BackOffice/AdvanceCharts/pie-chart/pie-chart.component';
+import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,10 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
     AddAdvanceComponent,
     UpdateAdvanceComponent,
     AdvanceBackComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    DashboardComponent,
+    PieChartComponent
+
   ],
   imports: [
     BrowserModule,
@@ -61,7 +67,8 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
     FooterModule,
     SidebarModule,
     EditorModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgChartsModule
   ],
   providers: [
     {provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}
