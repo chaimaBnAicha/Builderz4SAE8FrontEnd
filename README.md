@@ -3,13 +3,13 @@ Builderz is a web-based construction management platform designed to enhance col
 
 ##Technologies Used
 Frontend :
-  Angular
-  Component-Based Architecture
-  Lazy Loading
-  Authentication Guard
-  OpenAPI Generator for Angular
-  Bootstrap
--------------------------------------------------------------------------------------------------
+  #Angular
+  #Component-Based Architecture
+  #Lazy Loading
+  #Authentication Guard
+  #OpenAPI Generator for Angular
+  #Bootstrap
+
 
 ##Learning Objectives
 By following this project, you will learn:
@@ -20,19 +20,19 @@ By following this project, you will learn:
   +Implementing user registration and account validation via email
   +Integrating AI-powered features to optimize decision-making and reduce management time
   +Dockerizing the infrastructure for deployment and scalability
--------------------------------------------------------------------------------------------------
+
 
 #Diagram class:
 ![image](https://github.com/user-attachments/assets/3138d325-fb87-40fd-b104-dcff3d8199b0)
 
---------------------------------------------------------------------------------------------------
 
-#Use case diagram
+
 
 
 
 
 ##Contributors
+
 Oumayma Hasnaoui : Task Management Module 
 Oumayma Hasnaoui : Stage Management Module 
 Chaima Ben Aicha : Project Request Management Module 
@@ -43,7 +43,8 @@ Yassine Zagrouba : Insurance Management Management Module
 Yassine Zagrouba : Offer Management Management Module 
 Firas Trabelsi   : Stock Management Module 
 Firas Trabelsi   : Invoice Management Management Module 
-----------------------------------------------------------------------------------------------------
+
+
 
 
 
