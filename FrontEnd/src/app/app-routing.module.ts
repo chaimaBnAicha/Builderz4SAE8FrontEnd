@@ -24,6 +24,7 @@ import { UpgradeComponent } from './BackOffice/upgrade/upgrade.component';
 import { GetofferComponent } from './FrontOffice/Offer/getoffer/getoffer.component';
 import { AddofferComponent } from './FrontOffice/Offer/addoffer/addoffer.component';
 import { UpdateofferComponent } from './FrontOffice/Offer/updateoffer/updateoffer.component';
+import { ViewOffersComponent } from './FrontOffice/Offer/view-offers/view-offers.component';
 // Define your routes
 const routes: Routes = [
   // FrontOffice routes
@@ -36,6 +37,7 @@ const routes: Routes = [
   
   { path: 'team', component: TeamComponent },
   { path: 'test', component: TestComponent },
+  {path:'app-view-offers', component:ViewOffersComponent},
  
   // BackOffice routes
   {

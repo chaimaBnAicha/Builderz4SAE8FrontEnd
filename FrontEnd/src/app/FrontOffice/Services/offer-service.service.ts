@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, throwError, tap } from 'rxjs';
 import { Offer, TypeOffer, OfferStatus } from '../Models/offer.model';
 import { map } from 'rxjs/operators';
 
@@ -39,7 +39,7 @@ export class OfferServiceService {
   constructor(private http: HttpClient) { }
 
   // Create - Add a new offer
-  createOffer(offer: Offer): Observable<Offer> {
+  createOffer(offer: Offer): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
@@ -58,14 +58,18 @@ export class OfferServiceService {
       status: "ACTIVE",
       start_Date: startDate.toISOString(),
       typeoffer: offer.Typeoffer.toString(),
-      end_Date: endDate.toISOString()
+      end_Date: endDate.toISOString(),
+      sendEmail: true  // Add flag to trigger email notification
     };
 
     console.log('Sending formatted offer:', JSON.stringify(formattedOffer, null, 2));
 
-    return this.http.post<Offer>(`${this.apiUrl}/add-Offer`, formattedOffer, { headers }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/add-Offer`, formattedOffer, { headers }).pipe(
+      tap(response => {
+        console.log('Offer created successfully:', response);
+      }),
       catchError(error => {
-        console.error('Error details:', error);
+        console.error('Error creating offer:', error);
         return throwError(() => error);
       })
     );

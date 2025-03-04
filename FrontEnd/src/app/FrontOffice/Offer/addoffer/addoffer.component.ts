@@ -15,6 +15,8 @@ export class AddofferComponent implements OnInit {
   TypeOffer = TypeOffer;
   OfferStatus = OfferStatus;
   today: string;
+  successMessage: string = '';
+  errorMessage: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -45,6 +47,8 @@ export class AddofferComponent implements OnInit {
 
   onSubmit() {
     this.submitted = true;
+    this.successMessage = '';
+    this.errorMessage = '';
 
     if (this.offerForm.invalid) {
       return;
@@ -52,29 +56,17 @@ export class AddofferComponent implements OnInit {
 
     const formData = this.offerForm.value;
     
-    // Create the offer object with proper typing
-    const newOffer: Offer = {
-      id_offer: undefined,
-      Title: formData.Title,
-      Description: formData.Description,
-      Start_Date: formData.Start_Date,
-      End_Date: formData.End_Date,
-      Typeoffer: formData.Typeoffer,
-      Status: OfferStatus.ACTIVE,
-      user_id: 1
-    };
-
-    console.log('Submitting offer:', newOffer);
-
-    this.offerService.createOffer(newOffer).subscribe({
+    this.offerService.createOffer(formData).subscribe({
       next: (response) => {
         console.log('Offer created successfully:', response);
-        this.router.navigate(['/admin/getoffer']);
+        this.successMessage = 'Offer created successfully! Email notification has been sent.';
+        setTimeout(() => {
+          this.router.navigate(['/admin/getoffer']);
+        }, 2000);
       },
       error: (error) => {
-        console.error('Full error:', error);
-        console.error('Request payload:', newOffer);
-        // You might want to show an error message to the user here
+        console.error('Error creating offer:', error);
+        this.errorMessage = 'Failed to create offer. Please try again.';
       }
     });
   }

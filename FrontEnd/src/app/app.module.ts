@@ -26,6 +26,7 @@ import { TestComponent } from './BackOffice/test/test.component';
 import { GetofferComponent } from './FrontOffice/Offer/getoffer/getoffer.component';
 import { AddofferComponent } from './FrontOffice/Offer/addoffer/addoffer.component';
 import { UpdateofferComponent } from './FrontOffice/Offer/updateoffer/updateoffer.component';
+import { ViewOffersComponent } from './FrontOffice/Offer/view-offers/view-offers.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { UpdateofferComponent } from './FrontOffice/Offer/updateoffer/updateoffe
     TestComponent,
     GetofferComponent,
     AddofferComponent,
-    UpdateofferComponent
+    UpdateofferComponent,
+    ViewOffersComponent
   ],
   imports: [
     BrowserModule,
