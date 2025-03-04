@@ -34,15 +34,25 @@ By following this project, you will learn:
 ##Contributors
 
 Oumayma Hasnaoui : Task Management Module 
+
 Oumayma Hasnaoui : Stage Management Module 
+
 Chaima Ben Aicha : Project Request Management Module 
+
 Chaima Ben Aicha : Project validation Management Module 
+
 Syrine Zaier     : Advance Management Module 
+
 Syrine Zaier     : Leave Management Module 
+
 Yassine Zagrouba : Insurance Management Management Module 
+
 Yassine Zagrouba : Offer Management Management Module 
+
 Firas Trabelsi   : Stock Management Module 
+
 Firas Trabelsi   : Invoice Management Management Module 
+
 
 
 
