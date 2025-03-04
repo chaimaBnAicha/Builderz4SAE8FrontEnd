@@ -23,13 +23,13 @@
 
             <div class="mb-3">
               <label for="description" class="form-label">Description*</label>
-              <textarea
-                class="form-control"
-                id="description"
+              <editor
                 formControlName="description"
-                rows="3"
+                [init]="editorConfig"
+                apiKey="bs8c5xfp5pctmes93wot5hlcmxuowt2wk3j2437fw51e5xvt"
+                id="description"
                 [ngClass]="{ 'is-invalid': submitted && f['description'].errors }"
-              ></textarea>
+              ></editor>
               <div *ngIf="submitted && f['description'].errors" class="invalid-feedback">
                 <div *ngIf="f['description'].errors['required']">Description is required</div>
               </div>
@@ -180,5 +180,82 @@ select.form-control {
   background-repeat: no-repeat;
   background-position: right 0.75rem center;
   background-size: 8px 10px;
+}
+
+/* TinyMCE Editor Styles */
+:host ::ng-deep .tox-tinymce {
+  border-color: #eeeeee !important;
+  border-radius: 4px !important;
+}
+
+:host ::ng-deep .tox .tox-toolbar__group {
+  padding: 0 5px !important;
+}
+
+:host ::ng-deep .tox .tox-tbtn {
+  color: #030f27 !important;
+}
+
+:host ::ng-deep .tox .tox-tbtn:hover {
+  background-color: #fdbe33 !important;
+  color: #030f27 !important;
+}
+
+:host ::ng-deep .tox .tox-tbtn--enabled {
+  background-color: #fdbe33 !important;
+  color: #030f27 !important;
+}
+
+:host ::ng-deep .tox .tox-tbtn--enabled:hover {
+  background-color: #030f27 !important;
+  color: #fdbe33 !important;
+}
+
+:host ::ng-deep .tox .tox-toolbar__group:not(:last-of-type) {
+  border-color: #eeeeee !important;
+}
+
+:host ::ng-deep .tox .tox-edit-area__iframe {
+  background-color: #ffffff !important;
+}
+
+:host ::ng-deep .tox .tox-statusbar {
+  border-color: #eeeeee !important;
+}
+
+:host ::ng-deep .tox .tox-statusbar__path-item {
+  color: #030f27 !important;
+}
+
+:host ::ng-deep .tox .tox-statusbar__wordcount {
+  color: #030f27 !important;
+}
+
+:host ::ng-deep .tox .tox-toolbar-overlord {
+  background-color: #ffffff !important;
+}
+
+:host ::ng-deep .tox .tox-toolbar__primary {
+  background-color: #ffffff !important;
+}
+
+:host ::ng-deep .tox .tox-toolbar__group {
+  background-color: #ffffff !important;
+}
+
+:host ::ng-deep .tox .tox-tbtn svg {
+  fill: #030f27 !important;
+}
+
+:host ::ng-deep .tox .tox-tbtn:hover svg {
+  fill: #030f27 !important;
+}
+
+:host ::ng-deep .tox .tox-tbtn--enabled svg {
+  fill: #030f27 !important;
+}
+
+:host ::ng-deep .tox .tox-tbtn--enabled:hover svg {
+  fill: #fdbe33 !important;
 }
 </style>

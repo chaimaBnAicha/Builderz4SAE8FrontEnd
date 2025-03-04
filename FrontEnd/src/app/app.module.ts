@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { EditorModule } from '@tinymce/tinymce-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +28,7 @@ import { GetofferComponent } from './FrontOffice/Offer/getoffer/getoffer.compone
 import { AddofferComponent } from './FrontOffice/Offer/addoffer/addoffer.component';
 import { UpdateofferComponent } from './FrontOffice/Offer/updateoffer/updateoffer.component';
 import { ViewOffersComponent } from './FrontOffice/Offer/view-offers/view-offers.component';
+import { PipesPipe } from './FrontOffice/pipes.pipe';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import { ViewOffersComponent } from './FrontOffice/Offer/view-offers/view-offers
     GetofferComponent,
     AddofferComponent,
     UpdateofferComponent,
-    ViewOffersComponent
+    ViewOffersComponent,
+    PipesPipe
   ],
   imports: [
     BrowserModule,
@@ -56,7 +59,8 @@ import { ViewOffersComponent } from './FrontOffice/Offer/view-offers/view-offers
     NavbarModule,
     FooterModule,
     SidebarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    EditorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -73,19 +73,22 @@
               </div>
             </div>
 
-            <div class="mb-3">
-              <label for="Description" class="form-label">Description*</label>
-              <textarea
-                class="form-control"
-                id="Description"
-                rows="3"
+            <div class="form-group">
+              <label for="Description">Description*</label>
+              <editor
                 formControlName="Description"
-                [ngClass]="{ 'is-invalid': submitted && f['Description'].errors }"
-              ></textarea>
-              <div *ngIf="submitted && f['Description'].errors" class="invalid-feedback">
-                <div *ngIf="f['Description'].errors['required']">Description is required</div>
+                [init]="editorConfig"
+                id="Description"
+                name="Description"
+                apiKey="bs8c5xfp5pctmes93wot5hlcmxuowt2wk3j2437fw51e5xvt"
+                [inline]="false"
+               
+              ></editor>
+              <div class="text-danger" *ngIf="f['Description'].touched && f['Description'].errors?.['required']">
+                <small>Description is required</small>
               </div>
             </div>
+            
 
             <div class="row">
               <div class="col-md-6 mb-3">

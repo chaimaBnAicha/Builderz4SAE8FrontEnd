@@ -149,7 +149,7 @@
       
       <div class="offer-content">
         <h3>{{offer.Title}}</h3>
-        <p>{{offer.Description}}</p>
+        <p [innerHTML]="offer.Description | pipes"></p>
         
         <div class="offer-details">
           <div class="detail-item">
@@ -190,7 +190,7 @@
       
       <div class="offer-details-section">
         <h4>Description</h4>
-        <p>{{selectedOffer?.Description}}</p>
+        <p [innerHTML]="(selectedOffer?.Description ?? '') | pipes"></p>
         
         <div class="dates-section">
           <div class="date-item">

@@ -140,7 +140,7 @@
 
                                             <tr *ngFor="let offer of filteredOffers">
                                                 <td class="align-middle">{{ offer.Title }}</td>
-                                                <td class="align-middle">{{ offer.Description || 'N/A' }}</td>
+                                                <td class="align-middle" [innerHTML]="offer.Description | pipes"></td>
                                                 <td class="align-middle">{{ offer.Start_Date | date:'mediumDate' }}</td>
                                                 <td class="align-middle">{{ offer.End_Date | date:'mediumDate' }}</td>
                                                 <td class="align-middle">

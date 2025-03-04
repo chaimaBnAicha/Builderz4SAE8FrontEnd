@@ -17,6 +17,21 @@ export class UpdateofferComponent implements OnInit {
   OfferStatus = OfferStatus;
   today: string;
 
+  editorConfig = {
+    height: 300,
+    menubar: false,
+    plugins: [
+      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+      'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+      'insertdatetime', 'media', 'table', 'help', 'wordcount'
+    ],
+    toolbar: 'undo redo | blocks | ' +
+      'bold italic backcolor | alignleft aligncenter ' +
+      'alignright alignjustify | bullist numlist outdent indent | ' +
+      'removeformat | help',
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+  };
+
   constructor(
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -62,13 +77,22 @@ export class UpdateofferComponent implements OnInit {
         const endDate = offer.End_Date ? 
           new Date(offer.End_Date).toISOString().split('T')[0] : '';
         
+        // Set the form values, preserving HTML content
         this.offerForm.patchValue({
           title: offer.Title,
-          description: offer.Description,
+          description: offer.Description || '', // Ensure description is never undefined
           start_Date: startDate,
           end_Date: endDate,
           typeoffer: offer.Typeoffer
         });
+
+        // Set the editor content after a short delay to ensure the editor is initialized
+        setTimeout(() => {
+          const editor = (window as any).tinymce.get('description');
+          if (editor) {
+            editor.setContent(offer.Description || '');
+          }
+        }, 100);
 
         console.log('Form values after patch:', this.offerForm.value);
       },
