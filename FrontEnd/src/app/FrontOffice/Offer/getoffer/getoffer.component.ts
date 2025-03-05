@@ -25,6 +25,11 @@ export class GetofferComponent implements OnInit {
   isLoading = false;
   error: string | null = null;
   
+  // Pagination properties
+  currentPage = 1;
+  pageSize = 5;
+  Math = Math; // For use in template
+
   constructor(
     private offerService: OfferServiceService,
     private router: Router
@@ -32,6 +37,41 @@ export class GetofferComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadOffers();
+  }
+
+  // Pagination methods
+  get totalPages(): number {
+    return Math.ceil(this.filteredOffers.length / this.pageSize);
+  }
+
+  getPages(): number[] {
+    const pages: number[] = [];
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  }
+
+  onPageChange(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      window.scrollTo(0, 0);
+    }
+  }
+
+  get paginatedOffers(): Offer[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    return this.filteredOffers.slice(start, end);
   }
 
   loadOffers() {
@@ -59,20 +99,28 @@ export class GetofferComponent implements OnInit {
 
   applyFilters() {
     this.filteredOffers = this.offers.filter(offer => {
-      return (
-        offer.Title.toLowerCase().includes(this.filters.title.toLowerCase()) &&
-        offer.Description.toLowerCase().includes(this.filters.description.toLowerCase()) &&
-        (this.filters.startDate ? new Date(offer.Start_Date!) >= new Date(this.filters.startDate) : true) &&
-        (this.filters.endDate ? new Date(offer.End_Date!) <= new Date(this.filters.endDate) : true) &&
-        (this.filters.type ? offer.Typeoffer === this.filters.type : true) &&
-        (this.filters.status ? offer.Status === this.filters.status : true)
-      );
+      const titleMatch = !this.filters.title || 
+        offer.Title.toLowerCase().includes(this.filters.title.toLowerCase());
+      const descriptionMatch = !this.filters.description || 
+        offer.Description.toLowerCase().includes(this.filters.description.toLowerCase());
+      const startDateMatch = !this.filters.startDate || 
+        new Date(offer.Start_Date!) >= new Date(this.filters.startDate);
+      const endDateMatch = !this.filters.endDate || 
+        new Date(offer.End_Date!) <= new Date(this.filters.endDate);
+      const typeMatch = !this.filters.type || 
+        offer.Typeoffer === this.filters.type;
+      const statusMatch = !this.filters.status || 
+        offer.Status === this.filters.status;
+
+      return titleMatch && descriptionMatch && startDateMatch && 
+             endDateMatch && typeMatch && statusMatch;
     });
   }
 
   onSearch(field: string, event: Event): void {
     const value = (event.target as HTMLInputElement | HTMLSelectElement).value;
     this.filters[field as keyof typeof this.filters] = value;
+    this.currentPage = 1; // Reset to first page when filtering
     this.applyFilters();
   }
 

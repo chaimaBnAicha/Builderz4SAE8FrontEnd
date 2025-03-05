@@ -29,6 +29,9 @@ import { AddofferComponent } from './FrontOffice/Offer/addoffer/addoffer.compone
 import { UpdateofferComponent } from './FrontOffice/Offer/updateoffer/updateoffer.component';
 import { ViewOffersComponent } from './FrontOffice/Offer/view-offers/view-offers.component';
 import { PipesPipe } from './FrontOffice/pipes.pipe';
+import { ChartsComponent } from './BackOffice/OfferCharts/charts/charts.component';
+import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,9 @@ import { PipesPipe } from './FrontOffice/pipes.pipe';
     AddofferComponent,
     UpdateofferComponent,
     ViewOffersComponent,
-    PipesPipe
+    PipesPipe,
+    ChartsComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +65,8 @@ import { PipesPipe } from './FrontOffice/pipes.pipe';
     FooterModule,
     SidebarModule,
     ReactiveFormsModule,
-    EditorModule
+    EditorModule,
+    NgxChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -14,10 +14,50 @@ export class ViewOffersComponent implements OnInit {
   selectedOffer: Offer | null = null;
   showModal: boolean = false;
 
+  // Pagination properties
+  currentPage = 1;
+  pageSize = 6; // Show 6 offers per page for the grid layout
+  Math = Math; // For use in template
+
   constructor(private offerService: OfferServiceService) { }
 
   ngOnInit(): void {
     this.loadOffers();
+  }
+
+  // Pagination methods
+  get totalPages(): number {
+    return Math.ceil(this.offers.length / this.pageSize);
+  }
+
+  getPages(): number[] {
+    const pages: number[] = [];
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  }
+
+  onPageChange(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      window.scrollTo(0, 0);
+    }
+  }
+
+  get paginatedOffers(): Offer[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    return this.offers.slice(start, end);
   }
 
   loadOffers(): void {

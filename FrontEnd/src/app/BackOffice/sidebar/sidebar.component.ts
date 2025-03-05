@@ -17,7 +17,7 @@ type MenuGroups = {
 export const ROUTES: RouteInfo[] = [
   // Main Group
   {
-    path: 'dashboard',
+    path: 'app-dashboard',
     title: 'Dashboard',
     icon: 'pe-7s-graph',
     class: '',

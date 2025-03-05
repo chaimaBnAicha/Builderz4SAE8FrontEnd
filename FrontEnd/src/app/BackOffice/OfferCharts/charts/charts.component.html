@@ -1,0 +1,35 @@
+<div class="charts-container">
+  <div class="chart-card">
+    <h3>Statut des offres</h3>
+    <ngx-charts-pie-chart
+      [view]="view"
+      [results]="statusData"
+      [legend]="true"
+      [doughnut]="true"
+      [animations]="true"
+      [labels]="true">
+    </ngx-charts-pie-chart>
+  </div>
+
+  <div class="chart-card">
+    <h3>Type des offres</h3>
+    <ngx-charts-bar-vertical
+      [view]="view"
+      [results]="typeData"
+      [scheme]="'cool'"
+      [xAxis]="true"
+      [yAxis]="true"
+      [legend]="true"
+      [showDataLabel]="true"
+      [animations]="true">
+    </ngx-charts-bar-vertical>
+  </div>
+
+  <div class="chart-card">
+    <h3>Offres par mois</h3>
+    <div class="chart-container">
+      <canvas #lineChart></canvas>
+    </div>
+  </div>
+</div>
+  
