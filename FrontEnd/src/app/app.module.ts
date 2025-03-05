@@ -32,6 +32,7 @@ import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { NgChartsModule } from 'ng2-charts';
 import { PieChartComponent } from './BackOffice/AdvanceCharts/pie-chart/pie-chart.component';
 import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
+import { BarChartComponent } from './BackOffice/AdvanceCharts/bar-chart/bar-chart.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
     AdvanceBackComponent,
     SafeHtmlPipe,
     DashboardComponent,
-    PieChartComponent
+    PieChartComponent,
+    BarChartComponent
 
   ],
   imports: [

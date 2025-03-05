@@ -27,6 +27,7 @@ import { UpdateAdvanceComponent } from './FrontOffice/advance/update-advance/upd
 import { AdvanceBackComponent } from './BackOffice/Advance/advance-back/advance-back.component';
 import { PieChartComponent } from './BackOffice/AdvanceCharts/pie-chart/pie-chart.component';
 import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
+import { BarChartComponent } from './BackOffice/AdvanceCharts/bar-chart/bar-chart.component';
 
 // Define your routes
 const routes: Routes = [
@@ -63,6 +64,8 @@ const routes: Routes = [
          {path:'advanceback', component:AdvanceBackComponent},
          {path:'app-pie-chart', component:PieChartComponent},
          {path:'app-dashboard',component: DashboardComponent},
+         {path:'app-bar-chart', component:BarChartComponent},
+
       // Add other backoffice child routes here
       { path: '', redirectTo: 'home', pathMatch: 'full' }, // Default route under admin layout
     ],
