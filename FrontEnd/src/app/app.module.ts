@@ -33,6 +33,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { PieChartComponent } from './BackOffice/AdvanceCharts/pie-chart/pie-chart.component';
 import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
 import { BarChartComponent } from './BackOffice/AdvanceCharts/bar-chart/bar-chart.component';
+import { SinusoidalComponent } from './BackOffice/AdvanceCharts/sinusoidal/sinusoidal.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { BarChartComponent } from './BackOffice/AdvanceCharts/bar-chart/bar-char
     SafeHtmlPipe,
     DashboardComponent,
     PieChartComponent,
-    BarChartComponent
+    BarChartComponent,
+    SinusoidalComponent
 
   ],
   imports: [
