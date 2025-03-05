@@ -1,0 +1,24 @@
+.request-details-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    font-size: 20px;
+    margin-top: 15px;
+  }
+  
+  p {
+    font-size: 16px;
+  }
+  
+  #map {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+  }
+  

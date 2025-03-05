@@ -1,0 +1,29 @@
+/* Assurez-vous que le container est centré */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Centrer le contenu horizontalement */
+    padding: 20px;
+    width: 100%;
+  }
+  
+  /* Centrer la table avec un peu d'espace autour */
+  .table {
+    width: 80%; /* Ajustez la largeur de la table selon vos besoins */
+    margin: 20px auto; /* Centrer la table et ajouter un peu d'espace autour */
+    border-collapse: collapse; /* S'assurer que les bordures ne se chevauchent pas */
+  }
+  
+  /* Pour donner un aspect soigné aux cellules */
+  th, td {
+    padding: 10px 15px;
+    text-align: left;
+    border: 1px solid #ddd; /* Ajouter une bordure légère */
+  }
+  
+  /* Appliquer une couleur de fond aux en-têtes de la table */
+  th {
+    background-color: #f2f2f2;
+  }
+  

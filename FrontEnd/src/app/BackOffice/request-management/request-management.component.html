@@ -1,0 +1,48 @@
+<div class="container">
+  <h2>Request Management</h2>
+
+  <!-- Filtres -->
+  <div class="filters">
+    <label>Filter by status:</label>
+    <select [(ngModel)]="selectedStatus" (change)="filterByStatus()">
+      <option value="">All</option>
+      <option value="Pending">Pending</option>
+      <option value="Approved">Approved</option>
+      <option value="Rejected">Rejected</option>
+    </select>
+  </div>
+
+  <!-- Carte Google Maps -->
+  <div id="map" style="height: 400px; width: 100%; margin-bottom: 20px;"></div>
+
+  <!-- Tableau des demandes -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Project Name</th>
+        <th>Client</th>
+        <th>Budget</th>
+        <th>Duration</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let request of filteredRequests">
+        <td>{{ request.id_projet }}</td>
+        <td>{{ request.projectName }}</td>
+        <td>{{ request.User?.name }} (ID: {{ request.User?.id }})</td>
+        <td>{{ request.estimated_budget }} $</td>
+        <td>{{ request.estimated_duration }}</td>
+        <td>
+          <span [ngStyle]="{'color': getStatusColor(request.status)}">{{ request.status }}</span>
+        </td>
+        <td>
+          <button (click)="viewDetails(request.id_projet)" class="btn btn-info">View Details</button>
+          <button (click)="deleteRequest(request.id_projet)" class="btn btn-warning">🗑 Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
