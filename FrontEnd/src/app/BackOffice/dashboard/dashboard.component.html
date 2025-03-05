@@ -1,5 +1,22 @@
-
-<h1>Advance Request Statistics</h1>
-<app-pie-chart></app-pie-chart>
-<app-bar-chart></app-bar-chart>
-<app-sinusoidal></app-sinusoidal>
+<div class="statistics-container">
+    <h1 class="title">Advance Request Statistics</h1>
+    
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h2>Request Status Distribution</h2>
+        <app-pie-chart></app-pie-chart>
+      </div>
+      <div class="chart-card">
+        <h2>Sinusoidal Trend</h2>
+        <app-sinusoidal></app-sinusoidal>
+      </div>
+    </div>
+  
+      <div class="chart-card">
+        <h2>Monthly Requests</h2>
+        <app-bar-chart></app-bar-chart>
+      </div>
+  
+      
+  </div>
+  
