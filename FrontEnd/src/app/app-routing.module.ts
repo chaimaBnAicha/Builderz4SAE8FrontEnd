@@ -2,16 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 
 import { AdminLayoutComponent } from './BackOffice/layouts/admin-layout/admin-layout.component';
 import { IndexComponent } from './FrontOffice/index/index.component';
-
+import { BlogComponent } from './FrontOffice/blog/blog.component';
 import { ContactComponent } from './FrontOffice/contact/contact.component';
 import { PortfolioComponent } from './FrontOffice/portfolio/portfolio.component';
 import { ServiceComponent } from './FrontOffice/service/service.component';
-
+import { SingleComponent } from './FrontOffice/single/single.component';
 import { TeamComponent } from './FrontOffice/team/team.component';
 import { AboutComponent } from './FrontOffice/about/about.component';
 import { HomeComponent } from './BackOffice/home/home.component';
@@ -24,6 +22,8 @@ import { IconsComponent } from './BackOffice/icons/icons.component';
 import { NotificationsComponent } from './BackOffice/notifications/notifications.component';
 import { UpgradeComponent } from './BackOffice/upgrade/upgrade.component';
 import { PostTacheComponent } from './tache/post-tache/post-tache.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { GetAllTacheComponent } from './tache/get-all-tache/get-all-tache.component';
 import { UpdateTacheComponent } from './tache/update-tache/update-tache.component';
 import { KanbanComponent } from './tache/kanban/kanban.component';
@@ -33,12 +33,12 @@ import { TacheResponseComponent } from './tache/tache-response/tache-response.co
 const routes: Routes = [
   // FrontOffice routes
   { path: '', component: IndexComponent },
-  
+  { path: 'blog', component: BlogComponent },
   { path: 'about', component: AboutComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'portfolio', component: PortfolioComponent },
   { path: 'service', component: ServiceComponent },
-  
+  { path: 'single', component: SingleComponent },
   { path: 'team', component: TeamComponent },
   { path: 'test', component: TestComponent },
   {path:'tache',component:PostTacheComponent},
@@ -63,17 +63,22 @@ const routes: Routes = [
       { path: '', redirectTo: 'home', pathMatch: 'full' }, // Default route under admin layout
     ],
   },
-
+  { path: 'reponse/:taskId/:response', component: TacheResponseComponent },
   // Default route for unknown paths
   { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
   imports: [
+    CommonModule,
+    BrowserModule,
     RouterModule.forRoot(routes, {
-      useHash: true
-    })
+      useHash: true, // Use hash-based routing (optional)
+    }),
+    FormsModule,
+    ReactiveFormsModule,
+    HttpClientModule,
   ],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

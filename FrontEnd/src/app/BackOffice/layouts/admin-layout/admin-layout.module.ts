@@ -23,7 +23,7 @@ import { SidebarModule } from "../../sidebar/sidebar.module";
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
     ReactiveFormsModule,
-    LbdModule,
+  
     NavbarModule,
     FooterModule,
     SidebarModule

@@ -1,19 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { TacheService, Tache } from 'src/app/service/tache.service';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { DatePipe } from '@angular/common';
-import { Router } from '@angular/router';
-
 @Component({
-  selector: 'app-typography',
-  templateUrl: './typography.component.html',
-  styleUrls: ['./typography.component.css'],
-  providers: [DatePipe]
+  selector: 'app-get-tache',
+  templateUrl: './get-tache.component.html',
+  styleUrls: ['./get-tache.component.css']
 })
-export class TypographyComponent implements OnInit {
-  taches: Tache[] = [];
+export class GetTacheComponent {
+ taches: Tache[] = [];
   searchControl = new FormControl('');
   isSearching = false;
   noResults = false;
@@ -132,5 +128,4 @@ showTaskDetails(tache: Tache) {
 
 closeDetails() {
   this.selectedTache = null;
-}
-}
+}}

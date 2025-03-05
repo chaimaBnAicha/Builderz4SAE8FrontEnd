@@ -5,17 +5,20 @@ import { RouterModule } from '@angular/router';
 
 import { LbdChartComponent } from './lbd-chart/lbd-chart.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
   ],
   declarations: [
 
-    LbdChartComponent,
+    
 
   ],
   exports: [
-    LbdChartComponent,
+
+ 
+
   ]
 })
 export class LbdModule { }

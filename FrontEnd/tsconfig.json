@@ -23,11 +23,7 @@
     "lib": [
       "ES2022",
       "dom"
-    ],
-    "types": [
-      "pdfmake/interfaces"
-    ],
-    "esModuleInterop": true
+    ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

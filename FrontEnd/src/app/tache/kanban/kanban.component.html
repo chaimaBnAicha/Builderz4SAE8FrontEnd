@@ -148,11 +148,10 @@
                       <div class="deco-line"></div>
                     </div>
                     <div cdkDropList 
-                         id="A_FAIRE"
                          [cdkDropListData]="taches.A_FAIRE"
                          (cdkDropListDropped)="drop($event, 'A_FAIRE')"
                          class="task-list">
-                      <div *ngFor="let tache of taches.A_FAIRE; trackBy: trackById" 
+                      <div *ngFor="let tache of taches.A_FAIRE" 
                            cdkDrag
                            class="task-card">
                            <div class="task-border"></div>
@@ -169,11 +168,10 @@
                       <div class="deco-line"></div>
                     </div>
                     <div cdkDropList 
-                         id="EN_COURS"
                          [cdkDropListData]="taches.EN_COURS"
                          (cdkDropListDropped)="drop($event, 'EN_COURS')"
                          class="task-list">
-                      <div *ngFor="let tache of taches.EN_COURS; trackBy: trackById" 
+                      <div *ngFor="let tache of taches.EN_COURS" 
                            cdkDrag
                            class="task-card">
                            <div class="task-border"></div>
@@ -190,11 +188,10 @@
                       <div class="deco-line"></div>
                     </div>
                     <div cdkDropList 
-                         id="TERMINEE"
                          [cdkDropListData]="taches.TERMINEE"
                          (cdkDropListDropped)="drop($event, 'TERMINEE')"
                          class="task-list">
-                      <div *ngFor="let tache of taches.TERMINEE; trackBy: trackById" 
+                      <div *ngFor="let tache of taches.TERMINEE" 
                            cdkDrag
                            class="task-card">
                            <div class="task-border"></div>
