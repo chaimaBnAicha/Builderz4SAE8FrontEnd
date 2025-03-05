@@ -1,4 +1,4 @@
-<div class="container mt-4 request-details-container">
+<div class="container mt-4 request-details-container" #pdfContent>
   <h2 class="text-center mb-4" style="color: #030f27;">Project Request - Details</h2>
 
   <!-- User Information Section -->
@@ -7,7 +7,6 @@
   </h3>
   <div *ngIf="userInfo" class="card card-user mb-4" style="border: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
     <div class="author">
-      <!-- Nouvel avatar moderne -->
       <div class="avatar-container" style="width: 100px; height: 100px; border-radius: 50%; background-color: #fdbe33; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
         <span style="font-size: 40px; color: #030f27; font-weight: bold;">{{ userInfo.first_name.charAt(0) }}{{ userInfo.last_name.charAt(0) }}</span>
       </div>
@@ -17,36 +16,30 @@
       </h4>
     </div>
     <form>
-      <div class="form-group text-left" style="margin-bottom: 15px;">
-        <label for="firstName" style="color: #030f27; font-weight: bold;">First Name</label>
-        <input type="text" class="form-control" id="firstName" value="{{ userInfo.first_name }}" readonly style="background-color: #f8f9fa; border: 1px solid #ddd; color: #030f27;">
+      <div class="form-group text-left">
+        <label style="color: #030f27; font-weight: bold;">First Name</label>
+        <input type="text" class="form-control" value="{{ userInfo.first_name }}" readonly>
       </div>
-      <div class="form-group text-left" style="margin-bottom: 15px;">
-        <label for="lastName" style="color: #030f27; font-weight: bold;">Last Name</label>
-        <input type="text" class="form-control" id="lastName" value="{{ userInfo.last_name }}" readonly style="background-color: #f8f9fa; border: 1px solid #ddd; color: #030f27;">
+      <div class="form-group text-left">
+        <label style="color: #030f27; font-weight: bold;">Last Name</label>
+        <input type="text" class="form-control" value="{{ userInfo.last_name }}" readonly>
       </div>
-      <div class="form-group text-left" style="margin-bottom: 15px;">
-        <label for="email" style="color: #030f27; font-weight: bold;">Email</label>
-        <input type="email" class="form-control" id="email" value="{{ userInfo.email }}" readonly style="background-color: #f8f9fa; border: 1px solid #ddd; color: #030f27;">
+      <div class="form-group text-left">
+        <label style="color: #030f27; font-weight: bold;">Email</label>
+        <input type="email" class="form-control" value="{{ userInfo.email }}" readonly>
       </div>
-      <div class="form-group text-left" style="margin-bottom: 15px;">
-        <label for="phone" style="color: #030f27; font-weight: bold;">Phone</label>
-        <input type="text" class="form-control" id="phone" value="{{ userInfo.phone_number }}" readonly style="background-color: #f8f9fa; border: 1px solid #ddd; color: #030f27;">
+      <div class="form-group text-left">
+        <label style="color: #030f27; font-weight: bold;">Phone</label>
+        <input type="text" class="form-control" value="{{ userInfo.phone_number }}" readonly>
       </div>
     </form>
-  </div>
-  <hr style="border-top: 1px solid #fdbe33;">
-  <div class="text-center" style="padding: 10px;">
-    <button href="#" class="btn btn-simple" style="color: #030f27;"><i class="fa fa-facebook-square"></i></button>
-    <button href="#" class="btn btn-simple" style="color: #030f27;"><i class="fa fa-twitter"></i></button>
-    <button href="#" class="btn btn-simple" style="color: #030f27;"><i class="fa fa-google-plus-square"></i></button>
   </div>
 
   <!-- Project Information Section -->
   <h3 class="section-title" style="color: #030f27; margin-bottom: 20px; font-weight: bold; border-bottom: 2px solid #fdbe33; padding-bottom: 10px;">
     Project Information
   </h3>
-  <div *ngIf="requestDetails" class="card card-user mb-4" style="border: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
+  <div *ngIf="requestDetails" class="card card-user mb-4">
     <div class="author">
       <div class="avatar-container" style="width: 100px; height: 100px; border-radius: 50%; background-color: #fdbe33; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
         <span style="font-size: 40px; color: #030f27; font-weight: bold;">{{ requestDetails.projectName.charAt(0) }}</span>
@@ -58,54 +51,55 @@
     </div>
 
     <form>
-      <div class="form-group text-left" style="margin-bottom: 15px;">
-        <label for="projectName" style="color: #030f27; font-weight: bold;">Project Name</label>
-        <input type="text" class="form-control" id="projectName" value="{{ requestDetails.projectName }}" readonly style="background-color: #f8f9fa; border: 1px solid #ddd; color: #030f27;">
+      <div class="form-group text-left">
+        <label style="color: #030f27; font-weight: bold;">Project Name</label>
+        <input type="text" class="form-control" value="{{ requestDetails.projectName }}" readonly>
       </div>
-      <div class="form-group text-left" style="margin-bottom: 15px;">
-        <label for="budget" style="color: #030f27; font-weight: bold;">Estimated Budget</label>
-        <input type="text" class="form-control" id="budget" value="{{ requestDetails.estimated_budget }} TND" readonly style="background-color: #f8f9fa; border: 1px solid #ddd; color: #030f27;">
+      <div class="form-group text-left">
+        <label style="color: #030f27; font-weight: bold;">Estimated Budget</label>
+        <input type="text" class="form-control" value="{{ requestDetails.estimated_budget }} TND" readonly>
       </div>
-      <div class="form-group text-left" style="margin-bottom: 15px;">
-        <label for="duration" style="color: #030f27; font-weight: bold;">Estimated Duration</label>
-        <input type="text" class="form-control" id="duration" value="{{ requestDetails.estimated_duration }} months" readonly style="background-color: #f8f9fa; border: 1px solid #ddd; color: #030f27;">
+      <div class="form-group text-left">
+        <label style="color: #030f27; font-weight: bold;">Estimated Duration</label>
+        <input type="text" class="form-control" value="{{ requestDetails.estimated_duration }} months" readonly>
       </div>
-      <div class="form-group text-left" style="margin-bottom: 15px;">
-        <label for="description" style="color: #030f27; font-weight: bold;">Description</label>
-        <textarea class="form-control" id="description" rows="3" readonly style="background-color: #f8f9fa; border: 1px solid #ddd; color: #030f27;">{{ requestDetails.description }}</textarea>
+      <div class="form-group text-left">
+        <label style="color: #030f27; font-weight: bold;">Description</label>
+        <textarea class="form-control" rows="3" readonly>{{ requestDetails.description }}</textarea>
       </div>
       
-      <!-- Move map before location input -->
       <div *ngIf="requestDetails?.geographic_location" id="map" class="mb-4" style="width: 100%; height: 400px; border-radius: 8px; overflow: hidden;"></div>
 
-      <div class="form-group text-left" style="margin-bottom: 15px;">
-        <label for="location" style="color: #030f27; font-weight: bold;">Location</label>
-        <input type="text" class="form-control" id="location" value="{{ requestDetails.geographic_location }}" readonly style="background-color: #f8f9fa; border: 1px solid #ddd; color: #030f27;">
+      <div class="form-group text-left">
+        <label style="color: #030f27; font-weight: bold;">Location</label>
+        <input type="text" class="form-control" value="{{ requestDetails.geographic_location }}" readonly>
       </div>
     </form>
-
   </div>
 
   <!-- Action Buttons -->
   <div class="text-center">
-    <button 
-      (click)="updateStatus(requestDetails.id_projet, 'Approved')" 
-      class="btn mx-2" 
-      style="background-color: #fdbe33; color: #030f27; border: none; padding: 10px 20px; font-weight: bold;"
+    <button (click)="updateStatus(requestDetails.id_projet, 'Approved')" class="btn mx-2" 
+      style="background-color: #fdbe33; color: #030f27; font-weight: bold;"
       [disabled]="requestDetails.status === 'Approved' || requestDetails.status === 'Rejected'">
       ✔ Approve
     </button>
 
-    <button 
-      (click)="updateStatus(requestDetails.id_projet, 'Rejected')" 
-      class="btn mx-2" 
-      style="background-color: #030f27; color: #fff; border: none; padding: 10px 20px; font-weight: bold;"
+    <button (click)="updateStatus(requestDetails.id_projet, 'Rejected')" class="btn mx-2"
+      style="background-color: #030f27; color: #fff; font-weight: bold;"
       [disabled]="requestDetails.status === 'Approved' || requestDetails.status === 'Rejected'">
       ✖ Reject
     </button>
 
-    <button (click)="goBack()" class="btn mx-2" style="background-color: #fff; color: #030f27; border: 1px solid #030f27; padding: 10px 20px; font-weight: bold;">
+    <button (click)="goBack()" class="btn mx-2"
+      style="background-color: #fff; color: #030f27; border: 1px solid #030f27; font-weight: bold;">
       Back to List
+    </button>
+
+    <!-- Download PDF Button -->
+    <button (click)="downloadPDF()" class="btn mx-2"
+      style="background-color: #28a745; color: #fff; font-weight: bold;">
+      ⬇ Download PDF
     </button>
   </div>
 </div>

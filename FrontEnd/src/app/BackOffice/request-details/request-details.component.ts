@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RequestService } from 'src/app/service/request.service';
-import { Router } from '@angular/router';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-request-details',
@@ -12,7 +13,9 @@ export class RequestDetailsComponent implements OnInit {
   requestDetails: any;
   userInfo: any;
   map!: google.maps.Map;
-  markers: any[] = [];  // Tableau pour stocker les marqueurs de la carte
+  markers: any[] = []; // Stocker les marqueurs de la carte
+
+  @ViewChild('pdfContent', { static: false }) pdfContent!: ElementRef; // Référence à l'élément HTML
 
   constructor(
     private route: ActivatedRoute,
@@ -24,20 +27,22 @@ export class RequestDetailsComponent implements OnInit {
     const id_projet = this.route.snapshot.paramMap.get('id_projet');
     if (id_projet) {
       this.loadRequestDetails(Number(id_projet));
-      this.loadUserInfo();  // Charger les informations de l'utilisateur
+      this.loadUserInfo();
     }
   }
 
   loadRequestDetails(id_projet: number): void {
     this.requestService.getRequestDetails(id_projet).subscribe((data) => {
       this.requestDetails = data;
-      this.loadMap(this.requestDetails?.geographic_location);
+      if (this.requestDetails?.geographic_location) {
+        this.loadMap(this.requestDetails.geographic_location);
+      }
     });
   }
 
   loadUserInfo(): void {
     this.requestService.getUserInfo().subscribe((data) => {
-      this.userInfo = data;  // Assigner les informations de l'utilisateur récupérées
+      this.userInfo = data;
     });
   }
 
@@ -48,60 +53,62 @@ export class RequestDetailsComponent implements OnInit {
     }
 
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ 'address': location }, (results, status) => {
+    geocoder.geocode({ address: location }, (results, status) => {
       if (status === 'OK' && results[0]) {
         const mapOptions: google.maps.MapOptions = {
           center: results[0].geometry.location,
           zoom: 15
         };
 
-        // Assurez-vous que l'élément 'map' existe au moment où vous créez la carte
         const mapElement = document.getElementById('map');
         if (mapElement) {
           this.map = new google.maps.Map(mapElement, mapOptions);
 
-          new google.maps.Marker({
+          const marker = new google.maps.Marker({
             position: results[0].geometry.location,
             map: this.map,
-            title: location
+            title: location,
+            icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
           });
+
+          this.markers.push({ id_projet: this.requestDetails.id_projet, marker });
         } else {
-          console.error('L\'élément de la carte est introuvable');
+          console.error("L'élément de la carte est introuvable");
         }
       } else {
-        console.error('La géolocalisation a échoué pour la raison suivante : ' + status);
+        console.error('La géolocalisation a échoué : ' + status);
       }
     });
   }
 
   updateStatus(id_projet: number, status: string): void {
-    if (status === 'Approved') {
-      this.requestService.approveRequest(id_projet).subscribe(() => {
-        this.loadRequestDetails(id_projet);  // Recharge les détails après mise à jour
-        this.updateMarkerColor(id_projet, 'green');  // Marqueur vert après approbation
-      });
-    } else if (status === 'Rejected') {
-      this.requestService.rejectRequest(id_projet).subscribe(() => {
-        this.loadRequestDetails(id_projet);  // Recharge les détails après mise à jour
-        this.updateMarkerColor(id_projet, 'red');  // Marqueur rouge après rejet
-      });
-    }
-  }
-  
-
- // Mettre à jour la couleur du marqueur en fonction du statut
- updateMarkerColor(id_projet: number, color: string): void {
-  // Chercher le marqueur correspondant à l'ID du projet
-  const marker = this.markers.find(m => m.id_projet === id_projet);
-  if (marker) {
-    marker.setIcon({
-      url: `http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`
+    const updateFn = status === 'Approved' ? this.requestService.approveRequest : this.requestService.rejectRequest;
+    updateFn.call(this.requestService, id_projet).subscribe(() => {
+      this.loadRequestDetails(id_projet);
+      this.updateMarkerColor(id_projet, status === 'Approved' ? 'green' : 'red');
     });
   }
-}
 
+  updateMarkerColor(id_projet: number, color: string): void {
+    const markerData = this.markers.find(m => m.id_projet === id_projet);
+    if (markerData) {
+      markerData.marker.setIcon(`http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`);
+    }
+  }
 
   goBack(): void {
-    this.router.navigate(['/admin/project-manager']);  // Revenir à la liste des demandes
+    this.router.navigate(['/admin/project-manager']);
+  }
+
+  downloadPDF(): void {
+    const element = this.pdfContent.nativeElement;
+    html2canvas(element).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 190;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+      pdf.save('request-details.pdf');
+    });
   }
 }

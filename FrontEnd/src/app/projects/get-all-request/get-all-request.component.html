@@ -110,38 +110,41 @@
                     Add a New Request
                 </a>
             </div>
-            <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Project Name</th>
-                            <th>Description</th>
-                            <th>Budget (€)</th>
-                            <th>Duration (months)</th>
-                            <th>Location</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let request of requests" class="table-row">
-                            <td>{{ request.projectName }}</td>
-                            <td>{{ request.description }}</td>
-                            <td>{{ request.estimated_budget | currency:'EUR' }}</td>
-                            <td>{{ request.estimated_duration }}</td>
-                            <td>{{ request.geographic_location }}</td>
-                            <td>
-                                <button class="btn btn-danger btn-sm btn-cancel" (click)="deleteRequest(request.id_projet)">
-                                    Cancel Request
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <ng-template #noRequests>
-                <p class="text-center text-muted no-requests">No requests found.</p>
-            </ng-template>
+           <!-- Barre de recherche -->
+           <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search requests..." [(ngModel)]="searchText" (input)="filterRequests()">
         </div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Description</th>
+                        <th>Budget (€)</th>
+                        <th>Duration (months)</th>
+                        <th>Location</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let request of filteredRequests" class="table-row">
+                        <td>{{ request.projectName }}</td>
+                        <td>{{ request.description }}</td>
+                        <td>{{ request.estimated_budget | currency:'EUR' }}</td>
+                        <td>{{ request.estimated_duration }}</td>
+                        <td>{{ request.geographic_location }}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm btn-cancel" (click)="deleteRequest(request.id_projet)">Cancel Request</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <ng-template #noRequests>
+            <p class="text-center text-muted no-requests">No requests found.</p>
+        </ng-template>
+    </div>
     </div>
 
     <!-- Custom CSS -->

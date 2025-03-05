@@ -8,7 +8,9 @@ import { RequestService } from 'src/app/service/request.service';
 })
 export class GetAllRequestComponent implements OnInit {
 
-  requests: any[] = []; // Utilisez `any[]` ou une interface spécifique si vous en avez une
+  requests: any[] = []; // Toutes les requêtes
+  filteredRequests: any[] = []; // Requêtes filtrées
+  searchText: string = '';
 
   constructor(private requestService: RequestService) { }
 
@@ -16,12 +18,12 @@ export class GetAllRequestComponent implements OnInit {
     this.getAllRequest();
   }
 
-  // Méthode pour récupérer toutes les requêtes
   getAllRequest(): void {
     this.requestService.getAllRequest().subscribe(
       (res: any[]) => {
         console.log('Requêtes reçues:', res);
-        this.requests = res; // Affectez les données reçues à la propriété `requests`
+        this.requests = res;
+        this.filteredRequests = res;
       },
       (error) => {
         console.error('Erreur lors de la récupération des requêtes:', error);
@@ -33,7 +35,6 @@ export class GetAllRequestComponent implements OnInit {
     this.requestService.deleteRequest(id_projet).subscribe(
       () => {
         console.log('Requête supprimée avec succès');
-        // Mettez à jour la liste des requêtes après la suppression
         this.getAllRequest();
       },
       (error) => {
@@ -41,7 +42,11 @@ export class GetAllRequestComponent implements OnInit {
       }
     );
   }
-  
 
-
+  filterRequests(): void {
+    this.filteredRequests = this.requests.filter(request =>
+      request.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      request.description.toLowerCase().includes(this.searchText.toLowerCase())
+    );
+  }
 }
