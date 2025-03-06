@@ -32,11 +32,12 @@ export class BarChartComponent implements OnInit {
     labels: [],
     datasets: [{
       data: [],
-      backgroundColor: '#36A2EB',
-      hoverBackgroundColor: '#4BC0C0',
+      backgroundColor: ['#A5C1DC', '#B7E4C7', '#FEC8D8', '#FFD3B6', '#C7CEEA'], // Soft pastel colors
+      hoverBackgroundColor: ['#91B3D2', '#A1D9B6', '#FDB6C7', '#FFC3A4', '#B6BFD8'],
       label: 'Monthly Data'
     }]
   };
+  
 
   public barChartType: ChartType = 'bar';
 

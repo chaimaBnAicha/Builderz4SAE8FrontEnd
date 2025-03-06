@@ -25,10 +25,16 @@ export class SinusoidalComponent {
     labels: [],
     datasets: [{
       data: [],
-      label: 'Sinusoidal Data',
-      borderColor: '#36A2EB',
-      backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      label: 'Daily Advance Requests Amount',
+      borderColor: '#7F56D9', // Modern purple-blue gradient
+      backgroundColor: 'rgba(127, 86, 217, 0.2)', // Light transparent fill
+      pointBackgroundColor: '#7F56D9', // Points in the same color
+      pointBorderColor: '#FFFFFF', // White borders around points
+      pointHoverBackgroundColor: '#5E3BEE', // Darker hover color
+      pointHoverBorderColor: '#FFFFFF',
       fill: true,
+      tension: 0.4 // Smooth curve effect
+      
     }]
   };
   

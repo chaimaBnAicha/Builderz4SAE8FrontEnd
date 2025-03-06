@@ -55,8 +55,10 @@ export class PieChartComponent implements OnInit {
                 response['Approved'] || 0,
                 response['Rejected'] || 0
               ],
-              backgroundColor: ['#fdbe33', '#28a745', '#dc3545'],
-              hoverBackgroundColor: ['#fdd87d', '#218838', '#c82333']
+              backgroundColor: ['#A5C1DC', '#B7E4C7', '#F8C8DC'], // Blue, Green, Pink (Pastel shades)
+hoverBackgroundColor: ['#C3D6E8', '#D0F0DF', '#FBD1E9'] // Lighter hover shades
+
+
             }]
           };
         },
