@@ -228,3 +228,46 @@ label {
   width: 1rem;
   height: 1rem;
 }
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+:host ::ng-deep .ck-editor__editable {
+  min-height: 200px;
+}
+
+.text-danger {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}:host ::ng-deep .ck-editor__editable {
+  min-height: 200px;
+  max-height: 400px;
+}
+
+:host ::ng-deep .ck.ck-editor {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+:host ::ng-deep .ck-editor__editable_inline {
+  padding: 0 1rem;
+}.rich-text-editor {
+  min-height: 150px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  outline: none;
+}

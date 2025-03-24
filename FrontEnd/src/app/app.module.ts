@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AboutComponent } from './FrontOffice/about/about.component';
@@ -32,7 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { KanbanComponent } from './tache/kanban/kanban.component';
 import { DatePipe } from '@angular/common';
 
-
+import { EditorModule,TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';  
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,10 +68,12 @@ import { DatePipe } from '@angular/common';
     DragDropModule,
     BrowserAnimationsModule,
     DragDropModule ,
-
+    EditorModule,
+   ],
+  providers: [
+    DatePipe,{provide :TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}
+    
   ],
-  providers: [DatePipe],  // Add this
-
   bootstrap: [AppComponent]
 })
 export class AppModule {}

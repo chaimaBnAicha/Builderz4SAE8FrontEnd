@@ -14,41 +14,217 @@
                         
 
 
-<table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nom</th>
-        <th>Description</th>
-        <th>Statut</th>
-        <th>Priorité</th>
-        <th>Date de Début</th>
-        <th>Date de Fin</th>
-        <th>Projet</th>
-        <th>Responsable</th>
-     
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let tache of displayedTaches; let i = index" (dblclick)="showTaskDetails(tache)"> <!-- Ajouter cette partie -->
-        
-        <td>{{ tache.id }}</td>
-        <td>{{ tache.nom || tache.titre }}</td>
-        <td>
-          {{ tache.description }}
-          <button class="analyze-btn" (click)="analyzeDescription(tache)">
-            <i class="fas fa-robot"></i> Analyser
-          </button>
-        </td>
-        <td [attr.data-statut]="tache.statut">{{ tache.statut }}</td>
-        <td [attr.data-priorite]="tache.priorite">{{ tache.priorite }}</td>
-     
-        <td>{{ tache.projet.id }}</td>
-        <td>{{ tache.responsable.id }}</td>
-        
-      </tr>
-    </tbody>
-</table>
+                      <div class="main-content">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="card shadow-lg">
+                                        <div class="card-header bg-gradient-warning text-dark py-3">
+                                            <h4 class="title mb-0">Task Management Dashboard</h4>
+                                            <p class="category mb-0">Overview of all tasks and their status</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead class="bg-light">
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>Name</th>
+                                                            <th>Description</th>
+                                                            <th>Status</th>
+                                                            <th>Priority</th>
+                                                            <th>Start Date</th>
+                                                            <th>End Date</th>
+                                                            <th>Project</th>
+                                                            <th>Assignee</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let tache of displayedTaches" 
+                                                            (dblclick)="showTaskDetails(tache)"
+                                                            class="task-row">
+                                                            <td>{{ tache.id }}</td>
+                                                            <td class="font-weight-bold">{{ tache.nom || tache.titre }}</td>
+                                                            <td>
+                                                                <div class="description-cell">
+                                                                    {{ tache.description }}
+                                                                    <button class="btn btn-sm btn-outline-warning analyze-btn" 
+                                                                            (click)="analyzeDescription(tache)">
+                                                                        <i class="fas fa-robot me-1"></i> Analyze
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <span class="status-badge" [ngClass]="'status-' + tache.statut">
+                                                                    {{ tache.statut }}
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="priority-badge" [ngClass]="'priority-' + tache.priorite">
+                                                                    {{ tache.priorite }}
+                                                                </span>
+                                                            </td>
+                                                            <td>{{ tache.dateDebut | date:'short' }}</td>
+                                                            <td>{{ tache.dateFin | date:'short' }}</td>
+                                                            <td>
+                                                                <span class="project-badge">
+                                                                    #{{ tache.projet.id }}
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <span class="assignee-badge">
+                                                                    #{{ tache.responsable.id }}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                    
+                                            <!-- Pagination -->
+                                            <div class="d-flex justify-content-center mt-4">
+                                                <div class="pagination-controls">
+                                                    <button class="btn btn-outline-warning me-2" 
+                                                            (click)="goToPreviousPage()" 
+                                                            [disabled]="currentPage === 1">
+                                                        <i class="fas fa-chevron-left"></i>
+                                                    </button>
+                                                    <span class="pagination-info mx-3">
+                                                        Page {{ currentPage }} of {{ totalPages }}
+                                                    </span>
+                                                    <button class="btn btn-outline-warning ms-2" 
+                                                            (click)="goToNextPage()" 
+                                                            [disabled]="currentPage === totalPages">
+                                                        <i class="fas fa-chevron-right"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <style>
+                    .card {
+                        border: none;
+                        margin-bottom: 30px;
+                        transition: all 0.3s ease;
+                    }
+                    
+                    .bg-gradient-warning {
+                        background: linear-gradient(45deg, #FFC107 0%, #FFD700 100%);
+                    }
+                    
+                    .table {
+                        margin-bottom: 0;
+                    }
+                    
+                    .table thead th {
+                        border-top: none;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        font-size: 0.875rem;
+                        padding: 1rem;
+                    }
+                    
+                    .task-row {
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                    }
+                    
+                    .task-row:hover {
+                        background-color: #FFF8DC;
+                        transform: translateY(-2px);
+                    }
+                    
+                    .description-cell {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
+                    
+                    .analyze-btn {
+                        padding: 0.25rem 0.5rem;
+                        font-size: 0.875rem;
+                    }
+                    
+                    .status-badge, .priority-badge, .project-badge, .assignee-badge {
+                        padding: 0.35rem 0.75rem;
+                        border-radius: 50rem;
+                        font-size: 0.875rem;
+                        font-weight: 500;
+                        display: inline-block;
+                    }
+                    
+                    /* Status badges */
+                    .status-A_FAIRE {
+                        background-color: #FFF3CD;
+                        color: #856404;
+                    }
+                    
+                    .status-EN_COURS {
+                        background-color: #CCE5FF;
+                        color: #004085;
+                    }
+                    
+                    .status-TERMINE {
+                        background-color: #D4EDDA;
+                        color: #155724;
+                    }
+                    
+                    /* Priority badges */
+                    .priority-BASSE {
+                        background-color: #D4EDDA;
+                        color: #155724;
+                    }
+                    
+                    .priority-MOYENNE {
+                        background-color: #FFF3CD;
+                        color: #856404;
+                    }
+                    
+                    .priority-ELEVEE {
+                        background-color: #F8D7DA;
+                        color: #721C24;
+                    }
+                    
+                    .project-badge, .assignee-badge {
+                        background-color: #E2E3E5;
+                        color: #383D41;
+                    }
+                    
+                    .pagination-controls {
+                        display: flex;
+                        align-items: center;
+                        background: white;
+                        padding: 0.5rem;
+                        border-radius: 50rem;
+                        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                    }
+                    
+                    .pagination-info {
+                        font-weight: 500;
+                        color: #6C757D;
+                    }
+                    
+                    /* Responsive adjustments */
+                    @media (max-width: 768px) {
+                        .table-responsive {
+                            border: none;
+                        }
+                        
+                        .card-header {
+                            text-align: center;
+                        }
+                        
+                        .pagination-controls {
+                            flex-direction: column;
+                            gap: 10px;
+                        }
+                    }
+                    </style>
   <div class="pagination">
     <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">
       <i class="fas fa-chevron-left"></i> <!-- Flèche précédente -->

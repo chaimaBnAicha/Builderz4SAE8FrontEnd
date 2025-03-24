@@ -158,120 +158,144 @@
               </div>
             </div>
 
-            <form [formGroup]="postTacheForm" (ngSubmit)="onSubmit()">
-              <!-- Nom -->
-              <div>
-                <label for="nom">Nom:</label>
-                <input type="text" formControlName="nom" id="nom" />
-                <div *ngIf="postTacheForm.get('nom')?.invalid && postTacheForm.get('nom')?.touched">
-                  <div *ngIf="postTacheForm.get('nom')?.errors?.['required']">Le nom est requis.</div>
-                  <div *ngIf="postTacheForm.get('nom')?.errors?.['minlength']">Le nom doit avoir au moins 3 caractères.</div>
+            <div class="container mt-5 mb-5">
+              <div class="row justify-content-center">
+                <div class="col-lg-8">
+                  <div class="card shadow-lg border-0 rounded-lg">
+                    <div class="card-header bg-gradient-primary text-white py-3">
+                      <h3 class="mb-0 text-center">Create New Task</h3>
+                    </div>
+                    <div class="card-body p-4">
+                      <form [formGroup]="postTacheForm" (ngSubmit)="onSubmit()" class="needs-validation">
+                        
+                        <!-- Name -->
+                        <div class="mb-4">
+                          <label for="nom" class="form-label fw-bold">Task Name</label>
+                          <input type="text" class="form-control form-control-lg" formControlName="nom" id="nom" 
+                                 placeholder="Enter task name"
+                                 [class.is-invalid]="postTacheForm.get('nom')?.invalid && postTacheForm.get('nom')?.touched">
+                          <div class="invalid-feedback">
+                            <div *ngIf="postTacheForm.get('nom')?.errors?.['required']">Task name is required</div>
+                            <div *ngIf="postTacheForm.get('nom')?.errors?.['minlength']">Minimum 3 characters required</div>
+                          </div>
+                        </div>
+            
+                        <!-- Description -->
+                        <div class="mb-4">
+                          <label for="description" class="form-label fw-bold">Description</label>
+                                                <textarea class="form-control" formControlName="description" id="description" rows="4"
+                                    placeholder="Enter task description"
+                                    [class.is-invalid]="postTacheForm.get('description')?.invalid && postTacheForm.get('description')?.touched"></textarea>
+                          <div class="text-danger small mt-1" *ngIf="postTacheForm.get('description')?.invalid && postTacheForm.get('description')?.touched">
+                            <div *ngIf="postTacheForm.get('description')?.errors?.['required']">Description is required</div>
+                            <div *ngIf="postTacheForm.get('description')?.errors?.['minlength']">Minimum 20 characters</div>
+                            <div *ngIf="postTacheForm.get('description')?.errors?.['maxlength']">Maximum 50 characters</div>
+                          </div>
+                        </div>
+            
+                        <!-- Details -->
+                        <div class="mb-4">
+                          <label for="details" class="form-label fw-bold">Details</label>
+                          <textarea class="form-control" formControlName="details" id="details" rows="4"
+                                    placeholder="Enter detailed information..."
+                                    [class.is-invalid]="postTacheForm.get('details')?.invalid && postTacheForm.get('details')?.touched"></textarea>
+                          <div class="invalid-feedback">
+                            <div *ngIf="postTacheForm.get('details')?.errors?.['required']">Details are required</div>
+                            <div *ngIf="postTacheForm.get('details')?.errors?.['minlength']">Minimum 20 characters</div>
+                            <div *ngIf="postTacheForm.get('details')?.errors?.['maxlength']">Maximum 200 characters</div>
+                          </div>
+                        </div>
+            
+                        <div class="row">
+                          <!-- Estimated Duration -->
+                          <div class="col-md-6 mb-4">
+                            <label for="dureeEstimee" class="form-label fw-bold">Estimated Duration (days)</label>
+                            <input type="number" class="form-control" formControlName="dureeEstimee" id="dureeEstimee"
+                                   placeholder="Enter number of days"
+                                   [class.is-invalid]="postTacheForm.get('dureeEstimee')?.invalid && postTacheForm.get('dureeEstimee')?.touched">
+                            <div class="invalid-feedback">
+                              <div *ngIf="postTacheForm.get('dureeEstimee')?.errors?.['required']">Duration is required</div>
+                              <div *ngIf="postTacheForm.get('dureeEstimee')?.errors?.['min']">Minimum 7 days required</div>
+                            </div>
+                          </div>
+            
+                          <!-- Priority -->
+                          <div class="col-md-6 mb-4">
+                            <label for="priorite" class="form-label fw-bold">Priority Level</label>
+                            <select class="form-select form-select-lg" formControlName="priorite" id="priorite">
+                              <option value="BASSE">Low</option>
+                              <option value="MOYENNE">Medium</option>
+                              <option value="ELEVEE">High</option>
+                            </select>
+                          </div>
+                        </div>
+            
+                        <div class="row">
+                          <!-- Start Date -->
+                          <div class="col-md-6 mb-4">
+                            <label for="dateDebut" class="form-label fw-bold">Start Date</label>
+                            <input type="datetime-local" class="form-control form-control-lg" formControlName="dateDebut" id="dateDebut"
+                                   [class.is-invalid]="postTacheForm.get('dateDebut')?.invalid && postTacheForm.get('dateDebut')?.touched">
+                            <div class="invalid-feedback">
+                              <div *ngIf="postTacheForm.get('dateDebut')?.errors?.['required']">Start date is required</div>
+                              <div *ngIf="postTacheForm.get('dateDebut')?.errors?.['dateInvalide']">Invalid date</div>
+                            </div>
+                          </div>
+            
+                          <!-- End Date -->
+                          <div class="col-md-6 mb-4">
+                            <label for="dateFin" class="form-label fw-bold">End Date</label>
+                            <input type="datetime-local" class="form-control form-control-lg" formControlName="dateFin" id="dateFin"
+                                   [class.is-invalid]="postTacheForm.get('dateFin')?.invalid && postTacheForm.get('dateFin')?.touched">
+                            <div class="invalid-feedback">
+                              <div *ngIf="postTacheForm.get('dateFin')?.errors?.['required']">End date is required</div>
+                              <div *ngIf="postTacheForm.get('dateFin')?.errors?.['dateFinInvalide']">Must be after start date</div>
+                            </div>
+                          </div>
+                        </div>
+            
+                        <div class="row">
+                          <!-- Project ID -->
+                          <div class="col-md-6 mb-4" formGroupName="projet">
+                            <label for="projetId" class="form-label fw-bold">Project ID</label>
+                            <input type="number" class="form-control form-control-lg" formControlName="id" id="projetId"
+                                   placeholder="Enter project ID"
+                                   [class.is-invalid]="postTacheForm.get('projet.id')?.invalid && postTacheForm.get('projet.id')?.touched">
+                            <div class="invalid-feedback">
+                              <div *ngIf="postTacheForm.get('projet.id')?.errors?.['required']">Project ID is required</div>
+                              <div *ngIf="postTacheForm.get('projet.id')?.errors?.['pattern']">Invalid ID format</div>
+                            </div>
+                          </div>
+            
+                          <!-- Responsible ID -->
+                          <div class="col-md-6 mb-4" formGroupName="responsable">
+                            <label for="responsableId" class="form-label fw-bold">Assignee ID</label>
+                            <input type="number" class="form-control form-control-lg" formControlName="id" id="responsableId"
+                                   placeholder="Enter assignee ID"
+                                   [class.is-invalid]="postTacheForm.get('responsable.id')?.invalid && postTacheForm.get('responsable.id')?.touched">
+                            <div class="invalid-feedback">
+                              <div *ngIf="postTacheForm.get('responsable.id')?.errors?.['required']">Assignee ID is required</div>
+                              <div *ngIf="postTacheForm.get('responsable.id')?.errors?.['pattern']">Invalid ID format</div>
+                            </div>
+                          </div>
+                        </div>
+            
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between mt-4">
+                          <button type="button" class="btn btn-secondary btn-lg px-4" routerLink="/get-all-tache">
+                            <i class="fas fa-arrow-left me-2"></i>Back
+                          </button>
+                          <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="postTacheForm.invalid">
+                            <i class="fas fa-save me-2"></i>Save Task
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </div>
             
-              <!-- Description -->
-              <div>
-                <label for="description">Description:</label>
-                <textarea formControlName="description" id="description"></textarea>
-                <div *ngIf="postTacheForm.get('description')?.invalid && postTacheForm.get('description')?.touched">
-                  <div *ngIf="postTacheForm.get('description')?.errors?.['required']">La description est requise.</div>
-                  <div *ngIf="postTacheForm.get('description')?.errors?.['minlength']">La description doit avoir au moins 20 caractères.</div>
-                  <div *ngIf="postTacheForm.get('description')?.errors?.['maxlength']">La description ne peut pas dépasser 50 caractères.</div>
-                </div>
-              </div>
-            
-              <!-- Détails -->
-              <div>
-                <label for="details">Détails:</label>
-                <textarea formControlName="details" id="details"></textarea>
-                <div *ngIf="postTacheForm.get('details')?.invalid && postTacheForm.get('details')?.touched">
-                  <div *ngIf="postTacheForm.get('details')?.errors?.['required']">Les détails sont requis.</div>
-                  <div *ngIf="postTacheForm.get('details')?.errors?.['minlength']">Les détails doivent avoir au moins 20 caractères.</div>
-                  <div *ngIf="postTacheForm.get('details')?.errors?.['maxlength']">Les détails ne peuvent pas dépasser 200 caractères.</div>
-                </div>
-              </div>
-            
-              <!-- Durée Estimée -->
-              <div>
-                <label for="dureeEstimee">Durée Estimée (en jours):</label>
-                <input type="number" formControlName="dureeEstimee" id="dureeEstimee" />
-                <div *ngIf="postTacheForm.get('dureeEstimee')?.invalid && postTacheForm.get('dureeEstimee')?.touched">
-                  <div *ngIf="postTacheForm.get('dureeEstimee')?.errors?.['required']">La durée estimée est requise.</div>
-                  <div *ngIf="postTacheForm.get('dureeEstimee')?.errors?.['min']">La durée estimée doit être d'au moins 7 jours.</div>
-                </div>
-              </div>
-            
-              <!-- Statut -->
-              <div>
-                <label for="statut">Statut:</label>
-                <select formControlName="statut" id="statut">
-                  <option value="A_FAIRE">À faire</option>
-                  <option value="EN_COURS">En cours</option>
-                  <option value="TERMINE">Terminé</option>
-                </select>
-                <div *ngIf="postTacheForm.get('statut')?.invalid && postTacheForm.get('statut')?.touched">
-                  <div *ngIf="postTacheForm.get('statut')?.errors?.['required']">Le statut est requis.</div>
-                </div>
-              </div>
-            
-              <!-- Priorité -->
-              <div>
-                <label for="priorite">Priorité:</label>
-                <select formControlName="priorite" id="priorite">
-                  <option value="BASSE">Basse</option>
-                  <option value="MOYENNE">Moyenne</option>
-                  <option value="ELEVEE">Élevée</option>
-                </select>
-                <div *ngIf="postTacheForm.get('priorite')?.invalid && postTacheForm.get('priorite')?.touched">
-                  <div *ngIf="postTacheForm.get('priorite')?.errors?.['required']">La priorité est requise.</div>
-                </div>
-              </div>
-            
-              <!-- Date de Début -->
-              <div>
-                <label for="dateDebut">Date de Début:</label>
-                <input type="datetime-local" formControlName="dateDebut" id="dateDebut" />
-                <div *ngIf="postTacheForm.get('dateDebut')?.invalid && postTacheForm.get('dateDebut')?.touched">
-                  <div *ngIf="postTacheForm.get('dateDebut')?.errors?.['required']">La date de début est requise.</div>
-                  <div *ngIf="postTacheForm.get('dateDebut')?.errors?.['dateInvalide']">La date de début doit être après aujourd'hui.</div>
-                </div>
-              </div>
-            
-              <!-- Date de Fin -->
-              <div>
-                <label for="dateFin">Date de Fin:</label>
-                <input type="datetime-local" formControlName="dateFin" id="dateFin" />
-                <div *ngIf="postTacheForm.get('dateFin')?.invalid && postTacheForm.get('dateFin')?.touched">
-                  <div *ngIf="postTacheForm.get('dateFin')?.errors?.['required']">La date de fin est requise.</div>
-                  <div *ngIf="postTacheForm.get('dateFin')?.errors?.['dateFinInvalide']">La date de fin doit être au moins 1 jour après la date de début.</div>
-                </div>
-              </div>
-            
-              <!-- ID Projet -->
-              <div formGroupName="projet">
-                <label for="projetId">ID Projet:</label>
-                <input type="number" formControlName="id" id="projetId" />
-                <div *ngIf="postTacheForm.get('projet.id')?.invalid && postTacheForm.get('projet.id')?.touched">
-                  <div *ngIf="postTacheForm.get('projet.id')?.errors?.['required']">L'ID du projet est requis.</div>
-                  <div *ngIf="postTacheForm.get('projet.id')?.errors?.['pattern']">L'ID du projet doit être un nombre.</div>
-                </div>
-              </div>
-            
-              <!-- ID Responsable -->
-              <div formGroupName="responsable">
-                <label for="responsableId">ID Responsable:</label>
-                <input type="number" formControlName="id" id="responsableId" />
-                <div *ngIf="postTacheForm.get('responsable.id')?.invalid && postTacheForm.get('responsable.id')?.touched">
-                  <div *ngIf="postTacheForm.get('responsable.id')?.errors?.['required']">L'ID du responsable est requis.</div>
-                  <div *ngIf="postTacheForm.get('responsable.id')?.errors?.['pattern']">L'ID du responsable doit être un nombre.</div>
-                </div>
-              </div>
-            
-              <!-- Bouton de soumission -->
-              <button type="submit" [disabled]="postTacheForm.invalid">Soumettre</button>
-            </form>
-            
-<button class="btn-new" routerLink="/get-all-tache">All Task</button>
 
 <!-- Footer Start -->
 <div class="footer wow fadeIn" data-wow-delay="0.3s">

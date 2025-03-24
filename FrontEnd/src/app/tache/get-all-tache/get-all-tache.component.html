@@ -138,77 +138,361 @@
             </div>
             <!-- Page Header End -->
 
-<button class="btn-new" routerLink="/tache">Post new Tache</button>
-<div class="search-container">
-    <div class="search-input-wrapper">
-        <input type="text" 
-               [formControl]="searchControl"
-               placeholder="Rechercher par nom, description, statut, responsable..."
-               class="search-input">
-        <i class="fas fa-search search-icon"></i>
-        <div class="search-spinner" *ngIf="isSearching">
-            <i class="fas fa-spinner fa-spin"></i>
-        </div>
-    </div>
-    
-    <div class="search-status" *ngIf="noResults">
-        <p>Aucun résultat trouvé</p>
-    </div>
+            <div class="action-header">
+              <button class="btn-new" routerLink="/tache">
+                <i class="fas fa-plus-circle me-2"></i>
+                Create New Task
+              </button>
+              <div>
+              <button class="btn-new" routerLink="/kanban">
+                <i class="fas fa-plus-circle me-2"></i>
+kanban              </button>
+</div>
+              <div class="search-container">
+                <div class="search-input-wrapper">
+                  <input type="text" 
+                         [formControl]="searchControl"
+                         placeholder="Search by name, description, status, assignee..."
+                         class="search-input">
+                  <i class="fas fa-search search-icon"></i>
+                  <div class="search-spinner" *ngIf="isSearching">
+                    <i class="fas fa-spinner fa-spin"></i>
+                  </div>
+                </div>
+                
+                <div class="search-status" *ngIf="noResults">
+                  <p><i class="fas fa-info-circle me-2"></i>No results found</p>
+                </div>
+              </div>
+            </div>
+            
+            <style>
+            .action-header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 20px;
+              background: white;
+              border-radius: 10px;
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+              margin: 20px;
+            }
+            
+            .btn-new {
+              background: #FFD700;
+              color: #8B4513;
+              border: none;
+              padding: 12px 24px;
+              border-radius: 25px;
+              font-weight: 600;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              transition: all 0.3s ease;
+              text-decoration: none;
+            }
+            
+            .btn-new:hover {
+              background: #FFC107;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba(139, 69, 19, 0.2);
+            }
+            
+            .search-container {
+              flex-grow: 1;
+              max-width: 600px;
+              margin-left: 20px;
+            }
+            
+            .search-input-wrapper {
+              position: relative;
+              display: flex;
+              align-items: center;
+            }
+            
+            .search-input {
+              width: 100%;
+              padding: 12px 20px;
+              padding-left: 45px;
+              border: 2px solid #FFC107;
+              border-radius: 25px;
+              font-size: 14px;
+              transition: all 0.3s ease;
+              background: #FFF8DC;
+            }
+            
+            .search-input:focus {
+              outline: none;
+              border-color: #FFD700;
+              box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.25);
+              background: white;
+            }
+            
+            .search-icon {
+              position: absolute;
+              left: 15px;
+              color: #8B4513;
+              font-size: 16px;
+            }
+            
+            .search-spinner {
+              position: absolute;
+              right: 15px;
+              color: #FFC107;
+            }
+            
+            .search-status {
+              margin-top: 10px;
+              padding: 10px 15px;
+              background: #FFF3CD;
+              border: 1px solid #FFD700;
+              border-radius: 8px;
+              color: #8B4513;
+            }
+            
+            .search-status p {
+              margin: 0;
+              display: flex;
+              align-items: center;
+              font-size: 14px;
+            }
+            
+            /* Responsive Design */
+            @media (max-width: 768px) {
+              .action-header {
+                flex-direction: column;
+                gap: 15px;
+              }
+            
+              .search-container {
+                margin-left: 0;
+                width: 100%;
+                max-width: 100%;
+              }
+            
+              .btn-new {
+                width: 100%;
+                justify-content: center;
+              }
+            }
+            </style>
+
+<!-- Add this CSS in your component -->
+<style>
+.tasks-container {
+  padding: 20px;
+  margin: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.tasks-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+}
+
+.tasks-table thead th {
+  background: #2c3e50;
+  color: white;
+  padding: 15px;
+  font-weight: 500;
+  text-align: left;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tasks-table tbody tr {
+  transition: all 0.3s ease;
+}
+
+.tasks-table tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.tasks-table tbody tr:hover {
+  background-color: #e9ecef;
+  transform: scale(1.01);
+}
+
+.tasks-table td {
+  padding: 12px 15px;
+  vertical-align: middle;
+  border-bottom: 1px solid #dee2e6;
+}
+
+/* Status badges */
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status-A_FAIRE { background: #ffeeba; color: #856404; }
+.status-EN_COURS { background: #b8daff; color: #004085; }
+.status-TERMINE { background: #c3e6cb; color: #155724; }
+
+/* Priority badges */
+.priority-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.priority-BASSE { background: #28a745; color: white; }
+.priority-MOYENNE { background: #ffc107; color: black; }
+.priority-ELEVEE { background: #dc3545; color: white; }
+
+/* Action buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-btn { background: #007bff; color: white; }
+.delete-btn { background: #dc3545; color: white; }
+.pdf-btn { background: #17a2b8; color: white; }
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+</style>
+
+<!-- Table Section -->
+<div class="tasks-container">
+  <div class="table-responsive">
+    <table class="tasks-table">
+      <thead>
+        <tr>
+          <th>Task Name</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Priority</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Project</th>
+          <th>Assignee</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tache of displayedTaches">
+          <td>{{ tache.nom || tache.titre }}</td>
+          <td>
+            {{ tache.description }}
+            <button class="action-btn" (click)="analyzeDescription(tache)">
+              <i class="fas fa-robot"></i>
+            </button>
+          </td>
+          <td>
+            <span class="status-badge status-{{tache.statut}}">
+              {{ tache.statut }}
+            </span>
+          </td>
+          <td>
+            <span class="priority-badge priority-{{tache.priorite}}">
+              {{ tache.priorite }}
+            </span>
+          </td>
+          <td>{{ tache.dateDebut | date:'short' }}</td>
+          <td>{{ tache.dateFin | date:'short' }}</td>
+          <td>Project #{{ tache.projet.id }}</td>
+          <td>User #{{ tache.responsable.id }}</td>
+          <td>
+            <div class="action-buttons">
+              <button routerLink="/tache/{{tache.id}}" class="action-btn edit-btn">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button (click)="confirmDelete(tache.id)" class="action-btn delete-btn">
+                <i class="fas fa-trash"></i>
+              </button>
+              <button (click)="generatePDF(tache)" class="action-btn pdf-btn">
+                <i class="fas fa-file-pdf"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
-<table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nom</th>
-        <th>Description</th>
-        <th>Statut</th>
-        <th>Priorité</th>
-        <th>Date de Début</th>
-        <th>Date de Fin</th>
-        <th>Projet</th>
-        <th>Responsable</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let tache of displayedTaches; let i = index">
-        <td>{{ tache.id }}</td>
-        <td>{{ tache.nom || tache.titre }}</td>
-        <td>
-          {{ tache.description }}
-          <button class="analyze-btn" (click)="analyzeDescription(tache)">
-            <i class="fas fa-robot"></i> Analyser
-          </button>
-        </td>
-        <td [attr.data-statut]="tache.statut">{{ tache.statut }}</td>
-        <td [attr.data-priorite]="tache.priorite">{{ tache.priorite }}</td>
-        <td>{{ tache.dateDebut | date:'short' }}</td>
-        <td>{{ tache.dateFin | date:'short' }}</td>
-        <td>{{ tache.projet.id }}</td>
-        <td>{{ tache.responsable.id }}</td>
-        <td>
-          <button routerLink="/tache/{{tache.id}}" class="icon-button">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button (click)="confirmDelete(tache.id)" class="icon-button delete">
-            <i class="fas fa-trash"></i>
-          </button>
-          <button (click)="generatePDF(tache)" class="icon-button pdf">
-            <i class="fas fa-file-pdf"></i>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-</table>
+<!-- Pagination Section -->
+<div class="pagination-container">
   <div class="pagination">
-    <button (click)="goToPreviousPage()" [disabled]="currentPage === 1">
-      <i class="fas fa-chevron-left"></i> <!-- Flèche précédente -->
+    <button class="page-btn" (click)="goToPreviousPage()" [disabled]="currentPage === 1">
+      <i class="fas fa-chevron-left"></i>
     </button>
-    <button (click)="goToNextPage()" [disabled]="currentPage === totalPages">
-      <i class="fas fa-chevron-right"></i> <!-- Flèche suivante -->
+    <span class="page-info">Page {{ currentPage }} of {{ totalPages }}</span>
+    <button class="page-btn" (click)="goToNextPage()" [disabled]="currentPage === totalPages">
+      <i class="fas fa-chevron-right"></i>
     </button>
   </div>
+</div>
+
+<style>
+/* Pagination styles */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: white;
+  padding: 10px 20px;
+  border-radius: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.page-btn {
+  background: none;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.page-btn:not([disabled]):hover {
+  background: #e9ecef;
+}
+
+.page-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-weight: 500;
+  color: #2c3e50;
+}
+</style>
+
+
 
   <!-- Footer Start -->
 <div class="footer wow fadeIn" data-wow-delay="0.3s">

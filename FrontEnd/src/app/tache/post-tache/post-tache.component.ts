@@ -3,25 +3,46 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TacheService, Tache } from 'src/app/service/tache.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AbstractControl } from '@angular/forms';
-
+import  ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { Editor } from '@ckeditor/ckeditor5-core';
 @Component({
   selector: 'app-post-tache',
   templateUrl: './post-tache.component.html',
   styleUrls: ['./post-tache.component.css']
 })
 export class PostTacheComponent implements OnInit {
+
   postTacheForm!: FormGroup;
   tache: Tache | null = null;
   isProcessing: boolean = false;
   processingMessage: string = '';
-
-  constructor(
+  
+    constructor(
     private tacheService: TacheService,
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute
   ) {}
 
+    // Add this property
+   
+
+    editorConfig = {
+      height: 300,
+      suffix: '.min',
+      menubar: false,
+      plugins: [
+        'advlist autolink lists link image charmap print preview anchor',
+        'searchreplace visualblocks code fullscreen',
+        'insertdatetime media table paste code help wordcount'
+      ],
+      toolbar: 'undo redo | formatselect | ' +
+        'bold italic backcolor | alignleft aligncenter ' +
+        'alignright alignjustify | bullist numlist outdent indent | ' +
+        'removeformat | help',
+      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+    };
+  
   ngOnInit() {
     const today = new Date().toISOString().split('T')[0]; // Date d'aujourd'hui en format ISO
 

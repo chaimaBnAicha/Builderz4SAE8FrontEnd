@@ -213,7 +213,7 @@ updateStatut(id: number, statut: string): Observable<Tache> {
     });
   }
 
-  generatePDF(tache: Tache) {
+  /*generatePDF(tache: Tache) {
     const statusColors = {
       'A_FAIRE': '#ff4444',
       'EN_COURS': '#ffbb33',
@@ -382,7 +382,236 @@ updateStatut(id: number, statut: string): Observable<Tache> {
     } catch (error) {
       console.error('Erreur lors de la génération du PDF:', error);
     }
-  }
+  }*/
+
+
+
+    generatePDF(tache: Tache) {
+      const statusColors = {
+        'A_FAIRE': '#ff4444',
+        'EN_COURS': '#ffbb33',
+        'TERMINEE': '#00C851'
+      };
+    
+      const priorityColors = {
+        'HAUTE': '#ff4444',
+        'MOYENNE': '#ffbb33',
+        'BASSE': '#00C851'
+      };
+    
+      const docDefinition = {
+        pageSize: 'A4',
+        pageMargins: [40, 80, 40, 60],
+        header: {
+          columns: [
+            {
+              text: 'BUILDERZ',
+              alignment: 'center',
+              fontSize: 28,
+              bold: true,
+              color: '#1E3C72',
+              margin: [0, 20, 0, 0]
+            }
+          ]
+        },
+        content: [
+          {
+            text: `Généré le: ${new Date().toLocaleString('fr-FR', {
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}`,
+            alignment: 'right',
+            fontSize: 10,
+            color: '#666666',
+            margin: [0, 0, 0, 20]
+          },
+          {
+            canvas: [{ type: 'line', x1: 0, y1: 5, x2: 515, y2: 5, lineWidth: 1, lineColor: '#E0E0E0' }],
+            margin: [0, 0, 0, 20]
+          },
+          {
+            text: 'Détails de la Tâche',
+            alignment: 'center',
+            fontSize: 22,
+            bold: true,
+            color: '#1E3C72',
+            margin: [0, 0, 0, 20]
+          },
+          {
+            table: {
+              widths: ['50%', '50%'],
+              body: [
+                [
+                  { 
+                    text: [
+                      { text: '📋 ID: ', bold: true, color: '#1E3C72' },
+                      { text: tache.id }
+                    ],
+                    fontSize: 12
+                  },
+                  { 
+                    text: [
+                      { text: '🔄 Statut: ', bold: true, color: '#1E3C72' },
+                      { text: tache.statut, color: statusColors[tache.statut] }
+                    ],
+                    fontSize: 12
+                  }
+                ],
+                [
+                  { 
+                    text: [
+                      { text: '📝 Titre: ', bold: true, color: '#1E3C72' },
+                      { text: tache.titre || tache.nom }
+                    ],
+                    fontSize: 12,
+                    colSpan: 2
+                  },
+                  {}
+                ],
+                [
+                  { 
+                    text: [
+                      { text: '📄 Description: ', bold: true, color: '#1E3C72' },
+                      { text: tache.description }
+                    ],
+                    fontSize: 12,
+                    colSpan: 2
+                  },
+                  {}
+                ],
+                [
+                  { 
+                    text: [
+                      { text: '⚡ Priorité: ', bold: true, color: '#1E3C72' },
+                      { text: tache.priorite, color: priorityColors[tache.priorite] }
+                    ],
+                    fontSize: 12
+                  },
+                  { 
+                    text: [
+                      { text: '📅 Date de début: ', bold: true, color: '#1E3C72' },
+                      { text: new Date(tache.dateDebut).toLocaleDateString('fr-FR') }
+                    ],
+                    fontSize: 12
+                  }
+                ]
+              ]
+            },
+            layout: 'noBorders'
+          },
+          {
+            canvas: [{ type: 'line', x1: 0, y1: 5, x2: 515, y2: 5, lineWidth: 1, lineColor: '#E0E0E0' }],
+            margin: [0, 20, 0, 20]
+          },
+          {
+            text: 'Informations complémentaires',
+            style: 'subheader',
+            margin: [0, 0, 0, 15]
+          },
+          {
+            columns: [
+              {
+                width: '50%',
+                stack: [
+                  {
+                    text: [
+                      { text: '🏢 Projet: ', bold: true, color: '#1E3C72' },
+                      { text: '#' + tache.projet?.id }
+                    ],
+                    fontSize: 12
+                  }
+                ]
+              },
+              {
+                width: '50%',
+                stack: [
+                  {
+                    text: [
+                      { text: '👤 Responsable: ', bold: true, color: '#1E3C72' },
+                      { text: '#' + tache.responsable?.id }
+                    ],
+                    fontSize: 12
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            text: '',
+            margin: [0, 30, 0, 0]
+          },
+          {
+            columns: [
+              {
+                width: '*',
+                text: ''
+              },
+              {
+                width: 'auto',
+                stack: [
+                  {
+                    text: '_______________________',
+                    alignment: 'center',
+                    margin: [0, 50, 0, 5]
+                  },
+                  {
+                    text: 'Signature',
+                    alignment: 'center',
+                    fontSize: 12,
+                    color: '#666666'
+                  }
+                ]
+              },
+              {
+                width: '*',
+                text: ''
+              }
+            ]
+          }
+        ],
+        footer: {
+          columns: [
+            {
+              text: 'BUILDERZ',
+              alignment: 'left',
+              margin: [40, 0, 0, 0],
+              color: '#666666',
+              fontSize: 10
+            },
+            {
+              text: 'Page 1 sur 1',
+              alignment: 'right',
+              margin: [0, 0, 40, 0],
+              color: '#666666',
+              fontSize: 10
+            }
+          ]
+        },
+        styles: {
+          subheader: {
+            fontSize: 16,
+            bold: true,
+            color: '#1E3C72',
+            margin: [0, 15, 0, 10]
+          }
+        },
+        defaultStyle: {
+          fontSize: 12,
+          color: '#333333'
+        }
+      };
+    
+      try {
+        const pdfDocGenerator = pdfMake.createPdf(docDefinition);
+        pdfDocGenerator.download(`Tache_${tache.id}_${new Date().toISOString().split('T')[0]}.pdf`);
+      } catch (error) {
+        console.error('Erreur lors de la génération du PDF:', error);
+      }
+    }
+
 
   // Méthode pour calculer les statistiques
   getTaskStatistics(): Observable<TacheStats> {
