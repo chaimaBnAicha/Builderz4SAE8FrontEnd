@@ -1,4 +1,3 @@
-<!-- Advances Table -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -114,7 +113,6 @@
 <a routerLink="/advance" class="nav-item nav-link">Advance</a>
 <a routerLink="/leave" class="nav-item nav-link">Leave</a>
 
-
                                
                                 
                                 
@@ -127,13 +125,12 @@
             <!-- Nav Bar End -->
 
 
-
 <div class="container mt-4">
     <div class="card">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-            <h4>My Advances</h4>
-            <button class="btn btn-light" routerLink="/add-advance">
-                <i class="fas fa-plus"></i> New Advance Request
+            <h4>My Leave Requests</h4>
+            <button class="btn btn-light" routerLink="/add-leave">
+                <i class="fas fa-plus"></i> New Leave Request
             </button>
         </div>
         <div class="card-body">
@@ -144,7 +141,7 @@
                             type="text" 
                             class="form-control"
                             style="border-right: none;"
-                            placeholder="Search by amount or reason..." 
+                            placeholder="Search by reason..." 
                             [(ngModel)]="searchTerm"
                             (keyup)="onSearch()">
                         <div class="input-group-append" *ngIf="searchTerm">
@@ -160,9 +157,9 @@
                             [(ngModel)]="statusFilter" 
                             (change)="onStatusFilter()">
                         <option value="">Filter by Status</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Approved">Approved</option>
-                        <option value="Rejected">Rejected</option>
+                        <option value="PENDING">Pending</option>
+                        <option value="APPROVED">Approved</option>
+                        <option value="REJECTED">Rejected</option>
                     </select>
                 </div>
             </div>
@@ -170,40 +167,51 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Amount</th>
-                            <th>Request Date</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Type</th>
                             <th>Reason</th>
+                            <th>Document</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let advance of advances | paginate: { itemsPerPage: itemsPerPage, currentPage: p, totalItems: advances.length }">
-                            <td>{{ advance.amount_request | currency }}</td>
-                            <td>{{ advance.requestDate | date:'mediumDate' }}</td>
-                            <td [innerHTML]="advance.reason | safeHtml"></td>
+                        <tr *ngFor="let leave of leaves | paginate: { itemsPerPage: itemsPerPage, currentPage: p, totalItems: leaves.length }">
+                            <td>{{ leave.start_date | date:'mediumDate' }}</td>
+                            <td>{{ leave.end_date | date:'mediumDate' }}</td>
+                            <td>{{ leave.type }}</td>
+                            <td>{{ leave.reason }}</td>
+                            <td>
+                                <a *ngIf="leave.documentAttachement" 
+                                   href="{{ leave.documentAttachement }}" 
+                                   target="_blank" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-file"></i>
+                                </a>
+                            </td>
                             <td>
                                 <span class="badge" [ngClass]="{
-                                    'badge-warning': advance.status === 'Pending',
-                                    'badge-success': advance.status === 'Approved',
-                                    'badge-danger': advance.status === 'Rejected'
-                                }">
-                                    {{ advance.status }}
+                                    'badge-warning': leave.status === 'PENDING',
+                                    'badge-success': leave.status === 'APPROVED',
+                                    'badge-danger': leave.status === 'REJECTED'
+                                }" style="color: #030f27 !important;">
+                                    {{ leave.status }}
                                 </span>
                             </td>
                             <td>
-                                <button class="btn btn-info btn-sm mr-2" (click)="onEdit(advance)" 
-                                        [disabled]="advance.status !== 'Pending'">
+                                <button class="btn btn-info btn-sm mr-2" [routerLink]="['/updateleave', leave.id]" 
+                                        >
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm" (click)="onDelete(advance.id)"
-                                        [disabled]="advance.status !== 'Pending'">
+                                <button class="btn btn-danger btn-sm" (click)="onDelete(leave.id)"
+                                        >
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
-                        <tr *ngIf="advances.length === 0">
-                            <td colspan="5" class="text-center">No advances found</td>
+                        <tr *ngIf="leaves.length === 0">
+                            <td colspan="5" class="text-center">No leaves found</td>
                         </tr>
                     </tbody>
                 </table>
@@ -227,8 +235,8 @@
         </div>
     </div>
 </div>
- <!-- Footer Start -->
- <div class="footer wow fadeIn" data-wow-delay="0.3s">
+<!-- Footer Start -->
+<div class="footer wow fadeIn" data-wow-delay="0.3s">
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-lg-3">

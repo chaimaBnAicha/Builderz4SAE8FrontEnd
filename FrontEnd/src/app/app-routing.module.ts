@@ -29,6 +29,9 @@ import { PieChartComponent } from './BackOffice/AdvanceCharts/pie-chart/pie-char
 import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
 import { BarChartComponent } from './BackOffice/AdvanceCharts/bar-chart/bar-chart.component';
 import { SinusoidalComponent } from './BackOffice/AdvanceCharts/sinusoidal/sinusoidal.component';
+import { GetleavesComponent } from './FrontOffice/leave/getleaves/getleaves.component';
+import { AddleaveComponent } from './FrontOffice/leave/addleave/addleave.component';
+import { UpdateleaveComponent } from './FrontOffice/leave/updateleave/updateleave.component';
 
 // Define your routes
 const routes: Routes = [
@@ -45,6 +48,9 @@ const routes: Routes = [
   {path: 'advance', component:AdvanceComponent},
   {path: 'add-advance', component:AddAdvanceComponent},
   {path: 'update-advance/:id', component:UpdateAdvanceComponent},
+  {path: 'leave', component:GetleavesComponent},
+  {path: 'addleave',component: AddleaveComponent},
+  {path: 'updateleave', component:UpdateleaveComponent},
 
 
 
