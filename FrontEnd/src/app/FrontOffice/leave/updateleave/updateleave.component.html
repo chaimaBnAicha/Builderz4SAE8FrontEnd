@@ -142,9 +142,10 @@
                                 class="form-control" 
                                 id="start_date"
                                 formControlName="start_date"
-                                [min]="minDate">
-                            <div class="text-danger" *ngIf="f['start_date'].touched && f['start_date'].errors">
-                                <small *ngIf="f['start_date'].errors?.['required']">Start date is required</small>
+                                [min]="minDate"
+                                (change)="onStartDateChange()">
+                            <div class="invalid-feedback" *ngIf="f['start_date'].errors?.['required'] && f['start_date'].touched">
+                                Start date is required
                             </div>
                         </div>
                     </div>
@@ -155,10 +156,12 @@
                                 type="date" 
                                 class="form-control" 
                                 id="end_date"
-                                formControlName="end_date"
-                                [min]="f['start_date'].value">
-                            <div class="text-danger" *ngIf="f['end_date'].touched && f['end_date'].errors">
-                                <small *ngIf="f['end_date'].errors?.['required']">End date is required</small>
+                                formControlName="end_date">
+                            <div class="invalid-feedback" *ngIf="f['end_date'].errors?.['required'] && f['end_date'].touched">
+                                End date is required
+                            </div>
+                            <div class="invalid-feedback" *ngIf="f['end_date'].errors?.['endDateInvalid']">
+                                End date must be after start date
                             </div>
                         </div>
                     </div>

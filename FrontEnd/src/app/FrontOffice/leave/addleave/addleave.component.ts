@@ -25,12 +25,43 @@ export class AddleaveComponent implements OnInit {
   ngOnInit() {
     this.leaveForm = this.fb.group({
       start_date: ['', Validators.required],
-      end_date: ['', Validators.required],
+      end_date: ['', [Validators.required]],
       type: ['', Validators.required],
       reason: ['', Validators.required],
       documentAttachement: [''],
       status: [LeaveStatus.PENDING]
-    });
+    }, { validator: this.dateValidator });
+  }
+
+  // Custom validator to check if end date is after start date
+  dateValidator(group: FormGroup) {
+    const start = group.get('start_date')?.value;
+    const end = group.get('end_date')?.value;
+    
+    if (start && end) {
+      const startDate = new Date(start);
+      const endDate = new Date(end);
+      
+      if (endDate < startDate) {
+        group.get('end_date')?.setErrors({ endDateInvalid: true });
+        return { endDateInvalid: true };
+      }
+    }
+    return null;
+  }
+
+  // Update end date min value when start date changes
+  onStartDateChange() {
+    const startDate = this.leaveForm.get('start_date')?.value;
+    if (startDate) {
+      this.leaveForm.get('end_date')?.setValue(''); // Reset end date
+      const minEndDate = new Date(startDate);
+      minEndDate.setDate(minEndDate.getDate() + 1);
+      const endDateInput = document.getElementById('end_date') as HTMLInputElement;
+      if (endDateInput) {
+        endDateInput.min = minEndDate.toISOString().split('T')[0];
+      }
+    }
   }
 
   onFileSelect(event: any) {
