@@ -181,7 +181,7 @@
                             <td>{{ leave.start_date | date:'mediumDate' }}</td>
                             <td>{{ leave.end_date | date:'mediumDate' }}</td>
                             <td>{{ leave.type }}</td>
-                            <td>{{ leave.reason }}</td>
+                            <td [innerHTML]="leave.reason | safeHtml"></td>
                             <td>
                                 <a *ngIf="leave.documentAttachement" 
                                    href="{{ leave.documentAttachement }}" 

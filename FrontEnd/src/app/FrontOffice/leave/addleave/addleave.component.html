@@ -180,13 +180,13 @@
 
                 <div class="form-group">
                     <label for="reason">Reason</label>
-                    <textarea 
-                        class="form-control" 
-                        id="reason" 
-                        rows="3"
-                        formControlName="reason"></textarea>
-                    <div class="text-danger" *ngIf="f['reason'].touched && f['reason'].errors">
-                        <small *ngIf="f['reason'].errors?.['required']">Reason is required</small>
+                    <editor
+                        [init]="editorConfig"
+                        [formControlName]="'reason'"
+                        id="reason"
+                    ></editor>
+                    <div class="text-danger" *ngIf="f['reason'].touched && f['reason'].errors?.['required']">
+                        <small>Reason is required</small>
                     </div>
                 </div>
 

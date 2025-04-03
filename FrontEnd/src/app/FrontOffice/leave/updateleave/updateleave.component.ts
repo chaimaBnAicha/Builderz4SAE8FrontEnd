@@ -16,6 +16,23 @@ export class UpdateleaveComponent implements OnInit {
   minDate: string;
   currentDocument: string = '';
 
+  editorConfig = {
+    base_url: '/tinymce',
+    suffix: '.min',
+    height: 300,
+    menubar: false,
+    plugins: [
+      'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+      'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+      'insertdatetime', 'media', 'table', 'help', 'wordcount'
+    ],
+    toolbar: 'undo redo | formatselect | ' +
+      'bold italic forecolor backcolor | alignleft aligncenter ' +
+      'alignright alignjustify | bullist numlist outdent indent | ' +
+      'removeformat | help',
+    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+  };
+
   constructor(
     private fb: FormBuilder,
     private leaveService: LeaveService,
