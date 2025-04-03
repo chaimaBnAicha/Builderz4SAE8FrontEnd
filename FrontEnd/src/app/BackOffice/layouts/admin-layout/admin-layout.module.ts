@@ -3,6 +3,7 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 import { LbdModule } from '../../lbd/lbd.module';
 import { NguiMapModule } from '@ngui/map';
@@ -21,6 +22,7 @@ import { NavbarModule } from "../../shared/navbar/navbar.module";
 import { FooterModule } from "../../shared/footer/footer.module";
 import { SidebarModule } from "../../sidebar/sidebar.module";
 import { PieChartComponent } from '../../AdvanceCharts/pie-chart/pie-chart.component';
+import { LeaveBackComponent } from '../../Leave/leave-back/leave-back.component';
 
 @NgModule({
   imports: [
@@ -33,7 +35,8 @@ import { PieChartComponent } from '../../AdvanceCharts/pie-chart/pie-chart.compo
     NavbarModule,
     FooterModule,
     SidebarModule,
-    NgChartsModule
+    NgChartsModule,
+    NgxPaginationModule
   ],
   declarations: [
     UserComponent,
@@ -43,6 +46,7 @@ import { PieChartComponent } from '../../AdvanceCharts/pie-chart/pie-chart.compo
     MapsComponent,
     NotificationsComponent,
     UpgradeComponent,
+    LeaveBackComponent
   ]
 })
 export class AdminLayoutModule {}

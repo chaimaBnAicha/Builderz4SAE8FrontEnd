@@ -72,6 +72,13 @@ export const ROUTES: RouteInfo[] = [
     group: 'finance'
   },
   {
+    path: 'leaves',
+    title: 'Leave Management',
+    icon: 'pe-7s-cash',
+    class: '',
+    group: 'finance'
+  },
+  {
     path: 'icons',
     title: 'Insurance Management',
     icon: 'pe-7s-shield',
