@@ -40,23 +40,27 @@ export class GetleavesComponent implements OnInit {
   }
 
   onSearch() {
-    this.filterLeaves();
-  }
-
-  onStatusFilter() {
-    this.filterLeaves();
-  }
-
-  filterLeaves() {
-    this.leaves = [...this.originalLeaves];
-
-    if (this.searchTerm) {
+    this.leaves = [...this.originalLeaves]; // Reset to original data
+    
+    if (this.searchTerm.trim()) {
       const searchLower = this.searchTerm.toLowerCase();
       this.leaves = this.leaves.filter(leave => 
-        leave.reason.toLowerCase().includes(searchLower)
+        leave.reason.toLowerCase().includes(searchLower) ||
+        leave.type.toLowerCase().includes(searchLower)
       );
     }
 
+    // Apply status filter after search if it exists
+    if (this.statusFilter) {
+      this.leaves = this.leaves.filter(leave => 
+        leave.status === this.statusFilter
+      );
+    }
+  }
+
+  onStatusFilter() {
+    this.leaves = [...this.originalLeaves]; // Reset to original data
+    
     if (this.statusFilter) {
       this.leaves = this.leaves.filter(leave => 
         leave.status === this.statusFilter
@@ -66,7 +70,7 @@ export class GetleavesComponent implements OnInit {
 
   clearSearch() {
     this.searchTerm = '';
-    this.filterLeaves();
+    this.onSearch();
   }
 
   onItemsPerPageChange() {

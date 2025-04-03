@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LeaveService } from 'src/app/Service/leave.service';
-import { LeaveType, LeaveStatus } from 'src/app/models/leave.model';
+import { LeaveType, LeaveStatus, Leave } from 'src/app/models/leave.model';
 
 @Component({
   selector: 'app-updateleave',
@@ -73,12 +73,29 @@ export class UpdateleaveComponent implements OnInit {
 
   onSubmit() {
     if (this.leaveForm.valid) {
-      this.leaveService.updateLeave(this.leaveForm.value).subscribe({
-        next: () => {
-          this.router.navigate(['/leaves']);
+      const formValue = this.leaveForm.value;
+      const leave: Leave = {
+        id: Number(this.leaveId),
+        start_date: formValue.start_date,
+        end_date: formValue.end_date,
+        type: formValue.type,
+        reason: formValue.reason,
+        documentAttachement: formValue.documentAttachement || null,
+        status: formValue.status || LeaveStatus.PENDING
+      };
+
+      console.log('Submitting leave:', leave);
+      
+      this.leaveService.updateLeave(leave).subscribe({
+        next: (response) => {
+          console.log('Update successful:', response);
+          this.router.navigate(['/leave']);
         },
         error: (error) => {
-          console.error('Error updating leave:', error);
+          console.error('Error details:', error);
+          if (error.error) {
+            console.error('Server error message:', error.error);
+          }
         }
       });
     }

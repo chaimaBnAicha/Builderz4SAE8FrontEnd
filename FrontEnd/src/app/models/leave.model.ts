@@ -1,19 +1,19 @@
 export enum LeaveType {
-  SICK = 'SICK',
-  UNPAID = 'UNPAID',
-  EMERGENCY = 'EMERGENCY'
+  SICK = 'Sick',
+  UNPAID = 'Unpaid',
+  EMERGENCY = 'Emergency'
 }
 
 export enum LeaveStatus {
-  PENDING = 'PENDING',
-  APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED'
+  PENDING = 'Pending',
+  APPROVED = 'Approved',
+  REJECTED = 'Rejected'
 }
 
 export interface Leave {
   id: number;
-  start_date: Date;
-  end_date: Date;
+  start_date: Date | string;
+  end_date: Date | string;
   reason: string;
   documentAttachement: string;
   type: LeaveType;

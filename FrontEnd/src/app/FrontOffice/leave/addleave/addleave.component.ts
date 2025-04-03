@@ -48,7 +48,7 @@ export class AddleaveComponent implements OnInit {
     if (this.leaveForm.valid) {
       this.leaveService.addLeave(this.leaveForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/leaves']);
+          this.router.navigate(['/leave']);
         },
         error: (error) => {
           console.error('Error adding leave:', error);
@@ -58,7 +58,7 @@ export class AddleaveComponent implements OnInit {
   }
 
   onCancel() {
-    this.router.navigate(['/leaves']);
+    this.router.navigate(['/leave']);
   }
 
   get f() {

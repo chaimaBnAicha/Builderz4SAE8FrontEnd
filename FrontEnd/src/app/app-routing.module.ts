@@ -50,7 +50,7 @@ const routes: Routes = [
   {path: 'update-advance/:id', component:UpdateAdvanceComponent},
   {path: 'leave', component:GetleavesComponent},
   {path: 'addleave',component: AddleaveComponent},
-  {path: 'updateleave', component:UpdateleaveComponent},
+  {path: 'updateleave/:id', component:UpdateleaveComponent},
 
 
 
