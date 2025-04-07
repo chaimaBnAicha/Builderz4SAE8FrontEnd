@@ -18,7 +18,7 @@ export class GetleavesComponent implements OnInit {
   p: number = 1;
   itemsPerPage: number = 5;
 
-  private apiUrl = 'http://localhost:8081/BackendSyrine/api/documents'; // Adjust port if needed
+  private apiUrl = 'http://localhost:8081/api/documents'; 
 
   constructor(
     private leaveService: LeaveService,

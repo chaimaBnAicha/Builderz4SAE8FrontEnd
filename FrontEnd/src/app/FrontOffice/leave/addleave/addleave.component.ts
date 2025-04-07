@@ -19,7 +19,7 @@ export class AddleaveComponent implements OnInit {
   isUploading = false;
   uploadError: string | null = null;
 
-  private apiUrl = 'http://localhost:8081/BackendSyrine/api/documents';
+  private apiUrl = 'http://localhost:8081/api/documents';
 
   editorConfig = {
     base_url: '/tinymce',

@@ -9,7 +9,7 @@ import { LeaveType, LeaveStatus } from '../models/leave.model';
   providedIn: 'root'
 })
 export class LeaveService {
-  private apiUrl = 'http://localhost:8081/BackendSyrine/leave';  
+  private apiUrl = 'http://localhost:8081/leave';  
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',

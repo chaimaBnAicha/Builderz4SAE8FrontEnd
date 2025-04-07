@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LeaveService } from 'src/app/Service/leave.service';
 import { LeaveType, LeaveStatus, Leave } from 'src/app/models/leave.model';
+import { HttpClient } from '@angular/common/http';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-updateleave',
@@ -15,6 +17,11 @@ export class UpdateleaveComponent implements OnInit {
   leaveTypes = Object.values(LeaveType);
   minDate: string;
   currentDocument: string | undefined = undefined;
+  selectedFile: File | null = null;
+  isUploading = false;
+  uploadError: string | null = null;
+
+  private apiUrl = 'http://localhost:8081/api/documents';
 
   editorConfig = {
     base_url: '/tinymce',
@@ -37,7 +44,8 @@ export class UpdateleaveComponent implements OnInit {
     private fb: FormBuilder,
     private leaveService: LeaveService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {
     this.minDate = new Date().toISOString().split('T')[0];
   }
@@ -81,40 +89,65 @@ export class UpdateleaveComponent implements OnInit {
   onFileSelect(event: any) {
     const file = event.target.files[0];
     if (file) {
-      this.leaveForm.patchValue({
-        documentAttachement: file.name
-      });
-      this.leaveForm.markAsDirty();
+      this.selectedFile = file;
+      // Don't update form value yet - wait for successful upload
     }
   }
 
-  onSubmit() {
-    if (this.leaveForm.valid) {
-      const formValue = this.leaveForm.value;
-      const leave: Leave = {
-        id: Number(this.leaveId),
-        start_date: formValue.start_date,
-        end_date: formValue.end_date,
-        type: formValue.type,
-        reason: formValue.reason,
-        documentAttachement: formValue.documentAttachement || null,
-        status: formValue.status || LeaveStatus.PENDING
-      };
+  private uploadDocument(): Promise<string> {
+    if (!this.selectedFile) {
+      return Promise.resolve(this.currentDocument || ''); // Keep existing document if no new file
+    }
 
-      console.log('Submitting leave:', leave);
-      
-      this.leaveService.updateLeave(leave).subscribe({
-        next: (response) => {
-          console.log('Update successful:', response);
-          this.router.navigate(['/leave']);
-        },
-        error: (error) => {
-          console.error('Error details:', error);
-          if (error.error) {
-            console.error('Server error message:', error.error);
-          }
-        }
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+
+    return new Promise((resolve, reject) => {
+      this.http.post(`${this.apiUrl}/upload`, formData, {
+        responseType: 'text'
+      }).subscribe({
+        next: (filename: string) => resolve(filename),
+        error: (error) => reject(error)
       });
+    });
+  }
+
+  async onSubmit() {
+    if (this.leaveForm.valid) {
+      this.isUploading = true;
+      this.uploadError = null;
+
+      try {
+        // Upload new document if selected
+        const documentFilename = await this.uploadDocument();
+        
+        const formValue = this.leaveForm.value;
+        const leave: Leave = {
+          id: Number(this.leaveId),
+          start_date: formValue.start_date,
+          end_date: formValue.end_date,
+          type: formValue.type,
+          reason: formValue.reason,
+          documentAttachement: documentFilename || this.currentDocument,
+          status: formValue.status || LeaveStatus.PENDING
+        };
+
+        this.leaveService.updateLeave(leave).subscribe({
+          next: (response) => {
+            console.log('Update successful:', response);
+            this.router.navigate(['/leave']);
+          },
+          error: (error) => {
+            console.error('Error updating leave:', error);
+            this.uploadError = 'Failed to update leave request';
+          }
+        });
+      } catch (error) {
+        console.error('Error uploading document:', error);
+        this.uploadError = 'Failed to upload document';
+      } finally {
+        this.isUploading = false;
+      }
     }
   }
 

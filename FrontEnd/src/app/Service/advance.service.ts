@@ -10,7 +10,7 @@ import { Advance } from '../models/advance.model';
   providedIn: 'root'
 })
 export class AdvanceService {
-  private apiUrl = 'http://localhost:8081/BackendSyrine/advance';  
+  private apiUrl = 'http://localhost:8081/advance';  
 
   constructor(private http: HttpClient) { }
 
