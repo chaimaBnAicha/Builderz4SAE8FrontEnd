@@ -14,7 +14,7 @@ export class UpdateleaveComponent implements OnInit {
   leaveId!: number;
   leaveTypes = Object.values(LeaveType);
   minDate: string;
-  currentDocument: string = '';
+  currentDocument: string | undefined = undefined;
 
   editorConfig = {
     base_url: '/tinymce',
@@ -45,7 +45,7 @@ export class UpdateleaveComponent implements OnInit {
   ngOnInit() {
     this.leaveId = this.route.snapshot.params['id'];
     this.initForm();
-    this.loadLeave();
+    this.loadLeave(this.leaveId);
   }
 
   initForm() {
@@ -60,12 +60,12 @@ export class UpdateleaveComponent implements OnInit {
     }, { validator: this.dateValidator });
   }
 
-  loadLeave() {
-    this.leaveService.getLeaveById(this.leaveId).subscribe({
+  loadLeave(id: number) {
+    this.leaveService.getLeaveById(id).subscribe({
       next: (leave) => {
         this.leaveForm.patchValue({
-          start_date: new Date(leave.start_date).toISOString().split('T')[0],
-          end_date: new Date(leave.end_date).toISOString().split('T')[0],
+          start_date: leave.start_date,
+          end_date: leave.end_date,
           type: leave.type,
           reason: leave.reason,
           status: leave.status
@@ -155,5 +155,9 @@ export class UpdateleaveComponent implements OnInit {
         endDateInput.min = minEndDate.toISOString().split('T')[0];
       }
     }
+  }
+
+  hasDocument(): boolean {
+    return !!this.currentDocument;
   }
 }

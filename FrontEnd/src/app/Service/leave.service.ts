@@ -71,4 +71,10 @@ export class LeaveService {
       catchError(this.handleError)
     );
   }
+
+  downloadDocument(documentPath: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/documents/${documentPath}`, {
+      responseType: 'blob'
+    });
+  }
 }

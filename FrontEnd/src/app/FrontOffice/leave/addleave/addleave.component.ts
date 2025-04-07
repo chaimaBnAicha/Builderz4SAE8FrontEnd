@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LeaveService } from 'src/app/Service/leave.service';
 import { LeaveType, LeaveStatus } from 'src/app/models/leave.model';
+import { HttpClient } from '@angular/common/http';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-addleave',
@@ -13,6 +15,11 @@ export class AddleaveComponent implements OnInit {
   leaveForm!: FormGroup;
   leaveTypes = Object.values(LeaveType);
   minDate: string;
+  selectedFile: File | null = null;
+  isUploading = false;
+  uploadError: string | null = null;
+
+  private apiUrl = 'http://localhost:8081/BackendSyrine/api/documents';
 
   editorConfig = {
     base_url: '/tinymce',
@@ -34,7 +41,8 @@ export class AddleaveComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private leaveService: LeaveService,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {
     this.minDate = new Date().toISOString().split('T')[0];
   }
@@ -84,24 +92,60 @@ export class AddleaveComponent implements OnInit {
   onFileSelect(event: any) {
     const file = event.target.files[0];
     if (file) {
-      // Here you would typically upload the file to your server
-      // and get back a URL or file path
-      this.leaveForm.patchValue({
-        documentAttachement: file.name // For now, just storing the filename
-      });
+      this.selectedFile = file;
+      // Don't set the form value yet - we'll do that after successful upload
     }
   }
 
-  onSubmit() {
-    if (this.leaveForm.valid) {
-      this.leaveService.addLeave(this.leaveForm.value).subscribe({
-        next: () => {
-          this.router.navigate(['/leave']);
-        },
-        error: (error) => {
-          console.error('Error adding leave:', error);
-        }
+  private uploadDocument(): Promise<string> {
+    if (!this.selectedFile) {
+      return Promise.resolve(''); // Return empty string if no file selected
+    }
+
+    const formData = new FormData();
+    formData.append('file', this.selectedFile);
+
+    return new Promise((resolve, reject) => {
+      this.http.post(`${this.apiUrl}/upload`, formData, {
+        responseType: 'text'
+      }).subscribe({
+        next: (filename: string) => resolve(filename),
+        error: (error) => reject(error)
       });
+    });
+  }
+
+  async onSubmit() {
+    if (this.leaveForm.valid) {
+      this.isUploading = true;
+      this.uploadError = null;
+
+      try {
+        // First upload the document if one is selected
+        const documentFilename = await this.uploadDocument();
+        
+        // Create the leave request with the document filename
+        const leaveData = {
+          ...this.leaveForm.value,
+          documentAttachement: documentFilename
+        };
+
+        // Submit the leave request
+        this.leaveService.addLeave(leaveData).subscribe({
+          next: () => {
+            this.router.navigate(['/leave']);
+          },
+          error: (error) => {
+            console.error('Error adding leave:', error);
+            this.uploadError = 'Failed to create leave request';
+          }
+        });
+      } catch (error) {
+        console.error('Error uploading document:', error);
+        this.uploadError = 'Failed to upload document';
+      } finally {
+        this.isUploading = false;
+      }
     }
   }
 

@@ -183,12 +183,18 @@
                             <td>{{ leave.type }}</td>
                             <td [innerHTML]="leave.reason | safeHtml"></td>
                             <td>
-                                <a *ngIf="leave.documentAttachement" 
-                                   href="{{ leave.documentAttachement }}" 
-                                   target="_blank" 
-                                   class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-file"></i>
-                                </a>
+                                <div *ngIf="leave.documentAttachement">
+                                    <button class="btn btn-sm btn-outline-primary" 
+                                            (click)="downloadDocument(leave.documentAttachement)"
+                                            [disabled]="leave.isDownloading"
+                                            title="Download Document">
+                                        <i class="fas" [ngClass]="{'fa-download': !leave.isDownloading, 'fa-spinner fa-spin': leave.isDownloading}"></i>
+                                        {{leave.isDownloading ? 'Downloading...' : ''}}
+                                    </button>
+                                </div>
+                                <div *ngIf="leave.downloadError" class="text-danger small mt-1">
+                                    Download failed. Please try again.
+                                </div>
                             </td>
                             <td>
                                 <span class="badge" [ngClass]="{

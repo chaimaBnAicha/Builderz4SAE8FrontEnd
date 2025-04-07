@@ -12,11 +12,13 @@ export enum LeaveStatus {
 
 export interface Leave {
   id: number;
-  start_date: Date | string;
-  end_date: Date | string;
+  start_date: Date;
+  end_date: Date;
+  type: string;
   reason: string;
-  documentAttachement: string;
-  type: LeaveType;
-  status: LeaveStatus;
+  status: string;
+  documentAttachement?: string;
+  isDownloading?: boolean;
+  downloadError?: boolean;
 } 
  

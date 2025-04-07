@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgChartsModule } from 'ng2-charts';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { QuillModule } from 'ngx-quill';
 
 import { LbdModule } from '../../lbd/lbd.module';
 import { NguiMapModule } from '@ngui/map';
@@ -37,8 +36,7 @@ import { LeaveBackComponent } from '../../Leave/leave-back/leave-back.component'
     FooterModule,
     SidebarModule,
     NgChartsModule,
-    NgxPaginationModule,
-    QuillModule.forRoot(),
+    NgxPaginationModule
   ],
   declarations: [
     UserComponent,

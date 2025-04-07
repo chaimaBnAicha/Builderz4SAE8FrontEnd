@@ -198,9 +198,9 @@
                         id="documentAttachement"
                         (change)="onFileSelect($event)"
                         accept=".pdf,.doc,.docx">
-                    <small class="text-muted" *ngIf="currentDocument">
-                        Current document: {{ currentDocument }}
-                    </small>
+                    <div *ngIf="currentDocument" class="current-document">
+                        <p>Current document: {{currentDocument}}</p>
+                    </div>
                 </div>
 
                 <div class="mt-3">
