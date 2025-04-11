@@ -1,0 +1,141 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="card-title mb-0">{{ isEditing ? 'Edit Insurance' : 'Add New Insurance' }}</h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="insuranceForm" (ngSubmit)="onSubmit()" #form="ngForm">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Description</label>
+                  <input type="text" 
+                         class="form-control" 
+                         formControlName="description"
+                         [ngClass]="{'is-invalid': submitted && f['description'].errors}">
+                  <div class="invalid-feedback" *ngIf="submitted && f['description'].errors">
+                    <div *ngIf="f['description'].errors['required']">Description is required</div>
+                    <div *ngIf="f['description'].errors['minlength']">Description must be at least 3 characters</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Amount</label>
+                  <input type="number" 
+                         class="form-control" 
+                         formControlName="amount"
+                         [ngClass]="{'is-invalid': submitted && f['amount'].errors}">
+                  <div class="invalid-feedback" *ngIf="submitted && f['amount'].errors">
+                    <div *ngIf="f['amount'].errors['required']">Amount is required</div>
+                    <div *ngIf="f['amount'].errors['min']">Amount must be positive</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Start Date</label>
+                  <input type="date" 
+                         class="form-control" 
+                         formControlName="start_Date"
+                         [ngClass]="{'is-invalid': submitted && f['start_Date'].errors}">
+                  <div class="invalid-feedback" *ngIf="submitted && f['start_Date'].errors">
+                    Start date is required
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">End Date</label>
+                  <input type="date" 
+                         class="form-control" 
+                         formControlName="end_Date"
+                         [ngClass]="{'is-invalid': submitted && f['end_Date'].errors}">
+                  <div class="invalid-feedback" *ngIf="submitted && f['end_Date'].errors">
+                    End date is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-label">Category</label>
+                  <select class="form-control" 
+                          formControlName="category"
+                          [ngClass]="{'is-invalid': submitted && f['category'].errors}">
+                    <option *ngFor="let category of categories" [value]="category">{{category}}</option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="submitted && f['category'].errors">
+                    Category is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary me-2">
+                  <i class="fas fa-save me-1"></i>
+                  {{ isEditing ? 'Update' : 'Add' }}
+                </button>
+                <button type="button" class="btn btn-secondary" (click)="resetForm()">
+                  <i class="fas fa-times me-1"></i>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="card-title mb-0">Insurance List</h4>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th>ID</th>
+                  <th>Description</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Amount</th>
+                  <th>Category</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let insurance of insurances">
+                  <td>{{insurance.id_Insurance}}</td>
+                  <td>{{insurance.description}}</td>
+                  <td>{{insurance.start_Date | date:'medium'}}</td>
+                  <td>{{insurance.end_Date | date:'medium'}}</td>
+                  <td>{{insurance.amount | currency}}</td>
+                  <td>{{insurance.category}}</td>
+                  <td>
+                    <button class="btn btn-sm btn-info me-1" (click)="editInsurance(insurance)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-danger" (click)="deleteInsurance(insurance.id_Insurance!)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

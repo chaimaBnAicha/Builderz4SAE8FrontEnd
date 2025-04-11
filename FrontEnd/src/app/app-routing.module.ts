@@ -27,7 +27,7 @@ import { UpdateofferComponent } from './FrontOffice/Offer/updateoffer/updateoffe
 import { ViewOffersComponent } from './FrontOffice/Offer/view-offers/view-offers.component';
 import { ChartsComponent } from './BackOffice/OfferCharts/charts/charts.component';
 import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
-
+import { InsuranceComponent } from './BackOffice/insurance/insurance.component';
 
 // Define your routes
 const routes: Routes = [
@@ -61,7 +61,8 @@ const routes: Routes = [
          { path: 'getoffer',component:GetofferComponent},
          { path: 'updateoffer/:id', component: UpdateofferComponent },
          {path: 'app-charts', component: ChartsComponent},
-        {path: 'app-dashboard',component: DashboardComponent},
+         {path: 'app-dashboard',component: DashboardComponent},
+         {path: 'insurance', component: InsuranceComponent},
       // Add other backoffice child routes here
       { path: '', redirectTo: 'home', pathMatch: 'full' }, // Default route under admin layout
     ],

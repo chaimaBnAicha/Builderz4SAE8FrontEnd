@@ -31,6 +31,7 @@ import { ViewOffersComponent } from './FrontOffice/Offer/view-offers/view-offers
 import { PipesPipe } from './FrontOffice/pipes.pipe';
 import { ChartsComponent } from './BackOffice/OfferCharts/charts/charts.component';
 import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
+import { InsuranceComponent } from './BackOffice/insurance/insurance.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
@@ -52,7 +53,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     ViewOffersComponent,
     PipesPipe,
     ChartsComponent,
-    DashboardComponent
+    DashboardComponent,
+    InsuranceComponent
   ],
   imports: [
     BrowserModule,

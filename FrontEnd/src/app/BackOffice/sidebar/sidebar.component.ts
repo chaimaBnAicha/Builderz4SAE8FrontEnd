@@ -72,7 +72,7 @@ export const ROUTES: RouteInfo[] = [
     group: 'finance'
   },
   {
-    path: 'icons',
+    path: 'insurance',
     title: 'Insurance Management',
     icon: 'pe-7s-shield',
     class: '',
@@ -86,8 +86,6 @@ export const ROUTES: RouteInfo[] = [
     class: '',
     group: 'finance'
   },
-
-
 
   {
     path: 'icons',

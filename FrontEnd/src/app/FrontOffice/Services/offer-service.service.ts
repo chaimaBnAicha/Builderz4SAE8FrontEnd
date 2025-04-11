@@ -34,7 +34,7 @@ interface UpdateOfferDto {
   providedIn: 'root'
 })
 export class OfferServiceService {
-  private apiUrl = 'http://localhost:8081/BackendZagrouba/offer';
+  private apiUrl = 'http://localhost:8081/offer';
 
   constructor(private http: HttpClient) { }
 
