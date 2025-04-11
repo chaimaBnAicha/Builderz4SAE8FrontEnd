@@ -1,34 +1,73 @@
-<div class="charts-container">
-  <div class="chart-card">
-    <h3>Statut des offres</h3>
-    <ngx-charts-pie-chart
-      [view]="view"
-      [results]="statusData"
-      [legend]="true"
-      [doughnut]="true"
-      [animations]="true"
-      [labels]="true">
-    </ngx-charts-pie-chart>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Offer Status Chart -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="card-title mb-0">Offer Status Distribution</h4>
+        </div>
+        <div class="card-body">
+          <ngx-charts-pie-chart
+            [view]="view"
+            [results]="statusData"
+            [legend]="true"
+            [doughnut]="true"
+            [animations]="true"
+            [labels]="true">
+          </ngx-charts-pie-chart>
+        </div>
+      </div>
+    </div>
+
+    <!-- Offer Types Chart -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="card-title mb-0">Offer Types Distribution</h4>
+        </div>
+        <div class="card-body">
+          <ngx-charts-bar-vertical
+            [view]="view"
+            [results]="typeData"
+            [scheme]="'cool'"
+            [xAxis]="true"
+            [yAxis]="true"
+            [legend]="true"
+            [showDataLabel]="true"
+            [animations]="true">
+          </ngx-charts-bar-vertical>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="chart-card">
-    <h3>Type des offres</h3>
-    <ngx-charts-bar-vertical
-      [view]="view"
-      [results]="typeData"
-      [scheme]="'cool'"
-      [xAxis]="true"
-      [yAxis]="true"
-      [legend]="true"
-      [showDataLabel]="true"
-      [animations]="true">
-    </ngx-charts-bar-vertical>
-  </div>
+  <div class="row mt-4">
+    <!-- Monthly Offers Chart -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="card-title mb-0">Monthly Offers</h4>
+        </div>
+        <div class="card-body">
+          <div class="chart-container" style="position: relative; height:400px;">
+            <canvas #lineChart></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="chart-card">
-    <h3>Offres par mois</h3>
-    <div class="chart-container">
-      <canvas #lineChart></canvas>
+    <!-- Insurance Status Chart -->
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="card-title mb-0">Insurance Status Distribution</h4>
+        </div>
+        <div class="card-body">
+          <div class="chart-container" style="position: relative; height:400px;">
+            <canvas #insuranceStatusChart></canvas>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

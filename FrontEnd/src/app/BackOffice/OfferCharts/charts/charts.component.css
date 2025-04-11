@@ -27,6 +27,8 @@
   position: relative;
   height: 300px;
   width: 100%;
+  padding: 1rem;
+  min-height: 400px;
 }
 
 canvas {
@@ -39,4 +41,19 @@ canvas {
     min-width: 100%;
     max-width: 100%;
   }
+}
+
+.card {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  border: none;
+  margin-bottom: 1.5rem;
+}
+
+.card-header {
+  border-bottom: none;
+  padding: 1rem 1.25rem;
+}
+
+.row {
+  margin-bottom: 1.5rem;
 }

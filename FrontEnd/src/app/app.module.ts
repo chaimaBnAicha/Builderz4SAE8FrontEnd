@@ -33,6 +33,7 @@ import { ChartsComponent } from './BackOffice/OfferCharts/charts/charts.componen
 import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
 import { InsuranceComponent } from './BackOffice/insurance/insurance.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { InsuranceChartsComponent } from './BackOffice/insurance/insurance-charts/insurance-charts.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     PipesPipe,
     ChartsComponent,
     DashboardComponent,
-    InsuranceComponent
+    InsuranceComponent,
+    InsuranceChartsComponent
   ],
   imports: [
     BrowserModule,
