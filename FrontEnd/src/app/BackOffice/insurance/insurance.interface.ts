@@ -5,10 +5,13 @@ export interface Insurance {
     end_Date: Date | string;
     amount: number;
     category: Category;
+    user?: {
+        id: number;
+    };
 }
 
 export enum Category {
     RCPro = 'RCPro',
-    TRC = 'TRC',
-    CIVIL_EXPLOITATION = 'CIVIL_EXPLOITATION'
+    RC = 'RC',
+    RCProPlus = 'RCProPlus'
 } 

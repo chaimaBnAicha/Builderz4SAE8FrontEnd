@@ -40,7 +40,14 @@ export class InsuranceService {
     console.log('Fetching all insurances from:', url);
     return this.http.get<Insurance[]>(url, this.httpOptions)
       .pipe(
-        tap(data => console.log('Received data:', data)),
+        tap(data => {
+          console.log('Received data:', data);
+          // Add user ID to each insurance record
+          return data.map(insurance => ({
+            ...insurance,
+            user: { id: 1 }
+          }));
+        }),
         catchError(this.handleError)
       );
   }
@@ -58,7 +65,8 @@ export class InsuranceService {
       start_Date: insurance.start_Date,
       end_Date: insurance.end_Date,
       amount: insurance.amount,
-      category: insurance.category
+      category: insurance.category,
+      user: { id: 1 } // Set default user ID to 1
     };
 
     const url = `${this.apiUrl}/add-Insurance`;
@@ -87,7 +95,8 @@ export class InsuranceService {
       start_Date: insurance.start_Date,
       end_Date: insurance.end_Date,
       amount: insurance.amount,
-      category: insurance.category
+      category: insurance.category,
+      user: { id: 1 } // Set default user ID to 1
     };
 
     const url = `${this.apiUrl}/modify-Insurance`;
