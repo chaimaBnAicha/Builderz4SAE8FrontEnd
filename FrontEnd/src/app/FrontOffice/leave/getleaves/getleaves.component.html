@@ -184,16 +184,15 @@
                             <td [innerHTML]="leave.reason | safeHtml"></td>
                             <td>
                                 <div *ngIf="leave.documentAttachement">
-                                    <button class="btn btn-sm btn-outline-primary" 
-                                            (click)="downloadDocument(leave.documentAttachement)"
-                                            [disabled]="leave.isDownloading"
-                                            title="Download Document">
+                                    <button class="btn btn-primary btn-sm" 
+                                            (click)="downloadDocument(leave)"
+                                            [disabled]="leave.isDownloading">
                                         <i class="fas" [ngClass]="{'fa-download': !leave.isDownloading, 'fa-spinner fa-spin': leave.isDownloading}"></i>
                                         {{leave.isDownloading ? 'Downloading...' : ''}}
                                     </button>
                                 </div>
                                 <div *ngIf="leave.downloadError" class="text-danger small mt-1">
-                                    Download failed. Please try again.
+                                    Failed to download document
                                 </div>
                             </td>
                             <td>
@@ -211,7 +210,7 @@
                                     <i class="fas fa-edit"></i>
                                 </button>
                                 <button class="btn btn-danger btn-sm" (click)="onDelete(leave.id)"
-                                        >
+                                        *ngIf="leave.id">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>

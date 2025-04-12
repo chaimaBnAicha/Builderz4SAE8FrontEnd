@@ -10,6 +10,7 @@ import { LeaveType, LeaveStatus } from '../models/leave.model';
 })
 export class LeaveService {
   private apiUrl = 'http://localhost:8081/leave';  
+  private documentApiUrl = 'http://localhost:8081/api/documents';
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -20,45 +21,19 @@ export class LeaveService {
   constructor(private http: HttpClient) { }
 
   getLeaves(): Observable<Leave[]> {
-    return this.http.get<Leave[]>(`${this.apiUrl}/retrieve-all-leave`).pipe(
-      tap(leaves => console.log('Fetched leaves:', leaves)),
-      catchError(this.handleError)
-    );
+    return this.http.get<Leave[]>(`${this.apiUrl}/retrieve-all-leave`);
   }
 
-  deleteLeave(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/remove-leave/${id}`).pipe(
-      catchError(this.handleError)
-    );
+  deleteLeave(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/remove-leave/${id}`);
   }
 
   addLeave(leave: Leave): Observable<Leave> {
-    return this.http.post<Leave>(`${this.apiUrl}/add-leave`, leave).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.post<Leave>(`${this.apiUrl}/add-leave`, leave, this.httpOptions);
   }
 
   updateLeave(leave: Leave): Observable<Leave> {
-    const url = `${this.apiUrl}/modify-Leave`;
-    
-    const formattedLeave = {
-      id: Number(leave.id),
-      start_date: new Date().toISOString(),  // Current timestamp
-      end_date: new Date().toISOString(),    // Current timestamp
-      reason: leave.reason || "string",
-      documentAttachement: leave.documentAttachement || "string",
-      type: LeaveType.SICK,    // Using enum value
-      status: LeaveStatus.PENDING  // Using enum value
-    };
-
-    console.log('Sending formatted leave:', formattedLeave);
-    return this.http.put<Leave>(url, formattedLeave, this.httpOptions).pipe(
-      tap(response => console.log('Server response:', response)),
-      catchError(error => {
-        console.error('Server error:', error);
-        return throwError(() => error);
-      })
-    );
+    return this.http.put<Leave>(`${this.apiUrl}/modify-Leave`, leave, this.httpOptions);
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -67,14 +42,25 @@ export class LeaveService {
   }
 
   getLeaveById(id: number): Observable<Leave> {
-    return this.http.get<Leave>(`${this.apiUrl}/retrieve-leave/${id}`).pipe(
+    return this.http.get<Leave>(`${this.apiUrl}/retrieve-leave/${id}`);
+  }
+
+  downloadDocument(documentPath: string): Observable<Blob> {
+    return this.http.get(`${this.documentApiUrl}/${documentPath}`, {
+      responseType: 'blob'
+    }).pipe(
       catchError(this.handleError)
     );
   }
 
-  downloadDocument(documentPath: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/documents/${documentPath}`, {
-      responseType: 'blob'
-    });
+  uploadDocument(file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    return this.http.post(`${this.documentApiUrl}/upload`, formData, {
+      responseType: 'text'
+    }).pipe(
+      catchError(this.handleError)
+    );
   }
 }

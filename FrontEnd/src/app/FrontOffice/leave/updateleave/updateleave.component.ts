@@ -118,23 +118,21 @@ export class UpdateleaveComponent implements OnInit {
       this.uploadError = null;
 
       try {
-        // Upload new document if selected
         const documentFilename = await this.uploadDocument();
         
-        const formValue = this.leaveForm.value;
         const leave: Leave = {
-          id: Number(this.leaveId),
-          start_date: formValue.start_date,
-          end_date: formValue.end_date,
-          type: formValue.type,
-          reason: formValue.reason,
-          documentAttachement: documentFilename || this.currentDocument,
-          status: formValue.status || LeaveStatus.PENDING
+          id: this.leaveId,
+          start_date: this.leaveForm.get('start_date')?.value,
+          end_date: this.leaveForm.get('end_date')?.value,
+          type: this.leaveForm.get('type')?.value,
+          reason: this.leaveForm.get('reason')?.value,
+          documentAttachement: documentFilename || this.leaveForm.get('documentAttachement')?.value,
+          status: this.leaveForm.get('status')?.value,
+          user: { id: 1 }
         };
 
         this.leaveService.updateLeave(leave).subscribe({
-          next: (response) => {
-            console.log('Update successful:', response);
+          next: () => {
             this.router.navigate(['/leave']);
           },
           error: (error) => {

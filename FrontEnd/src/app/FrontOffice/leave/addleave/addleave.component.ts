@@ -5,6 +5,7 @@ import { LeaveService } from 'src/app/Service/leave.service';
 import { LeaveType, LeaveStatus } from 'src/app/models/leave.model';
 import { HttpClient } from '@angular/common/http';
 import { finalize } from 'rxjs/operators';
+import { Leave } from 'src/app/models/leave.model';
 
 @Component({
   selector: 'app-addleave',
@@ -54,7 +55,8 @@ export class AddleaveComponent implements OnInit {
       type: ['', Validators.required],
       reason: ['', Validators.required],
       documentAttachement: [''],
-      status: [LeaveStatus.PENDING]
+      status: ['Pending'],
+      user: [{ id: 1 }]
     }, { validator: this.dateValidator });
   }
 
@@ -121,17 +123,21 @@ export class AddleaveComponent implements OnInit {
       this.uploadError = null;
 
       try {
-        // First upload the document if one is selected
         const documentFilename = await this.uploadDocument();
         
-        // Create the leave request with the document filename
-        const leaveData = {
-          ...this.leaveForm.value,
-          documentAttachement: documentFilename
+        const formattedLeave: Leave = {
+          start_date: new Date(this.leaveForm.get('start_date')?.value).toISOString(),
+          end_date: new Date(this.leaveForm.get('end_date')?.value).toISOString(),
+          reason: this.leaveForm.get('reason')?.value,
+          documentAttachement: documentFilename || '',
+          type: this.leaveForm.get('type')?.value as 'Sick' | 'Unpaid' | 'Emergency',
+          status: 'Pending' as 'Pending' | 'Approved' | 'Rejected',
+          user: {
+            id: 1
+          }
         };
 
-        // Submit the leave request
-        this.leaveService.addLeave(leaveData).subscribe({
+        this.leaveService.addLeave(formattedLeave).subscribe({
           next: () => {
             this.router.navigate(['/leave']);
           },

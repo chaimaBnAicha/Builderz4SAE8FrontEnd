@@ -40,6 +40,7 @@ export class GetleavesComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading leaves:', error);
+        alert('Error loading leaves. Please try again later.');
       }
     });
   }
@@ -82,66 +83,45 @@ export class GetleavesComponent implements OnInit {
     this.p = 1;
   }
 
-  onDelete(id: number) {
-    if (confirm('Are you sure you want to delete this leave request?')) {
-      this.leaveService.deleteLeave(id).subscribe({
-        next: () => {
-          this.loadLeaves(); // Reload the list after deletion
-        },
-        error: (error) => {
-          console.error('Error deleting leave:', error);
-        }
-      });
+  onDelete(leaveId: number | undefined) {
+    if (leaveId) {
+      if (confirm('Are you sure you want to delete this leave request?')) {
+        this.leaveService.deleteLeave(leaveId).subscribe({
+          next: () => {
+            this.loadLeaves(); // Refresh the list after deletion
+          },
+          error: (error) => {
+            console.error('Error deleting leave:', error);
+          }
+        });
+      }
     }
   }
 
-  downloadDocument(filename: string) {
-    // Find the leave to update its loading state
-    const leave = this.leaves.find(l => l.documentAttachement === filename);
-    if (!leave) return;
-
-    // Add loading state
+  downloadDocument(leave: Leave) {
+    if (!leave.documentAttachement) return;
+    
     leave.isDownloading = true;
     leave.downloadError = false;
 
-    this.http.get(`${this.apiUrl}/${filename}`, {
-      responseType: 'blob',
-      observe: 'response'
-    }).pipe(
-      finalize(() => {
-        leave.isDownloading = false;
-      })
-    ).subscribe({
-      next: (response) => {
-        if (response.body) {
-          // Get the filename from the Content-Disposition header if available
-          let downloadFilename = filename;
-          const contentDisposition = response.headers.get('Content-Disposition');
-          if (contentDisposition) {
-            const matches = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
-            if (matches != null && matches[1]) {
-              downloadFilename = matches[1].replace(/['"]/g, '');
-            }
-          }
-
-          const blob = new Blob([response.body], { 
-            type: response.headers.get('Content-Type') || 'application/octet-stream'
-          });
-          
+    this.leaveService.downloadDocument(leave.documentAttachement)
+      .subscribe({
+        next: (blob: Blob) => {
           const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = downloadFilename;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = leave.documentAttachement || 'document';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
+          leave.isDownloading = false;
+        },
+        error: (error) => {
+          console.error('Error downloading document:', error);
+          leave.downloadError = true;
+          leave.isDownloading = false;
         }
-      },
-      error: (error) => {
-        console.error('Error downloading document:', error);
-        leave.downloadError = true;
-      }
-    });
+      });
   }
 }
