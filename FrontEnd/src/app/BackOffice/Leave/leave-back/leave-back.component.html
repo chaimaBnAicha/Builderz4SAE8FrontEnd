@@ -99,12 +99,12 @@
                                 <div class="btn-group">
                                     <button class="btn btn-success btn-sm" 
                                             (click)="updateStatus(leave, LeaveStatus.APPROVED)"
-                                            [disabled]="leave.status === LeaveStatus.APPROVED || !canAccept(leave) || isLoading(leave)">
+                                            [disabled]="leave.status === LeaveStatus.APPROVED || leave.status === LeaveStatus.REJECTED || !canAccept(leave) || isLoading(leave)">
                                         <i class="fas" [ngClass]="{'fa-check': !isLoading(leave), 'fa-spinner fa-spin': isLoading(leave)}"></i>
                                     </button>
                                     <button class="btn btn-danger btn-sm" 
                                             (click)="updateStatus(leave, LeaveStatus.REJECTED)"
-                                            [disabled]="leave.status === LeaveStatus.REJECTED || canAccept(leave)">
+                                            [disabled]="leave.status === LeaveStatus.REJECTED || leave.status === LeaveStatus.APPROVED || canAccept(leave)">
                                         <i class="fas fa-times"></i>
                                     </button>
                                 </div>

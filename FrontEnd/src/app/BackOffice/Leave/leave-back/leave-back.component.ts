@@ -90,14 +90,25 @@ export class LeaveBackComponent implements OnInit {
 
   updateStatus(leave: Leave, newStatus: LeaveStatus) {
     if (leave.id) {
-      const updatedLeave = { ...leave, status: newStatus };
+      const updatedLeave = { 
+        ...leave, 
+        status: newStatus,
+        user: { id: 1 } // Ensure user is included
+      };
+      
+      console.log('Attempting to update leave status:', updatedLeave);
+      
       this.leaveService.updateLeave(updatedLeave).subscribe({
-        next: () => {
+        next: (response) => {
+          console.log('Update successful:', response);
           // Recheck canAccept after status update
           this.checkCanAcceptForAllLeaves(this.leaves);
         },
         error: (error) => {
           console.error('Error updating leave status:', error);
+          if (error.error) {
+            console.error('Server error details:', error.error);
+          }
         }
       });
     }

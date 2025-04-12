@@ -33,7 +33,78 @@ export class LeaveService {
   }
 
   updateLeave(leave: Leave): Observable<Leave> {
-    return this.http.put<Leave>(`${this.apiUrl}/modify-Leave`, leave, this.httpOptions);
+    // Log the data being sent
+    console.log('Updating leave with data:', leave);
+    
+    const leaveWithUser = {
+      ...leave,
+      user: { id: 1 }
+    };
+
+    // Log the final payload
+    console.log('Sending payload:', leaveWithUser);
+
+    return this.http.put<Leave>(`${this.apiUrl}/modify-Leave`, leaveWithUser, this.httpOptions)
+      .pipe(
+        tap(updatedLeave => {
+          console.log('Leave updated successfully:', updatedLeave);
+          // Send email notification
+          this.sendLeaveStatusEmail(updatedLeave);
+        }),
+        catchError(error => {
+          console.error('Error updating leave:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  private sendLeaveStatusEmail(leave: Leave): void {
+    const emailData = {
+      to: 'syrine.zaier@esprit.tn',
+      subject: `Leave Request ${leave.status}`,
+      body: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+          <h2 style="color: #333; text-align: center;">Leave Request Update</h2>
+          <div style="background-color: ${leave.status === 'Approved' ? '#d4edda' : '#f8d7da'}; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h3 style="color: ${leave.status === 'Approved' ? '#155724' : '#721c24'}; margin: 0;">
+              Your leave request has been ${leave.status.toLowerCase()}
+            </h3>
+          </div>
+          <div style="background-color: #f8f9fa; padding: 15px; border-radius: 5px;">
+            <h4 style="color: #333; margin-top: 0;">Request Details:</h4>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Start Date:</strong></td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${new Date(leave.start_date).toLocaleDateString()}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>End Date:</strong></td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${new Date(leave.end_date).toLocaleDateString()}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Type:</strong></td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${leave.type}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px;"><strong>Reason:</strong></td>
+                <td style="padding: 8px;">${leave.reason}</td>
+              </tr>
+            </table>
+          </div>
+          <div style="margin-top: 20px; text-align: center; color: #666; font-size: 12px;">
+            <p>This is an automated message. Please do not reply to this email.</p>
+          </div>
+        </div>
+      `,
+      isHtml: true
+    };
+
+    const url = `${this.apiUrl}/send?to=${encodeURIComponent(emailData.to)}&subject=${encodeURIComponent(emailData.subject)}&body=${encodeURIComponent(emailData.body)}&isHtml=${emailData.isHtml}`;
+
+    this.http.post(url, null).subscribe({
+      next: () => console.log('Email sent successfully'),
+      error: (error) => console.error('Error sending email:', error)
+    });
   }
 
   private handleError(error: HttpErrorResponse) {
