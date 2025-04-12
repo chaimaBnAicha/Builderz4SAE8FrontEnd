@@ -33,6 +33,7 @@ import { GetleavesComponent } from './FrontOffice/leave/getleaves/getleaves.comp
 import { AddleaveComponent } from './FrontOffice/leave/addleave/addleave.component';
 import { UpdateleaveComponent } from './FrontOffice/leave/updateleave/updateleave.component';
 import { LeaveBackComponent } from './BackOffice/Leave/leave-back/leave-back.component';
+import { LeaveCalendarComponent } from './BackOffice/Leave/leave-calendar/leave-calendar.component';
 
 // Define your routes
 const routes: Routes = [
@@ -75,6 +76,8 @@ const routes: Routes = [
          {path:'app-bar-chart', component:BarChartComponent},
          {path:'app-sinusoidal',component:SinusoidalComponent},
          { path: 'leaves', component: LeaveBackComponent },
+         { path: 'leave-calendar', component: LeaveCalendarComponent },
+
 
       // Add other backoffice child routes here
       { path: '', redirectTo: 'home', pathMatch: 'full' }, // Default route under admin layout

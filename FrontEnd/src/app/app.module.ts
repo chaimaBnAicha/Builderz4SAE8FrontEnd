@@ -5,6 +5,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -38,6 +40,11 @@ import { GetleavesComponent } from './FrontOffice/leave/getleaves/getleaves.comp
 import { AddleaveComponent } from './FrontOffice/leave/addleave/addleave.component';
 import { UpdateleaveComponent } from './FrontOffice/leave/updateleave/updateleave.component';
 import { LeaveBackComponent } from './BackOffice/Leave/leave-back/leave-back.component';
+import { LeaveCalendarComponent } from './BackOffice/Leave/leave-calendar/leave-calendar.component';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import { LeaveDetailsModalComponent } from './BackOffice/Leave/leave-details-modal/leave-details-modal.component';
 
 @NgModule({
   declarations: [
@@ -64,8 +71,9 @@ import { LeaveBackComponent } from './BackOffice/Leave/leave-back/leave-back.com
     GetleavesComponent,
     AddleaveComponent,
     UpdateleaveComponent,
-    LeaveBackComponent
-
+    LeaveBackComponent,
+    LeaveCalendarComponent,
+    LeaveDetailsModalComponent
   ],
   imports: [
     BrowserModule,
@@ -81,6 +89,8 @@ import { LeaveBackComponent } from './BackOffice/Leave/leave-back/leave-back.com
     EditorModule,
     NgxPaginationModule,
     NgChartsModule,
+    FullCalendarModule,
+    NgbModule
   ],
   providers: [
     {provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}
