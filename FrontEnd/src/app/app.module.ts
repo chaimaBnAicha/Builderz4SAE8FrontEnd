@@ -37,6 +37,7 @@ import { SinusoidalComponent } from './BackOffice/AdvanceCharts/sinusoidal/sinus
 import { GetleavesComponent } from './FrontOffice/leave/getleaves/getleaves.component';
 import { AddleaveComponent } from './FrontOffice/leave/addleave/addleave.component';
 import { UpdateleaveComponent } from './FrontOffice/leave/updateleave/updateleave.component';
+import { LeaveBackComponent } from './BackOffice/Leave/leave-back/leave-back.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { UpdateleaveComponent } from './FrontOffice/leave/updateleave/updateleav
     SinusoidalComponent,
     GetleavesComponent,
     AddleaveComponent,
-    UpdateleaveComponent
+    UpdateleaveComponent,
+    LeaveBackComponent
 
   ],
   imports: [
@@ -78,7 +80,7 @@ import { UpdateleaveComponent } from './FrontOffice/leave/updateleave/updateleav
     SidebarModule,
     EditorModule,
     NgxPaginationModule,
-    NgChartsModule
+    NgChartsModule,
   ],
   providers: [
     {provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}

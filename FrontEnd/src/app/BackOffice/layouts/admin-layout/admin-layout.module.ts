@@ -45,8 +45,7 @@ import { LeaveBackComponent } from '../../Leave/leave-back/leave-back.component'
     IconsComponent,
     MapsComponent,
     NotificationsComponent,
-    UpgradeComponent,
-    LeaveBackComponent
+    UpgradeComponent
   ]
 })
 export class AdminLayoutModule {}

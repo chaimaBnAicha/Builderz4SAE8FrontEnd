@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Leave } from '../models/leave.model';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { LeaveType, LeaveStatus } from '../models/leave.model';
 
@@ -62,5 +62,28 @@ export class LeaveService {
     }).pipe(
       catchError(this.handleError)
     );
+  }
+
+  canAcceptLeave(leave: Leave): Observable<boolean> {
+    if (!leave?.id) {
+      return of(false);
+    }
+
+    const params = new HttpParams()
+      .set('userId', '1')
+      .set('startDate', new Date(leave.start_date).toISOString())
+      .set('endDate', new Date(leave.end_date).toISOString())
+      .set('type', leave.type)
+      .set('document', leave.documentAttachement || '')
+      .set('status', leave.status);
+
+    return this.http.get<boolean>(`${this.apiUrl}/can-accept`, { params })
+      .pipe(
+        tap(response => console.log('Can accept response for leave', leave.id, ':', response)),
+        catchError(error => {
+          console.error('Error checking canAccept:', error);
+          return of(false);
+        })
+      );
   }
 }

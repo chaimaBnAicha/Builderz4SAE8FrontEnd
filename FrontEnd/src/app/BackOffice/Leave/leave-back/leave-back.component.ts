@@ -15,6 +15,8 @@ export class LeaveBackComponent implements OnInit {
   p: number = 1;
   itemsPerPage: number = 5;
   LeaveStatus = LeaveStatus; // Make enum available to template
+  canAcceptMap: { [key: number]: boolean } = {};
+  loadingMap: { [key: number]: boolean } = {};
 
   constructor(private leaveService: LeaveService) {}
 
@@ -27,9 +29,30 @@ export class LeaveBackComponent implements OnInit {
       next: (data) => {
         this.leaves = data;
         this.originalLeaves = [...data];
+        this.checkCanAcceptForAllLeaves(data);
       },
       error: (error) => {
         console.error('Error loading leaves:', error);
+      }
+    });
+  }
+
+  private checkCanAcceptForAllLeaves(leaves: Leave[]) {
+    leaves.forEach(leave => {
+      const leaveId = leave.id;
+      if (typeof leaveId === 'number') {
+        this.loadingMap[leaveId] = true;
+        this.leaveService.canAcceptLeave(leave).subscribe({
+          next: (canAccept) => {
+            this.canAcceptMap[leaveId] = canAccept;
+            this.loadingMap[leaveId] = false;
+          },
+          error: (error) => {
+            console.error('Error checking canAccept for leave:', leaveId, error);
+            this.canAcceptMap[leaveId] = false;
+            this.loadingMap[leaveId] = false;
+          }
+        });
       }
     });
   }
@@ -65,18 +88,60 @@ export class LeaveBackComponent implements OnInit {
     this.p = 1;
   }
 
-  updateStatus(leave: Leave, newStatus: string) {
-    const updatedLeave = { 
-      ...leave, 
-      status: newStatus as LeaveStatus 
-    };
-    this.leaveService.updateLeave(updatedLeave).subscribe({
-      next: () => {
-        this.loadLeaves();
-      },
-      error: (error) => {
-        console.error('Error updating leave status:', error);
-      }
-    });
+  updateStatus(leave: Leave, newStatus: LeaveStatus) {
+    if (leave.id) {
+      const updatedLeave = { ...leave, status: newStatus };
+      this.leaveService.updateLeave(updatedLeave).subscribe({
+        next: () => {
+          // Recheck canAccept after status update
+          this.checkCanAcceptForAllLeaves(this.leaves);
+        },
+        error: (error) => {
+          console.error('Error updating leave status:', error);
+        }
+      });
+    }
+  }
+
+  canAccept(leave: Leave): boolean {
+    const leaveId = leave.id;
+    if (typeof leaveId !== 'number') return false;
+    
+    // If we're still loading, return false to prevent premature enabling
+    if (this.loadingMap[leaveId]) return false;
+    
+    return this.canAcceptMap[leaveId] === true;
+  }
+
+  isLoading(leave: Leave): boolean {
+    const leaveId = leave.id;
+    return typeof leaveId === 'number' && this.loadingMap[leaveId] === true;
+  }
+
+  downloadDocument(leave: Leave) {
+    if (!leave.documentAttachement) return;
+    
+    leave.isDownloading = true;
+    leave.downloadError = false;
+
+    this.leaveService.downloadDocument(leave.documentAttachement)
+      .subscribe({
+        next: (blob: Blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = leave.documentAttachement || 'document';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+          leave.isDownloading = false;
+        },
+        error: (error) => {
+          console.error('Error downloading document:', error);
+          leave.downloadError = true;
+          leave.isDownloading = false;
+        }
+      });
   }
 } 

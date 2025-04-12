@@ -72,14 +72,19 @@
                             <td>{{ leave.start_date | date:'mediumDate' }}</td>
                             <td>{{ leave.end_date | date:'mediumDate' }}</td>
                             <td>{{ leave.type }}</td>
-                            <td>{{ leave.reason }}</td>
+                            <td [innerHTML]="leave.reason | safeHtml"></td>
                             <td>
-                                <a *ngIf="leave.documentAttachement" 
-                                   href="{{ leave.documentAttachement }}" 
-                                   target="_blank"
-                                   class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-file"></i>
-                                </a>
+                                <div *ngIf="leave.documentAttachement">
+                                    <button class="btn btn-primary btn-sm" 
+                                            (click)="downloadDocument(leave)"
+                                            [disabled]="leave.isDownloading">
+                                        <i class="fas" [ngClass]="{'fa-download': !leave.isDownloading, 'fa-spinner fa-spin': leave.isDownloading}"></i>
+                                        {{leave.isDownloading ? 'Downloading...' : ''}}
+                                    </button>
+                                </div>
+                                <div *ngIf="leave.downloadError" class="text-danger small mt-1">
+                                    Failed to download document
+                                </div>
                             </td>
                             <td>
                                 <span class="badge" [ngClass]="{
@@ -94,12 +99,12 @@
                                 <div class="btn-group">
                                     <button class="btn btn-success btn-sm" 
                                             (click)="updateStatus(leave, LeaveStatus.APPROVED)"
-                                            [disabled]="leave.status === LeaveStatus.APPROVED">
-                                        <i class="fas fa-check"></i>
+                                            [disabled]="leave.status === LeaveStatus.APPROVED || !canAccept(leave) || isLoading(leave)">
+                                        <i class="fas" [ngClass]="{'fa-check': !isLoading(leave), 'fa-spinner fa-spin': isLoading(leave)}"></i>
                                     </button>
                                     <button class="btn btn-danger btn-sm" 
                                             (click)="updateStatus(leave, LeaveStatus.REJECTED)"
-                                            [disabled]="leave.status === LeaveStatus.REJECTED">
+                                            [disabled]="leave.status === LeaveStatus.REJECTED || canAccept(leave)">
                                         <i class="fas fa-times"></i>
                                     </button>
                                 </div>
@@ -123,4 +128,5 @@
             </div>
         </div>
     </div>
-</div> 
+</div>
+
