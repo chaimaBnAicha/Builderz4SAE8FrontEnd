@@ -6,9 +6,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   template: `
     <div class="modal-header">
       <h4 class="modal-title">Leave Details</h4>
-      <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
+     
     </div>
     <div class="modal-body">
       <div class="row">

@@ -41,7 +41,7 @@ export class PieChartComponent implements OnInit {
   }
 
   fetchData(): void {
-    this.http.get<{ [key: string]: number }>('http://localhost:8081/BackendSyrine/advance/status')
+    this.http.get<{ [key: string]: number }>('http://localhost:8081/advance/status')
       .subscribe({
         next: (response) => {
           console.log('Response:', response); // Debug log

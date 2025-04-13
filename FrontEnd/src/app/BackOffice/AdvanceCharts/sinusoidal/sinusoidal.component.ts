@@ -50,7 +50,7 @@ export class SinusoidalComponent {
   }
 
   fetchData(): void {
-    this.http.get<{ [key: string]: number }>('http://localhost:8081/BackendSyrine/advance/sinusoidal')
+    this.http.get<{ [key: string]: number }>('http://localhost:8081/advance/sinusoidal')
       .subscribe({
         next: (response) => {
           console.log('Response:', response);

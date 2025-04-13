@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgChartsModule } from 'ng2-charts';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,7 +32,6 @@ import { UpdateAdvanceComponent } from './FrontOffice/advance/update-advance/upd
 import { AdvanceBackComponent } from './BackOffice/Advance/advance-back/advance-back.component';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { EditorModule, TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
-import { NgChartsModule } from 'ng2-charts';
 import { PieChartComponent } from './BackOffice/AdvanceCharts/pie-chart/pie-chart.component';
 import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
 import { BarChartComponent } from './BackOffice/AdvanceCharts/bar-chart/bar-chart.component';
@@ -45,6 +45,11 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { LeaveDetailsModalComponent } from './BackOffice/Leave/leave-details-modal/leave-details-modal.component';
+import { LeavePieChartComponent } from './BackOffice/Leave/leave-charts/leave-pie-chart/leave-pie-chart.component';
+import { LeaveBarChartComponent } from './BackOffice/Leave/leave-charts/leave-bar-chart/leave-bar-chart.component';
+import { LeaveSinusoidalComponent } from './BackOffice/Leave/leave-charts/leave-sinusoidal/leave-sinusoidal.component';
+import { LeaveChartsComponent } from './BackOffice/Leave/leave-charts/leave-charts.component';
+import { LeaveStatisticsService } from './Service/leave-statistics.service';
 
 @NgModule({
   declarations: [
@@ -73,7 +78,11 @@ import { LeaveDetailsModalComponent } from './BackOffice/Leave/leave-details-mod
     UpdateleaveComponent,
     LeaveBackComponent,
     LeaveCalendarComponent,
-    LeaveDetailsModalComponent
+    LeaveDetailsModalComponent,
+    LeavePieChartComponent,
+    LeaveBarChartComponent,
+    LeaveSinusoidalComponent,
+    LeaveChartsComponent
   ],
   imports: [
     BrowserModule,
@@ -93,7 +102,8 @@ import { LeaveDetailsModalComponent } from './BackOffice/Leave/leave-details-mod
     NgbModule
   ],
   providers: [
-    {provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}
+    {provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'},
+    LeaveStatisticsService
   ],
   bootstrap: [AppComponent]
 })

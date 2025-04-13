@@ -46,9 +46,9 @@ export class LeaveCalendarComponent implements OnInit {
       
       if (type === 'Sick') {
         color = '#dc3545';
-      } else if (type === 'Vacation') {
+      } else if (type === 'Unpaid') {
         color = '#28a745';
-      } else if (type === 'Personal') {
+      } else if (type === 'Emergency') {
         color = '#ffc107';
       }
       
