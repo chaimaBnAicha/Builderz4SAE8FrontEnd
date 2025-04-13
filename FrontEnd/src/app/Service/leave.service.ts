@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Leave } from '../models/leave.model';
-import { Observable, throwError, of } from 'rxjs';
+import { Observable, throwError, of, map } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { LeaveType, LeaveStatus } from '../models/leave.model';
 
@@ -156,5 +156,11 @@ export class LeaveService {
           return of(false);
         })
       );
+  }
+
+  getAllApprovedLeaves(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/all`).pipe(
+      map(leaves => leaves.filter(leave => leave.status === 'Approved'))
+    );
   }
 }

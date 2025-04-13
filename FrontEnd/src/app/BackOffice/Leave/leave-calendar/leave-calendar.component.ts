@@ -21,46 +21,51 @@ export class LeaveCalendarComponent implements OnInit {
     headerToolbar: {
       left: 'prev,next today',
       center: 'title',
-      right: 'dayGridMonth,dayGridWeek,dayGridDay'
+      right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
-    events: [],
-    eventColor: '#3788d8',
-    eventTextColor: '#ffffff',
-    eventDisplay: 'block',
-    eventTimeFormat: {
-      hour: '2-digit',
-      minute: '2-digit',
-      meridiem: false
+    eventClick: (info) => {
+      const modalRef = this.modalService.open(LeaveDetailsModalComponent, {
+        centered: true,
+        size: 'lg'
+      });
+      // Format the dates before passing to modal
+      const leaveData = {
+        ...info.event.extendedProps,
+        start_date: info.event.start,
+        end_date: info.event.end || info.event.start,
+        type: info.event.extendedProps['type']
+      };
+      modalRef.componentInstance.leave = leaveData;
     },
-    eventClick: this.handleEventClick.bind(this),
-    eventClassNames: 'leave-event',
-    height: 'auto',
-    contentHeight: 'auto',
-    aspectRatio: 1.8,
-    dayMaxEvents: true,
-    eventBorderColor: 'transparent',
-    eventBackgroundColor: '#3788d8',
-    eventDidMount: (info) => {
-      const type = info.event.extendedProps['type'];
-      let color = '#3788d8'; // default color
-      
-      if (type === 'Sick') {
-        color = '#dc3545';
-      } else if (type === 'Unpaid') {
-        color = '#28a745';
-      } else if (type === 'Emergency') {
-        color = '#ffc107';
-      }
-      
-      info.el.style.backgroundColor = color;
-      info.el.style.borderColor = color;
-      info.el.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+    events: (info, successCallback, failureCallback) => {
+      this.leaveService.getAllApprovedLeaves().subscribe({
+        next: (leaves: any[]) => {
+          const events = leaves.map(leave => ({
+            title: `${leave.type}`,
+            start: new Date(leave.start_date),
+            end: new Date(leave.end_date),
+            backgroundColor: this.getEventColor(leave.type),
+            extendedProps: {
+              ...leave,
+              type: leave.type,
+              status: leave.status,
+              reason: leave.reason,
+              documentAttachement: leave.documentAttachement
+            }
+          }));
+          successCallback(events);
+        },
+        error: (error) => {
+          console.error('Error fetching leaves:', error);
+          failureCallback(error);
+        }
+      });
     }
   };
 
   constructor(
-    private leaveService: LeaveService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private leaveService: LeaveService
   ) {}
 
   ngOnInit() {
@@ -108,5 +113,18 @@ export class LeaveCalendarComponent implements OnInit {
         console.error('Error loading leaves:', error);
       }
     });
+  }
+
+  private getEventColor(leaveType: string): string {
+    switch (leaveType) {
+      case 'Sick Leave':
+        return '#dc3545';
+      case 'Unpaid Leave':
+        return '#28a745';
+      case 'Emergency Leave':
+        return '#ffc107';
+      default:
+        return '#3788d8';
+    }
   }
 } 
