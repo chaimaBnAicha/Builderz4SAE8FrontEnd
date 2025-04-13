@@ -1,6 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { LeaveService } from '../../../Service/leave.service';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 type LeaveType = 'Sick Leave' | 'Unpaid Leave' | 'Emergency Leave';
 
@@ -11,6 +13,7 @@ type LeaveType = 'Sick Leave' | 'Unpaid Leave' | 'Emergency Leave';
 })
 export class LeaveDetailsModalComponent implements OnInit {
   @Input() leave: any;
+  @ViewChild('modalContent') modalContent!: ElementRef;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -66,5 +69,36 @@ export class LeaveDetailsModalComponent implements OnInit {
         }
       });
     }
+  }
+
+  downloadAsPDF() {
+    const content = this.modalContent.nativeElement;
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    
+    html2canvas(content, {
+      scale: 2,
+      useCORS: true,
+      logging: true,
+      allowTaint: true
+    }).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = 210; // A4 width in mm
+      const pageHeight = 295; // A4 height in mm
+      const imgHeight = canvas.height * imgWidth / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(`leave-request-${this.leave?.id || 'details'}.pdf`);
+    });
   }
 } 

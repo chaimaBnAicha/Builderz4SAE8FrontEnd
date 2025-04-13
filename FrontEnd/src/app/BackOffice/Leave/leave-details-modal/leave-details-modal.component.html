@@ -1,10 +1,16 @@
-<div class="modal-content">
-  <div class="modal-header bg-gradient-primary text-white">
+<div class="modal-content" #modalContent>
+  <div class="modal-header">
     <h5 class="modal-title">
-      <i class="fas fa-calendar-check me-2"></i>
+      <i class="fas fa-calendar-check"></i>
       Leave Details
     </h5>
-    <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="activeModal.dismiss()"></button>
+    <div class="header-actions">
+      <button class="btn btn-light" (click)="downloadAsPDF()">
+        <i class="fas fa-file-pdf"></i>
+        Download PDF
+      </button>
+      <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="activeModal.dismiss()"></button>
+    </div>
   </div>
 
   <div class="modal-body">
