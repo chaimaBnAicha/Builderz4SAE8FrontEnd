@@ -128,7 +128,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let request of filteredRequests" class="table-row">
+                    <tr *ngFor="let request of  paginatedRequests" class="table-row">
                         <td>{{ request.projectName }}</td>
                         <td>{{ request.description }}</td>
                         <td>{{ request.estimated_budget | currency:'EUR' }}</td>
@@ -139,8 +139,27 @@
                         </td>
                     </tr>
                 </tbody>
+                <!-- Pagination -->
+
             </table>
+            
         </div>
+        <nav *ngIf="totalPages.length > 1" class="mt-3">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <button class="page-link" (click)="setPage(currentPage - 1)">Previous</button>
+              </li>
+              <li 
+                class="page-item" 
+                *ngFor="let page of totalPages" 
+                [class.active]="currentPage === page">
+                <button class="page-link" (click)="setPage(page)">{{ page }}</button>
+              </li>
+              <li class="page-item" [class.disabled]="currentPage === totalPages.length">
+                <button class="page-link" (click)="setPage(currentPage + 1)">Next</button>
+              </li>
+            </ul>
+          </nav>
         <ng-template #noRequests>
             <p class="text-center text-muted no-requests">No requests found.</p>
         </ng-template>

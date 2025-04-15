@@ -40,7 +40,11 @@
               "src/assets/lib/slick/slick-theme.css",
               "src/assets/css/style.css",
               "src/assets/sass/light-bootstrap-dashboard.scss",
-              "src/assets/css/demo.css"
+              "src/assets/css/demo.css",
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
@@ -51,7 +55,11 @@
               "src/assets/Counter-Up-master/jquery.counterup.min.js",
               "node_modules/isotope-layout/dist/isotope.pkgd.min.js",
               "node_modules/owl.carousel/dist/owl.carousel.min.js",
-              "src/assets/js/main.js"
+              "src/assets/js/main.js",
+                 "node_modules/pdfmake/build/pdfmake.min.js",
+    "node_modules/pdfmake/build/vfs_fonts.js",
+     "node_modules/tinymce/tinymce.min.js"
+              
             ]
           },
           "configurations": {
@@ -109,9 +117,11 @@
             "tsConfig": "tsconfig.spec.json",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              { "glob": "**/*", "input": "node_modules/tinymce", "output": "/tinymce/"}
             ],
             "styles": [
+              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []

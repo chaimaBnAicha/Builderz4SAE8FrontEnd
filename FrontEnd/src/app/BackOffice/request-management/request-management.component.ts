@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RequestService } from 'src/app/service/request.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-request-management',
@@ -12,20 +13,110 @@ export class RequestManagementComponent implements OnInit, AfterViewInit {
   filteredRequests: any[] = [];
   selectedStatus: string = '';
   map: any;
-  markers: any[] = []; 
+  markers: any[] = [];
+  statistics: any;
+  
+  // Pagination
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+  previousRequestCount = 0;
+  //comparaison
+  comparisonResults: any = null;  // Stocker les résultats de la comparaison
+  selectedRequestsForComparison: number[] = [];  // Les IDs des projets sélectionnés
 
-  constructor(private requestService: RequestService, private router: Router) {}
+
+  constructor(
+    private requestService: RequestService,
+    private router: Router,
+    private toastr: ToastrService
+  ) {}
 
   ngOnInit(): void {
-    this.loadRequests();
+    
+  
+    console.log("ngOnInit called");
+    this.requestService.getAllRequest().subscribe((data) => {
+        console.log("Data fetched: ", data);
+        this.requests = data;
+        this.filteredRequests = [...data];
+        this.previousRequestCount = data.length;
+        this.filterByStatus();
+        this.addMarkersToMap();
+        this.checkHighBudgetPendingRequests();
+    });
+    
+
+    setInterval(() => {
+        console.log("Checking for new requests...");
+        this.checkForNewRequests();
+    }, 30000);
+
+    // Récupérer les statistiques des demandes avec le budget
+    this.requestService.getRequestStatistics().subscribe(data => {
+        this.statistics = data;
+    });
+   
+    
+}
+playNotificationSound(): void {
+  const audio = new Audio('assets/sounds/notification.mp3');
+  audio.load();
+  audio.play().then(() => {
+    console.log("Son joué avec succès !");
+  }).catch((error) => {
+    console.log("Erreur lors de la lecture du son:", error);
+  });
+}
+
+
+checkHighBudgetPendingRequests() {
+  const today = new Date();
+  const alerts = this.requests.filter(req => {
+    const dateReq = new Date(req.date_creation);
+    const diffDays = (today.getTime() - dateReq.getTime()) / (1000 * 3600 * 24);
+    return req.estimated_budget > 1000000 && req.status === 'Pending' && diffDays >= 7;
+  });
+
+  if (alerts.length > 0) {
+    this.toastr.warning(`⚠️ ${alerts.length} projets avec budget > 1M TND en attente depuis 7 jours`);
   }
+}
+  // Méthode pour sélectionner deux projets à comparer
+ selectForComparison(requestId: number) {
+  if (this.selectedRequestsForComparison.length < 2) {
+    this.selectedRequestsForComparison.push(requestId);
+  } else {
+    this.selectedRequestsForComparison = [requestId]; // Réinitialiser si déjà deux projets sont sélectionnés
+  }
+}// Méthode pour comparer les projets sélectionnés
+compareRequests() {
+  if (this.selectedRequestsForComparison.length !== 2) {
+    this.toastr.warning("Please select exactly two projects to compare.");
+    return;
+  }
+
+  this.requestService.compareTwoRequests(this.selectedRequestsForComparison).subscribe((response) => {
+    this.comparisonResults = response;
+    this.toastr.success("Projects compared successfully!");
+  }, error => {
+    this.toastr.error("Error comparing projects.");
+  });
+}
+
 
   ngAfterViewInit() {
     this.initMap();
   }
 
+  ngAfterViewChecked() {
+    if (!this.map) {
+      this.initMap();
+    }
+  }
+
   loadRequests() {
     this.requestService.getAllRequest().subscribe((data) => {
+      console.log('Données récupérées :', data); 
       this.requests = data;
       this.filterByStatus(); // Filtrer les projets avant d'ajouter les marqueurs
     }, (error) => {
@@ -47,13 +138,19 @@ export class RequestManagementComponent implements OnInit, AfterViewInit {
     if (status === 'Approved') {
       this.requestService.approveRequest(id_projet).subscribe(() => {
         this.loadRequests();
+        this.toastr.success('Project approved successfully!');
+        this.playNotificationSound(); // 🔊 jouer le son après approbation
       });
     } else if (status === 'Rejected') {
       this.requestService.rejectRequest(id_projet).subscribe(() => {
         this.loadRequests();
+        this.toastr.error('Project rejected!');
+        this.playNotificationSound(); // 🔊 jouer le son après rejet
       });
     }
   }
+  
+  
 
   deleteRequest(id_projet: number): void {
     this.requestService.deleteRequest(id_projet).subscribe(() => {
@@ -157,4 +254,75 @@ export class RequestManagementComponent implements OnInit, AfterViewInit {
         return 'black';
     }
   }
+
+  get paginatedRequests() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.filteredRequests.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  changePage(page: number) {
+    if (page > 0 && page <= Math.ceil(this.filteredRequests.length / this.itemsPerPage)) {
+      this.currentPage = page;
+    }
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredRequests.length / this.itemsPerPage);
+  }
+
+checkForNewRequests() {
+  this.requestService.getAllRequest().subscribe((data) => {
+    console.log("Ancienne requête : ", this.previousRequestCount);
+    console.log("Nouvelle requête : ", data.length);
+
+    if (data.length > this.previousRequestCount) {
+      const newCount = data.length - this.previousRequestCount;
+      console.log(`🆕 ${newCount} nouvelle(s) demande(s) de projet ajoutée(s) !`);
+
+      // Afficher la notification
+      this.toastr.info(`🆕 ${newCount} nouvelle(s) demande(s) de projet ajoutée(s)!`);
+      this.playNotificationSound(); // 🎵 jouer le son
+
+      this.requests = data;
+      this.previousRequestCount = data.length;
+      this.filterByStatus();
+       // 👈 ajoute cette ligne ici
+// 👈 ajoute cette ligne ici
+
+    }
+  });
 }
+
+  
+  
+  getRecommendationLabel(score: number): string {
+    if (score >= 0.8) return 'Highly Recommended';
+    if (score >= 0.5) return 'Moderately Recommended';
+    return 'Not Recommended';
+  }
+  getRecommendationColor(score: number): string {
+    if (score >= 0.8) {
+      return 'green';
+    } else if (score >= 0.5) {
+      return 'yellow';
+    } else {
+      return 'red';
+    }
+  }
+  // Ajouter une méthode pour obtenir l'icône selon le score de recommandation
+getRecommendationIcon(score: number): string {
+  if (score >= 0.8) {
+    return 'fa fa-thumbs-up'; // Icône pour "Highly Recommended"
+  } else if (score >= 0.5) {
+    return 'fa fa-hand-paper'; // Icône pour "Moderately Recommended"
+  } else {
+    return 'fa fa-thumbs-down'; // Icône pour "Not Recommended"
+  }
+}
+ 
+}
+
+
+  
+  
+

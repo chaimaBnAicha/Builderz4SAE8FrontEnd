@@ -129,11 +129,10 @@
                 <!-- Étape 1 : Informations du client -->
                 <mat-step label="Client Information">
                   <div *ngIf="userInfoForm" class="p-4 bg-light rounded">
-                      <p><strong>First Name:</strong> {{ userInfoForm.value.user_first_name }}</p>
+                      <p><strong>First Name:</strong> {{ userInfoForm.value.user_firstName }}</p>
                       <p><strong>Last Name:</strong> {{ userInfoForm.value.user_last_name }}</p>
                       <p><strong>Email:</strong> {{ userInfoForm.value.user_email }}</p>
                       <p><strong>Phone:</strong> {{ userInfoForm.value.user_phone }}</p>
-                      <p><strong>Address:</strong> {{ userInfoForm.value.user_address }}</p>
                   </div>
                   <div class="step-actions mt-3">
                       <button mat-button matStepperNext class="btn btn-primary">Next</button>
@@ -158,8 +157,8 @@
                           <mat-error *ngIf="projectInfoForm.get('estimated_budget')?.invalid">Budget must be positive.</mat-error>
                       </div>
                       <div class="form-group">
-                          <label>Estimated Duration (days)</label>
-                          <input matInput formControlName="estimated_duration" type="number" class="form-control" placeholder="Enter estimated duration in days" style="color: gray;">
+                          <label>Estimated Duration (months)</label>
+                          <input matInput formControlName="estimated_duration" type="number" class="form-control" placeholder="Enter estimated duration in months" style="color: gray;">
                           <mat-error *ngIf="projectInfoForm.get('estimated_duration')?.invalid">Duration must be greater than 0.</mat-error>
                       </div>
                   </form>

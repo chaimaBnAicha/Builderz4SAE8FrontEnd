@@ -12,6 +12,10 @@ export class GetAllRequestComponent implements OnInit {
   filteredRequests: any[] = []; // Requêtes filtrées
   searchText: string = '';
 
+  // Pagination
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
+
   constructor(private requestService: RequestService) { }
 
   ngOnInit(): void {
@@ -21,9 +25,8 @@ export class GetAllRequestComponent implements OnInit {
   getAllRequest(): void {
     this.requestService.getAllRequest().subscribe(
       (res: any[]) => {
-        console.log('Requêtes reçues:', res);
-        this.requests = res;
-        this.filteredRequests = res;
+        this.requests = res.filter(request => request.status === 'Pending');
+        this.filteredRequests = [...this.requests];
       },
       (error) => {
         console.error('Erreur lors de la récupération des requêtes:', error);
@@ -34,7 +37,6 @@ export class GetAllRequestComponent implements OnInit {
   deleteRequest(id_projet: number): void {
     this.requestService.deleteRequest(id_projet).subscribe(
       () => {
-        console.log('Requête supprimée avec succès');
         this.getAllRequest();
       },
       (error) => {
@@ -48,5 +50,19 @@ export class GetAllRequestComponent implements OnInit {
       request.projectName.toLowerCase().includes(this.searchText.toLowerCase()) ||
       request.description.toLowerCase().includes(this.searchText.toLowerCase())
     );
+    this.currentPage = 1; // Reset page when filtering
+  }
+
+  get paginatedRequests(): any[] {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    return this.filteredRequests.slice(startIndex, startIndex + this.itemsPerPage);
+  }
+
+  get totalPages(): number[] {
+    return Array(Math.ceil(this.filteredRequests.length / this.itemsPerPage)).fill(0).map((x, i) => i + 1);
+  }
+
+  setPage(page: number): void {
+    this.currentPage = page;
   }
 }
