@@ -34,6 +34,8 @@ import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
 import { InsuranceComponent } from './BackOffice/insurance/insurance.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { InsuranceChartsComponent } from './BackOffice/insurance/insurance-charts/insurance-charts.component';
+import { AddInsuranceComponent } from './BackOffice/insurance/add-insurance/add-insurance.component';
+import { UpdateInsuranceComponent } from './BackOffice/insurance/update-insurance/update-insurance.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +58,9 @@ import { InsuranceChartsComponent } from './BackOffice/insurance/insurance-chart
     ChartsComponent,
     DashboardComponent,
     InsuranceComponent,
-    InsuranceChartsComponent
+    InsuranceChartsComponent,
+    AddInsuranceComponent,
+    UpdateInsuranceComponent
   ],
   imports: [
     BrowserModule,

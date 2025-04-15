@@ -12,6 +12,6 @@ export interface Insurance {
 
 export enum Category {
     RCPro = 'RCPro',
-    RC = 'RC',
-    RCProPlus = 'RCProPlus'
+    TRC = 'TRC',
+    CIVIL_EXPLOITATION = 'CIVIL_EXPLOITATION'
 } 

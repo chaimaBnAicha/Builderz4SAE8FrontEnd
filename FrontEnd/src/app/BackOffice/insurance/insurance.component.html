@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-12">
-      <div class="card">
+      <!--<div class="card">
         <div class="card-header bg-primary text-white">
           <h4 class="card-title mb-0">{{ isEditing ? 'Edit Insurance' : 'Add New Insurance' }}</h4>
         </div>
@@ -90,15 +90,19 @@
             </div>
           </form>
         </div>
-      </div>
+      </div>-->
     </div>
   </div>
 
   <div class="row mt-4">
     <div class="col-md-12">
       <div class="card">
-        <div class="card-header bg-primary text-white">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
           <h4 class="card-title mb-0">Insurance List</h4>
+          <button class="btn btn-light" routerLink="/admin/insurance/add">
+            <i class="fas fa-plus me-1"></i>
+            Add Insurance
+          </button>
         </div>
         <div class="card-body">
           <div class="table-responsive">
@@ -115,13 +119,13 @@
               </thead>
               <tbody>
                 <tr *ngFor="let insurance of insurances">
-                  <td>{{insurance.description}}</td>
+                  <td class="align-middle" [innerHTML]="insurance.description | pipes"></td>
                   <td>{{insurance.start_Date | date:'medium'}}</td>
                   <td>{{insurance.end_Date | date:'medium'}}</td>
                   <td>{{insurance.amount | currency}}</td>
                   <td>{{insurance.category}}</td>
                   <td>
-                    <button class="btn btn-sm btn-info me-1" (click)="editInsurance(insurance)">
+                    <button class="btn btn-sm btn-info me-1" [routerLink]="['/admin/insurance/update', insurance.id_Insurance]">
                       <i class="fas fa-edit"></i>
                     </button>
                     <button class="btn btn-sm btn-danger" (click)="deleteInsurance(insurance.id_Insurance!)">

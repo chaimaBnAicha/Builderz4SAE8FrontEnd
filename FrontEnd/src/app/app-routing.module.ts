@@ -29,6 +29,8 @@ import { ChartsComponent } from './BackOffice/OfferCharts/charts/charts.componen
 import { DashboardComponent } from './BackOffice/dashboard/dashboard.component';
 import { InsuranceComponent } from './BackOffice/insurance/insurance.component';
 import { InsuranceChartsComponent } from './BackOffice/insurance/insurance-charts/insurance-charts.component';
+import { AddInsuranceComponent } from './BackOffice/insurance/add-insurance/add-insurance.component';
+import { UpdateInsuranceComponent } from './BackOffice/insurance/update-insurance/update-insurance.component';
 
 // Define your routes
 const routes: Routes = [
@@ -64,6 +66,8 @@ const routes: Routes = [
          {path: 'app-charts', component: ChartsComponent},
          {path: 'app-dashboard',component: DashboardComponent},
          {path: 'insurance', component: InsuranceComponent},
+         { path: 'insurance/add', component: AddInsuranceComponent },
+         { path: 'insurance/update/:id', component: UpdateInsuranceComponent },
          { path: 'insurance-charts', component: InsuranceChartsComponent },
       // Add other backoffice child routes here
       { path: '', redirectTo: 'home', pathMatch: 'full' }, // Default route under admin layout
