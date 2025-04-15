@@ -138,141 +138,166 @@
             </div>
             <!-- Page Header End -->
 
-            <div class="container mt-4">
-              <div *ngIf="tache?.statut === 'EN_COURS'" class="d-flex justify-content-center">
-                <button 
-                  (click)="handleMarkAsDone()"
-                  [disabled]="isProcessing"
-                  class="btn btn-success btn-lg"
-                  style="min-width: 200px;">
-                  <span *ngIf="isProcessing" class="spinner-border spinner-border-sm me-2"></span>
-                  {{ isProcessing ? processingMessage : 'Marquer comme terminée' }}
-                </button>
-              </div>
+<!-- Form Section Start -->
+<div class="container mt-5">
+  <div class="form-wrapper">
+    <h2 class="section-title">Edit Step</h2>
+    <form (ngSubmit)="onSubmit()" #etapeForm="ngForm" class="custom-form">
+      <div class="form-group">
+        <label for="task">Associated Task:</label>
+        <select id="task" [(ngModel)]="selectedTacheId" name="taskId" class="form-control custom-select" required>
+          <option [ngValue]="0">Select a task</option>
+          <option *ngFor="let tache of taches" [ngValue]="tache.id">
+            {{tache.titre || tache.nom}}
+          </option>
+        </select>
+      </div>
 
-              <div *ngIf="isProcessing" class="alert alert-info mt-3 text-center">
-                <div class="d-flex align-items-center justify-content-center">
-                  <div class="spinner-border text-info me-2"></div>
-                  <strong>{{ processingMessage }}</strong>
-                </div>
-              </div>
-            </div>
+      <div class="form-group">
+        <label for="name">Step Name:</label>
+        <input type="text" id="name" [(ngModel)]="etape.nom" name="name" 
+               class="form-control" required>
+      </div>
 
-            <form [formGroup]="postTacheForm" (ngSubmit)="onSubmit()">
-              <!-- Nom -->
-              <div>
-                <label for="nom">Nom:</label>
-                <input type="text" formControlName="nom" id="nom" />
-                <div *ngIf="postTacheForm.get('nom')?.invalid && postTacheForm.get('nom')?.touched">
-                  <div *ngIf="postTacheForm.get('nom')?.errors?.['required']">Le nom est requis.</div>
-                  <div *ngIf="postTacheForm.get('nom')?.errors?.['minlength']">Le nom doit avoir au moins 3 caractères.</div>
-                </div>
-              </div>
-            
-              <!-- Description -->
-              <div>
-                <label for="description">Description:</label>
-                <textarea formControlName="description" id="description"></textarea>
-                <div *ngIf="postTacheForm.get('description')?.invalid && postTacheForm.get('description')?.touched">
-                  <div *ngIf="postTacheForm.get('description')?.errors?.['required']">La description est requise.</div>
-                  <div *ngIf="postTacheForm.get('description')?.errors?.['minlength']">La description doit avoir au moins 20 caractères.</div>
-                  <div *ngIf="postTacheForm.get('description')?.errors?.['maxlength']">La description ne peut pas dépasser 50 caractères.</div>
-                </div>
-              </div>
-            
-              <!-- Détails -->
-              <div>
-                <label for="details">Détails:</label>
-                <textarea formControlName="details" id="details"></textarea>
-                <div *ngIf="postTacheForm.get('details')?.invalid && postTacheForm.get('details')?.touched">
-                  <div *ngIf="postTacheForm.get('details')?.errors?.['required']">Les détails sont requis.</div>
-                  <div *ngIf="postTacheForm.get('details')?.errors?.['minlength']">Les détails doivent avoir au moins 20 caractères.</div>
-                  <div *ngIf="postTacheForm.get('details')?.errors?.['maxlength']">Les détails ne peuvent pas dépasser 200 caractères.</div>
-                </div>
-              </div>
-            
-              <!-- Durée Estimée -->
-              <div>
-                <label for="dureeEstimee">Durée Estimée (en jours):</label>
-                <input type="number" formControlName="dureeEstimee" id="dureeEstimee" />
-                <div *ngIf="postTacheForm.get('dureeEstimee')?.invalid && postTacheForm.get('dureeEstimee')?.touched">
-                  <div *ngIf="postTacheForm.get('dureeEstimee')?.errors?.['required']">La durée estimée est requise.</div>
-                  <div *ngIf="postTacheForm.get('dureeEstimee')?.errors?.['min']">La durée estimée doit être d'au moins 7 jours.</div>
-                </div>
-              </div>
-            
-              <!-- Statut -->
-              <div>
-                <label for="statut">Statut:</label>
-                <select formControlName="statut" id="statut">
-                  <option value="A_FAIRE">À faire</option>
-                  <option value="EN_COURS">En cours</option>
-                  <option value="TERMINE">Terminé</option>
-                </select>
-                <div *ngIf="postTacheForm.get('statut')?.invalid && postTacheForm.get('statut')?.touched">
-                  <div *ngIf="postTacheForm.get('statut')?.errors?.['required']">Le statut est requis.</div>
-                </div>
-              </div>
-            
-              <!-- Priorité -->
-              <div>
-                <label for="priorite">Priorité:</label>
-                <select formControlName="priorite" id="priorite">
-                  <option value="BASSE">Basse</option>
-                  <option value="MOYENNE">Moyenne</option>
-                  <option value="ELEVEE">Élevée</option>
-                </select>
-                <div *ngIf="postTacheForm.get('priorite')?.invalid && postTacheForm.get('priorite')?.touched">
-                  <div *ngIf="postTacheForm.get('priorite')?.errors?.['required']">La priorité est requise.</div>
-                </div>
-              </div>
-            
-              <!-- Date de Début -->
-              <div>
-                <label for="dateDebut">Date de Début:</label>
-                <input type="datetime-local" formControlName="dateDebut" id="dateDebut" />
-                <div *ngIf="postTacheForm.get('dateDebut')?.invalid && postTacheForm.get('dateDebut')?.touched">
-                  <div *ngIf="postTacheForm.get('dateDebut')?.errors?.['required']">La date de début est requise.</div>
-                  <div *ngIf="postTacheForm.get('dateDebut')?.errors?.['dateInvalide']">La date de début doit être après aujourd'hui.</div>
-                </div>
-              </div>
-            
-              <!-- Date de Fin -->
-              <div>
-                <label for="dateFin">Date de Fin:</label>
-                <input type="datetime-local" formControlName="dateFin" id="dateFin" />
-                <div *ngIf="postTacheForm.get('dateFin')?.invalid && postTacheForm.get('dateFin')?.touched">
-                  <div *ngIf="postTacheForm.get('dateFin')?.errors?.['required']">La date de fin est requise.</div>
-                  <div *ngIf="postTacheForm.get('dateFin')?.errors?.['dateFinInvalide']">La date de fin doit être au moins 1 jour après la date de début.</div>
-                </div>
-              </div>
-            
-              <!-- ID Projet -->
-              <div formGroupName="projet">
-                <label for="projetId">ID Projet:</label>
-                <input type="number" formControlName="id" id="projetId" />
-                <div *ngIf="postTacheForm.get('projet.id')?.invalid && postTacheForm.get('projet.id')?.touched">
-                  <div *ngIf="postTacheForm.get('projet.id')?.errors?.['required']">L'ID du projet est requis.</div>
-                  <div *ngIf="postTacheForm.get('projet.id')?.errors?.['pattern']">L'ID du projet doit être un nombre.</div>
-                </div>
-              </div>
-            
-              <!-- ID Responsable -->
-              <div formGroupName="responsable">
-                <label for="responsableId">ID Responsable:</label>
-                <input type="number" formControlName="id" id="responsableId" />
-                <div *ngIf="postTacheForm.get('responsable.id')?.invalid && postTacheForm.get('responsable.id')?.touched">
-                  <div *ngIf="postTacheForm.get('responsable.id')?.errors?.['required']">L'ID du responsable est requis.</div>
-                  <div *ngIf="postTacheForm.get('responsable.id')?.errors?.['pattern']">L'ID du responsable doit être un nombre.</div>
-                </div>
-              </div>
-            
-              <!-- Bouton de soumission -->
-              <button type="submit" [disabled]="postTacheForm.invalid">Soumettre</button>
-            </form>
-            
-<button class="btn-new" routerLink="/get-all-tache">All Task</button>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea id="description" [(ngModel)]="etape.description" name="description" 
+                 class="form-control custom-textarea" rows="4" required></textarea>
+      </div>
 
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" [(ngModel)]="etape.dateDebut" 
+                   name="startDate" class="form-control" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" [(ngModel)]="etape.dateFin" 
+                   name="endDate" class="form-control" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status:</label>
+        <select id="status" [(ngModel)]="etape.statut" name="status" class="form-control custom-select" required>
+          <option value="EN_COURS">In Progress</option>
+          <option value="TERMINEE">Completed</option>
+          <option value="A_FAIRE">To Do</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn custom-btn" [disabled]="!etapeForm.form.valid">
+          Update Step
+        </button>
+        <button type="button" class="btn btn-secondary ml-2" routerLink="/etape/list">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+.form-wrapper {
+  background: #ffffff;
+  padding: 45px;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.1);
+  margin-bottom: 45px;
+}
+
+.section-title {
+  position: relative;
+  padding-bottom: 15px;
+  margin-bottom: 30px;
+  color: #030f27;
+}
+
+.section-title::after {
+  position: absolute;
+  content: "";
+  width: 60px;
+  height: 3px;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  background: #fdbe33;
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  color: #030f27;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.form-control {
+  height: 45px;
+  border: 1px solid #dddddd;
+  border-radius: 0;
+  color: #454545;
+  padding: 10px 15px;
+}
+
+.custom-textarea {
+  height: auto;
+  min-height: 120px;
+}
+
+.custom-select {
+  height: 45px;
+  border-radius: 0;
+}
+
+.form-control:focus {
+  border-color: #fdbe33;
+  box-shadow: none;
+}
+
+.custom-btn {
+  background: #fdbe33;
+  color: #030f27;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 0;
+  font-weight: 600;
+  transition: .3s;
+}
+
+.custom-btn:hover {
+  background: #030f27;
+  color: #fdbe33;
+}
+
+.btn-secondary {
+  background: #030f27;
+  border: none;
+  border-radius: 0;
+  padding: 12px 30px;
+  font-weight: 600;
+}
+
+.btn-secondary:hover {
+  background: #fdbe33;
+  color: #030f27;
+}
+
+.form-actions {
+  margin-top: 35px;
+  text-align: center;
+}
+</style>
+
+<!-- ... keep the footer part ... -->
 <!-- Footer Start -->
 <div class="footer wow fadeIn" data-wow-delay="0.3s">
   <div class="container">
@@ -350,38 +375,3 @@
 
 <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 </div>
-
-<!-- JavaScript Libraries -->
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-<script src="lib/easing/easing.min.js"></script>
-<script src="lib/wow/wow.min.js"></script>
-<script src="lib/owlcarousel/owl.carousel.min.js"></script>
-<script src="lib/isotope/isotope.pkgd.min.js"></script>
-<script src="lib/lightbox/js/lightbox.min.js"></script>
-<script src="lib/waypoints/waypoints.min.js"></script>
-<script src="lib/counterup/counterup.min.js"></script>
-<script src="lib/slick/slick.min.js"></script>
-
-<!-- Template Javascript -->
-<script src="js/main.js"></script>
-
-<div *ngIf="tache?.statut === 'EN_COURS'" class="mt-3">
-  <button 
-    (click)="handleMarkAsDone()"
-    [disabled]="isProcessing"
-    class="btn btn-success"
-    style="min-width: 200px;">
-    <span *ngIf="isProcessing" class="spinner-border spinner-border-sm me-2"></span>
-    {{ isProcessing ? processingMessage : 'Marquer comme terminée' }}
-  </button>
-</div>
-
-<div *ngIf="isProcessing" class="alert alert-info mt-3">
-  <div class="d-flex align-items-center">
-    <div class="spinner-border text-info me-2"></div>
-    <strong>{{ processingMessage }}</strong>
-  </div>
-</div>
-</body>
-</html>

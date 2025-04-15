@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { FullCalendarModule } from '@fullcalendar/angular'; // for FullCalendar
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AboutComponent } from './FrontOffice/about/about.component';
@@ -30,8 +31,17 @@ import { GetAllTacheComponent } from './tache/get-all-tache/get-all-tache.compon
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { KanbanComponent } from './tache/kanban/kanban.component';
 import { DatePipe } from '@angular/common';
-
-import { EditorModule,TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';  
+import { EtapeFilterComponent } from './etape/etape-filter/etape-filter.component';
+import { ListEtapeComponent } from './etape/list-etape/list-etape.component';
+import { AddEtapeComponent } from './etape/add-etape/add-etape.component';
+import { CreateMeetingComponent } from './meeting/create-meeting/create-meeting.component';
+import { MeetingDetailsDialog } from './meeting/meeting-details/meeting-details.dialog';
+import { CreateMeetingDialog } from './meeting/create-meeting/create-meeting.dialog';
+import { EditEtapeComponent } from './etape/edit-etape/edit-etape.component';
+import { MeetingCalendarComponent } from './meeting/meeting-calendar/meeting-calendar.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 @NgModule({
   declarations: [
     AppComponent,
@@ -51,7 +61,14 @@ import { EditorModule,TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
     UpdateTacheComponent,
     GetAllTacheComponent,
     KanbanComponent,
-    
+    AddEtapeComponent,
+    EditEtapeComponent,
+    EtapeFilterComponent,
+    ListEtapeComponent,
+    CreateMeetingComponent,
+    MeetingCalendarComponent,
+    MeetingDetailsDialog,
+    CreateMeetingDialog
   ],
   imports: [
     BrowserModule,
@@ -63,17 +80,16 @@ import { EditorModule,TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
     NavbarModule,
     FooterModule,
     SidebarModule,
-    ReactiveFormsModule ,
-    HttpClientModule,
+    ReactiveFormsModule,
     DragDropModule,
     BrowserAnimationsModule,
-    DragDropModule ,
-    EditorModule,
-   ],
-  providers: [
-    DatePipe,{provide :TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'}
-    
+    // Add Material Modules here
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    FullCalendarModule
   ],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

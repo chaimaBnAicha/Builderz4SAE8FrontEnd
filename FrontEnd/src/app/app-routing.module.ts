@@ -22,13 +22,16 @@ import { IconsComponent } from './BackOffice/icons/icons.component';
 import { NotificationsComponent } from './BackOffice/notifications/notifications.component';
 import { UpgradeComponent } from './BackOffice/upgrade/upgrade.component';
 import { PostTacheComponent } from './tache/post-tache/post-tache.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientJsonpModule, HttpClientModule } from '@angular/common/http';
 import { GetAllTacheComponent } from './tache/get-all-tache/get-all-tache.component';
 import { UpdateTacheComponent } from './tache/update-tache/update-tache.component';
 import { KanbanComponent } from './tache/kanban/kanban.component';
 import { TacheResponseComponent } from './tache/tache-response/tache-response.component';
-
+import { AddEtapeComponent } from './etape/add-etape/add-etape.component';
+import { ListEtapeComponent } from './etape/list-etape/list-etape.component';
+import { CreateMeetingComponent } from './meeting/create-meeting/create-meeting.component';
+import { EditEtapeComponent } from './etape/edit-etape/edit-etape.component';
+import { EtapeFilterComponent } from './etape/etape-filter/etape-filter.component';
+import { MeetingCalendarComponent } from './meeting/meeting-calendar/meeting-calendar.component';
 // Define your routes
 const routes: Routes = [
   // FrontOffice routes
@@ -41,26 +44,46 @@ const routes: Routes = [
   { path: 'single', component: SingleComponent },
   { path: 'team', component: TeamComponent },
   { path: 'test', component: TestComponent },
-  {path:'tache',component:PostTacheComponent},
-  {path:'get-all-tache',component:GetAllTacheComponent},
-  {path:'tache/:id',component:UpdateTacheComponent},
-{path:'kanban',component:KanbanComponent},
+  { path: 'tache', component: PostTacheComponent },
+  { path: 'get-all-tache', component: GetAllTacheComponent },
+  { path: 'tache/:id', component: UpdateTacheComponent },
+  { path: 'kanban', component: KanbanComponent },
+  { path: 'tasks', component: GetAllTacheComponent },
+  { path: 'task/create', component: PostTacheComponent },
+  { path: 'task/edit/:id', component: UpdateTacheComponent },
+  { path: 'task/kanban', component: KanbanComponent },
+  { path: 'etapes', component: AddEtapeComponent },
+  {path:'allmeeting',component:MeetingCalendarComponent},
+
+  // Step-related routes
+  { path: 'steps', component: ListEtapeComponent },
+  { path: 'step/create', component: AddEtapeComponent },
+  { path: 'task/:id/steps', component: ListEtapeComponent },
+  { path: 'create-meeting', component: CreateMeetingComponent },
+ {path: 'etape/tache/:id',component: ListEtapeComponent },
+ { path: 'etapes', component: AddEtapeComponent },
+{path:'list-etape',component:ListEtapeComponent},
+{ path: 'etape/edit/:id', component: EditEtapeComponent },
+{ path: 'steps', component: ListEtapeComponent },
+{ path: 'step/create', component: AddEtapeComponent },
+{ path: 'step/edit/:id', component: EditEtapeComponent },
+{ path: 'step/filter', component: EtapeFilterComponent },
+{ path: 'task/:id/steps', component: ListEtapeComponent },
   // BackOffice routes
   {
     path: 'admin',
     component: AdminLayoutComponent,
     children: [
-          { path: 'dashboard',      component: HomeComponent },
-         {path: 'admin2',          component: AdminLayoutComponent },
-         { path: 'user',           component: UserComponent },
-         { path: 'table',          component: TablesComponent },
-         { path: 'typography',     component: TypographyComponent },
-         { path: 'icons',          component: IconsComponent },
-         { path: 'maps',           component: MapsComponent },
-         { path: 'notifications',  component: NotificationsComponent },
-         { path: 'upgrade',        component: UpgradeComponent },
-      // Add other backoffice child routes here
-      { path: '', redirectTo: 'home', pathMatch: 'full' }, // Default route under admin layout
+      { path: 'dashboard', component: HomeComponent },
+      { path: 'admin2', component: AdminLayoutComponent },
+      { path: 'user', component: UserComponent },
+      { path: 'table', component: TablesComponent },
+      { path: 'typography', component: TypographyComponent },
+      { path: 'icons', component: IconsComponent },
+      { path: 'maps', component: MapsComponent },
+      { path: 'notifications', component: NotificationsComponent },
+      { path: 'upgrade', component: UpgradeComponent },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     ],
   },
   { path: 'reponse/:taskId/:response', component: TacheResponseComponent },
@@ -73,11 +96,8 @@ const routes: Routes = [
     CommonModule,
     BrowserModule,
     RouterModule.forRoot(routes, {
-      useHash: true, // Use hash-based routing (optional)
+      useHash: true,
     }),
-    FormsModule,
-    ReactiveFormsModule,
-    HttpClientModule,
   ],
   exports: [RouterModule],
 })

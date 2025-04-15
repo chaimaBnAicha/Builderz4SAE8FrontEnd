@@ -3,7 +3,9 @@ import { TacheService, Tache } from 'src/app/service/tache.service';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-
+import { Router } from '@angular/router';
+import { EtapeService } from '../../service/etape.service';
+import { MeetingService } from '../../service/meeting.service';
 @Component({
   selector: 'app-get-all-tache',
   templateUrl: './get-all-tache.component.html',
@@ -14,26 +16,38 @@ export class GetAllTacheComponent implements OnInit {
   searchControl = new FormControl('');
   isSearching = false;
   noResults = false;
+  selectedTacheId: number | null = null;
+  etapes: any[] = [];
+  // Add these properties at the class level
+ 
+  selectedTacheName: string = '';
+  
+  // Add this method to the class
+  // Remove the duplicate code at the bottom and keep only the showEtapes method in its proper place
+ 
   taskAnalysis: any = null;
 
-  constructor(private tacheService: TacheService) {}
+  constructor(
+    private router: Router,
+    private tacheService: TacheService,
+    private etapeService: EtapeService,private meetingService: MeetingService,
+  ) {}
 
   ngOnInit(): void {
     this.getAllTache();
     this.setupSearch();
-  }
+}
 
-  getAllTache(): void {
-    this.tacheService.getAllTache().subscribe({
-      next: (data: Tache[]) => {
-        console.log(data);
-        this.taches = data;
-      },
-      error: (error) => {
-        console.error('Erreur lors du chargement des tâches:', error);
-      }
-    });
-  }
+getAllTache(): void {
+  this.tacheService.getAllTache().subscribe({
+    next: (data) => {
+      this.taches = data;
+    },
+    error: (error) => {
+      console.error('Error loading tasks:', error);
+    }
+  });
+}
   /*deleteTacheComponent(id:number){
     this.tacheService.deleteTache(id).subscribe((data)=>{
       console.log("Tache supprimée avec succès",data);
@@ -117,5 +131,53 @@ deleteTacheComponent(tacheId: number) {
 
   closeAnalysis() {
     this.taskAnalysis = null;
+  }
+
+/*  showEtapes(tacheId: number) {
+    if (this.selectedTacheId === tacheId) {
+      this.selectedTacheId = null;
+      this.etapes = [];
+    } else {
+      this.selectedTacheId = tacheId;
+      this.etapeService.getEtapesByTacheId(tacheId).subscribe(
+        (data) => {
+          this.etapes = data;
+        },
+        (error) => {
+          console.error('Erreur lors du chargement des étapes:', error);
+        }
+      );
+    }
+  }*/
+  showEtapes(tacheId: number, tacheName: string) {
+    this.selectedTacheId = tacheId;
+    this.selectedTacheName = tacheName;
+    this.etapeService.getEtapesByTacheId(tacheId).subscribe(
+        (data) => {
+            this.etapes = data;
+        },
+        (error) => {
+            console.error('Erreur lors du chargement des étapes:', error);
+        }
+    );
+}
+
+closeEtapesModal() {
+    this.selectedTacheId = null;
+    this.selectedTacheName = '';
+    this.etapes = [];
+}
+
+
+
+  createMeeting(tache: any) {
+    // Navigate to create-meeting component with task data
+    this.router.navigate(['/create-meeting'], {
+      queryParams: {
+        subject: `Meeting for Task: ${tache.nom || tache.titre}`,
+        description: tache.description,
+        tacheId: tache.id
+      }
+    });
   }
 }
