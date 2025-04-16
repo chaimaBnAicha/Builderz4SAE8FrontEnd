@@ -31,6 +31,7 @@ import { InsuranceComponent } from './BackOffice/insurance/insurance.component';
 import { InsuranceChartsComponent } from './BackOffice/insurance/insurance-charts/insurance-charts.component';
 import { AddInsuranceComponent } from './BackOffice/insurance/add-insurance/add-insurance.component';
 import { UpdateInsuranceComponent } from './BackOffice/insurance/update-insurance/update-insurance.component';
+import { ViewInsuranceComponent } from './FrontOffice/insurance/view-insurance/view-insurance.component';
 
 // Define your routes
 const routes: Routes = [
@@ -45,6 +46,8 @@ const routes: Routes = [
   { path: 'team', component: TeamComponent },
   { path: 'test', component: TestComponent },
   {path:'app-view-offers', component:ViewOffersComponent},
+  {path:'app-view-insurance', component:ViewInsuranceComponent},
+
  
   // BackOffice routes
   {

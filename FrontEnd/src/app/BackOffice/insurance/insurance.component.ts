@@ -9,12 +9,27 @@ import { Insurance, Category } from './insurance.interface';
   styleUrls: ['./insurance.component.css']
 })
 export class InsuranceComponent implements OnInit {
-  insurances: Insurance[] = [];
   insuranceForm: FormGroup;
   categories = Object.values(Category);
   isEditing = false;
   submitted = false;
   currentInsuranceId?: number;
+
+  // Pagination properties
+  allInsurances: Insurance[] = [];
+  filteredInsurances: Insurance[] = [];
+  displayedInsurances: Insurance[] = [];
+  selectedCategory: string = '';
+  selectedStatus: string = '';
+  searchTerm: string = '';
+  pageIndex: number = 0;
+  pageSize: number = 10;
+  totalItems: number = 0;
+
+  // Make Math available to the template
+  get Math() {
+    return Math;
+  }
 
   constructor(
     private insuranceService: InsuranceService,
@@ -31,50 +46,89 @@ export class InsuranceComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Test the proxy connection
-    this.testProxyConnection();
     this.loadInsurances();
   }
-
-  private testProxyConnection(): void {
-    console.log('Testing proxy connection...');
-    this.insuranceService.getAllInsurances().subscribe({
-      next: (data) => {
-        console.log('Proxy test successful:', data);
-      },
-      error: (error) => {
-        console.error('Proxy test failed:', error);
-      }
-    });
-  }
-
-  // Convenience getter for easy access to form fields
-  get f() { return this.insuranceForm.controls; }
 
   loadInsurances(): void {
     this.insuranceService.getAllInsurances().subscribe(
       data => {
         console.log('Raw data from backend:', data);
         try {
-          this.insurances = data.map(insurance => {
-            console.log('Processing insurance:', insurance);
+          this.allInsurances = data.map(insurance => {
+            // Calculate status based on end date if not provided by backend
+            const currentDate = new Date();
+            const endDate = new Date(insurance.end_Date);
+            const calculatedStatus = endDate > currentDate ? 'VALID' : 'EXPIRED';
+
             return {
               ...insurance,
               start_Date: new Date(insurance.start_Date),
-              end_Date: new Date(insurance.end_Date)
+              end_Date: new Date(insurance.end_Date),
+              insuranceStatus: insurance.insuranceStatus || calculatedStatus
             };
           });
-          console.log('Processed insurances:', this.insurances);
+          
+          this.filterInsurances();
         } catch (error) {
           console.error('Error processing insurance data:', error);
         }
       },
       error => {
         console.error('Error loading insurances:', error);
-        console.error('Error details:', error.error);
-        console.error('Error status:', error.status);
       }
     );
+  }
+
+  filterInsurances(): void {
+    // First filter the data
+    this.filteredInsurances = this.allInsurances.filter(insurance => {
+      const matchesCategory = !this.selectedCategory || insurance.category === this.selectedCategory;
+      const matchesStatus = !this.selectedStatus || insurance.insuranceStatus === this.selectedStatus;
+      const matchesSearch = !this.searchTerm || 
+        insurance.description.toLowerCase().includes(this.searchTerm.toLowerCase());
+      return matchesCategory && matchesStatus && matchesSearch;
+    });
+
+    // Update pagination info
+    this.totalItems = this.filteredInsurances.length;
+    this.pageIndex = 0;
+    
+    // Update displayed items
+    this.updateDisplayedInsurances();
+  }
+
+  updateDisplayedInsurances(): void {
+    const start = this.pageIndex * this.pageSize;
+    const end = start + this.pageSize;
+    this.displayedInsurances = this.filteredInsurances.slice(start, end);
+  }
+
+  changePage(page: number): void {
+    if (page >= 0 && page < this.totalPages) {
+      this.pageIndex = page;
+      this.updateDisplayedInsurances();
+    }
+  }
+
+  onSearch(): void {
+    this.filterInsurances();
+  }
+
+  onCategoryChange(): void {
+    this.filterInsurances();
+  }
+
+  onStatusChange(): void {
+    this.filterInsurances();
+  }
+
+  get pageArray(): number[] {
+    const totalPages = Math.ceil(this.totalItems / this.pageSize);
+    return Array.from({ length: totalPages }, (_, i) => i);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.totalItems / this.pageSize);
   }
 
   onSubmit(): void {
@@ -165,4 +219,4 @@ export class InsuranceComponent implements OnInit {
       category: Category.RCPro
     });
   }
-} 
+}

@@ -8,10 +8,11 @@ export interface Insurance {
     user?: {
         id: number;
     };
+    insuranceStatus?: string; // Add this line - make it optional with ?
 }
 
 export enum Category {
     RCPro = 'RCPro',
     TRC = 'TRC',
     CIVIL_EXPLOITATION = 'CIVIL_EXPLOITATION'
-} 
+}
