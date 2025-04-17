@@ -11,6 +11,8 @@ import { LeaveType, LeaveStatus } from '../models/leave.model';
 export class LeaveService {
   private apiUrl = 'http://localhost:8081/leave';  
   private documentApiUrl = 'http://localhost:8081/api/documents';
+  private baseUrl = window.location.origin;  // This will get the current domain
+  private logoUrl = "https://i.imgur.com/YX34wNO.png";
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -59,11 +61,16 @@ export class LeaveService {
   }
 
   private sendLeaveStatusEmail(leave: Leave): void {
+    const logoUrl = "https://i.imgur.com/YX34wNO.png";
+
     const emailData = {
       to: 'syrine.zaier@esprit.tn',
       subject: `Leave Request ${leave.status}`,
       body: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+          <div style="text-align: center; margin-bottom: 20px;">
+      <img src="${logoUrl}" alt="App Logo" style="max-width: 120px; margin-bottom: 20px; border-radius: 5%; box-shadow: 0 0 10px rgba(0,0,0,0.3);">
+          </div>
           <h2 style="color: #333; text-align: center;">Leave Request Update</h2>
           <div style="background-color: ${leave.status === 'Approved' ? '#d4edda' : '#f8d7da'}; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
             <h3 style="color: ${leave.status === 'Approved' ? '#155724' : '#721c24'}; margin: 0;">

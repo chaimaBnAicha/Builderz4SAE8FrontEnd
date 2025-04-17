@@ -102,14 +102,8 @@
                            
 
 
- <a routerLink="/index" class="nav-item nav-link active">Home</a>
+ <a routerLink="/index" class="nav-item nav-link ">Home</a>
 
-<a routerLink="/about" class="nav-item nav-link">About</a>
-
-<a routerLink="/service" class="nav-item nav-link">Service</a>
-
-<a routerLink="/team" class="nav-item nav-link">Team</a>
-<a  routerLink="/portfolio" class="nav-item nav-link ">Project</a>
 <a routerLink="/advance" class="nav-item nav-link">Advance</a>
 <a routerLink="/leave" class="nav-item nav-link">Leave</a>
 
@@ -129,8 +123,11 @@
     <div class="card">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
             <h4>My Leave Requests</h4>
-            <button class="btn btn-light" routerLink="/addleave">
+            <button class="btn btn-light mr-2" routerLink="/addleave">
                 <i class="fas fa-plus"></i> New Leave Request
+            </button>
+            <button class="btn btn-light" (click)="openHistoryModal()">
+                <i class="fas fa-history"></i> View History
             </button>
         </div>
         <div class="card-body">
@@ -177,7 +174,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let leave of leaves | paginate: { itemsPerPage: itemsPerPage, currentPage: p, totalItems: leaves.length }">
+                        <tr *ngFor="let leave of leaves | paginate: { itemsPerPage: itemsPerPage, currentPage: p, totalItems: leaves.length }" 
+                            (click)="openLeaveDetails(leave)" 
+                            style="cursor: pointer;">
                             <td>{{ leave.start_date | date:'mediumDate' }}</td>
                             <td>{{ leave.end_date | date:'mediumDate' }}</td>
                             <td>{{ leave.type }}</td>
@@ -206,11 +205,14 @@
                             </td>
                             <td>
                                 <button class="btn btn-info btn-sm mr-2" 
-                                        [routerLink]="['/updateleave', leave.id]">
+                                        [routerLink]="['/updateleave', leave.id]" 
+                                        [disabled]="leave.status !== 'Pending'">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="btn btn-danger btn-sm" (click)="onDelete(leave.id)"
-                                        *ngIf="leave.id">
+                                <button class="btn btn-danger btn-sm" 
+                                        (click)="onDelete(leave.id)" 
+                                        *ngIf="leave.id" 
+                                        [disabled]="leave.status !== 'Pending'">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
@@ -314,5 +316,293 @@
     </div>
 </div>
 <!-- Footer End -->
+
+<!-- Leave History Modal -->
+<div #leaveHistoryModal class="modal fade" tabindex="-1" role="dialog" aria-labelledby="leaveHistoryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="leaveHistoryModalLabel">Leave History</h5>
+                <div class="modal-header-buttons">
+                    <button class="btn btn-download mr-2" (click)="downloadPDF()">
+                        <i class="fas fa-file-pdf"></i> Download PDF
+                    </button>
+                    <button type="button" class="close text-white" (click)="closeHistoryModal()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Type</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th>Request Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let history of leaveHistory">
+                                <td>{{ history.start_date | date:'mediumDate' }}</td>
+                                <td>{{ history.end_date | date:'mediumDate' }}</td>
+                                <td>{{ history.type }}</td>
+                                <td [innerHTML]="history.reason | safeHtml"></td>
+                                <td>
+                                    <span class="badge" [ngClass]="{
+                                        'badge-warning': history.status === 'Pending',
+                                        'badge-success': history.status === 'Approved',
+                                        'badge-danger': history.status === 'Rejected'
+                                    }" style="color: #030f27 !important;">
+                                        {{ history.status }}
+                                    </span>
+                                </td>
+                                <td>{{ history.start_date | date:'mediumDate' }}</td>
+                            </tr>
+                            <tr *ngIf="!leaveHistory || leaveHistory.length === 0">
+                                <td colspan="6" class="text-center">No history found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeHistoryModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Leave Details Modal -->
+<div class="leave-details-modal bg-white rounded-4 shadow-lg p-0 position-relative" 
+     *ngIf="selectedLeave"
+     [@fadeInOut]>
+    <!-- Header -->
+    <div class="modal-header bg-gradient-yellow border-0 p-4 rounded-top-4">
+        <div class="d-flex align-items-center">
+            <i class="fas fa-calendar-check me-3 fa-lg"></i>
+            <h5 class="modal-title mb-0 fw-semibold">Leave Details</h5>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-light btn-sm px-3 py-2 rounded-pill d-flex align-items-center" (click)="downloadPDF()">
+                <i class="fas fa-file-pdf me-2"></i>
+                Download PDF
+            </button>
+            <button class="btn btn-light btn-sm px-3 py-2 rounded-pill" (click)="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Body -->
+    <div class="modal-body p-4">
+        <!-- Dates Section -->
+        <div class="detail-section mb-4">
+            <div class="section-label mb-3">
+                <i class="fas fa-calendar-alt text-yellow me-2"></i>
+                <span class="fw-semibold">Dates</span>
+            </div>
+            <div class="date-range bg-light p-3 rounded-3">
+                <div class="d-flex flex-column gap-2">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">From:</span>
+                        <span class="fw-medium">{{from}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">To:</span>
+                        <span class="fw-medium">{{to}}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="text-muted">Duration:</span>
+                        <span class="fw-medium">{{duration}} days</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Type Section -->
+        <div class="detail-section mb-4">
+            <div class="section-label mb-3">
+                <i class="fas fa-tag text-yellow me-2"></i>
+                <span class="fw-semibold">Type</span>
+            </div>
+            <span class="badge rounded-pill px-3 py-2" 
+                  [ngClass]="{
+                    'bg-warning text-dark': type === 'Emergency',
+                    'bg-danger text-white': type === 'Sick',
+                    'bg-success text-white': type === 'Unpaid'
+                  }">
+                {{type}}
+            </span>
+        </div>
+
+        <!-- Status Section -->
+        <div class="detail-section mb-4">
+            <div class="section-label mb-3">
+                <i class="fas fa-check-circle text-yellow me-2"></i>
+                <span class="fw-semibold">Status</span>
+            </div>
+            <span class="badge rounded-pill px-3 py-2" 
+                  [ngClass]="{
+                    'bg-success': status === 'Approved',
+                    'bg-danger': status === 'Rejected',
+                    'bg-warning text-dark': status === 'Pending'
+                  }">
+                {{status}}
+            </span>
+        </div>
+
+        <!-- Reason Section -->
+        <div class="detail-section">
+            <div class="section-label mb-3">
+                <i class="fas fa-comment-alt text-yellow me-2"></i>
+                <span class="fw-semibold">Reason</span>
+            </div>
+            <div class="reason-text bg-light p-3 rounded-3">
+                {{reason}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div class="modal-backdrop" 
+     *ngIf="selectedLeave"
+     (click)="closeModal()"
+     [@fadeInOut]></div>
+
+<style>
+.leave-details-modal {
+    max-width: 500px;
+    width: 100%;
+    margin: 2rem auto;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #ffd966 0%, #ffc107 100%);
+}
+
+.text-yellow {
+    color: #ffc107;
+}
+
+.btn-light {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.btn-light:hover {
+    background: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+.section-label {
+    font-size: 0.9rem;
+    color: #444;
+}
+
+.date-range, .reason-text {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+.badge {
+    font-weight: 500;
+    font-size: 0.875rem;
+}
+
+.detail-section {
+    transition: transform 0.2s;
+}
+
+.detail-section:hover {
+    transform: translateX(4px);
+}
+
+@media (max-width: 576px) {
+    .leave-details-modal {
+        margin: 1rem;
+    }
+
+    .modal-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .modal-header .d-flex {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+/* Add these new styles */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1040;
+}
+
+.leave-details-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 500px;
+    width: calc(100% - 2rem);
+    margin: 0;
+    z-index: 1050;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Animation classes */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.modal-backdrop, .leave-details-modal {
+    animation: fadeIn 0.2s ease-out;
+}
+
+tr:hover {
+    background-color: #fff9e6 !important;
+    transition: background-color 0.2s;
+}
+
+/* Mobile responsiveness improvements */
+@media (max-width: 576px) {
+    .leave-details-modal {
+        width: calc(100% - 1rem);
+        margin: 0.5rem;
+        max-height: 85vh;
+    }
+
+    .modal-header {
+        padding: 1rem;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+}
+</style>
 
 

@@ -55,13 +55,7 @@ export const ROUTES: RouteInfo[] = [
     class: '',
     group: 'resources'
   },
-  {
-    path: 'icons',
-    title: 'Leave Management',
-    icon: 'pe-7s-date',
-    class: '',
-    group: 'resources'
-  },
+  
   
   // Finance Group
   {
@@ -74,7 +68,7 @@ export const ROUTES: RouteInfo[] = [
   {
     path: 'leaves',
     title: 'Leave Management',
-    icon: 'pe-7s-cash',
+    icon: 'pe-7s-date',
     class: '',
     group: 'finance'
   },

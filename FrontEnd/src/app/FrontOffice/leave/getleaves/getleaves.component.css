@@ -6,22 +6,33 @@
 .card-header {
     background-color: #fdbe33 !important;
     border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
 }
 
 .card-header h4 {
     color: #030f27 !important;
     font-weight: bold;
     margin: 0;
+    flex: 1;
 }
 
 .table thead th {
     background-color: #030f27;
     color: #fdbe33;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    font-size: 0.875rem;
+    font-size: 0.9rem;
     border-top: none;
-    padding: 12px 15px;
+    padding: 14px 16px;
+}
+
+/* Added hover effects for table rows */
+.table tbody tr:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
 }
 
 .table td {
@@ -52,30 +63,22 @@
     color: white !important;
 }
 
+/* Improved button styles for better visibility */
 .btn {
     margin: 0 3px;
-    padding: 5px 10px;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
 }
 
-.my-pagination ::ng-deep .ngx-pagination {
-    margin: 0;
-    padding: 0;
-}
-
-.my-pagination ::ng-deep .ngx-pagination .current {
-    background: #fdbe33;
-    border-radius: 4px;
-}
-
-.my-pagination ::ng-deep .ngx-pagination a:hover {
-    background: #030f27;
-    color: #fdbe33;
-    border-radius: 4px;
-}
-
-.form-control:focus {
-    border-color: #fdbe33;
-    box-shadow: none;
+/* Card header button specific styling */
+.card-header .btn {
+    margin: 0 2px;
+    padding: 6px 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
 .btn-light {
@@ -87,4 +90,329 @@
 .btn-light:hover {
     background-color: #fdbe33;
     color: #030f27;
+    transform: scale(1.05);
+}
+
+/* Improved pagination styles */
+.my-pagination ::ng-deep .ngx-pagination {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.my-pagination ::ng-deep .ngx-pagination .current {
+    background: #fdbe33;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.my-pagination ::ng-deep .ngx-pagination a:hover {
+    background: #030f27;
+    color: #fdbe33;
+    border-radius: 4px;
+    text-decoration: none;
+}
+
+/* Added focus styles for form controls */
+.form-control:focus {
+    border-color: #fdbe33;
+    box-shadow: 0 0 5px rgba(253, 190, 51, 0.8);
+}
+
+/* Styled the history modal */
+.modal-content {
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: none;
+    background: #fff;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #fdbe33 0%, #f8a100 100%);
+    color: #1a1a1a;
+    font-weight: bold;
+    border: none;
+    padding: 20px 25px;
+    border-radius: 15px 15px 0 0;
+    position: relative;
+}
+
+.modal-header .modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.modal-header .close {
+    color: #1a1a1a;
+    opacity: 1;
+    text-shadow: none;
+    transition: transform 0.3s ease;
+}
+
+.modal-header .close:hover {
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 25px;
+    background: #fff;
+}
+
+/* Table styling in modal */
+.modal-body .table {
+    margin-bottom: 0;
+    background: #fff;
+}
+
+.modal-body .table thead th {
+    background: #1a1a1a;
+    color: #fdbe33;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding: 15px;
+    border: none;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.modal-body .table tbody tr:nth-child(even) {
+    background-color: rgba(253, 190, 51, 0.05);
+}
+
+.modal-body .table tbody tr:hover {
+    background-color: rgba(253, 190, 51, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.modal-body .table td {
+    padding: 15px;
+    vertical-align: middle;
+    border-color: #f0f0f0;
+    font-size: 0.9rem;
+}
+
+/* Status badges in modal */
+.modal-body .badge {
+    padding: 8px 15px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.modal-body .badge-warning {
+    background: linear-gradient(135deg, #fdbe33 0%, #f8a100 100%) !important;
+    color: #1a1a1a !important;
+}
+
+.modal-body .badge-success {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%) !important;
+    color: white !important;
+}
+
+.modal-body .badge-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+    color: white !important;
+}
+
+.modal-footer {
+    border-top: 1px solid rgba(253, 190, 51, 0.2);
+    padding: 20px;
+    border-radius: 0 0 15px 15px;
+    background: #fff;
+}
+
+.modal-footer .btn {
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+    color: #fdbe33;
+    border: none;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.modal-footer .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, #fdbe33 0%, #f8a100 100%);
+    color: #1a1a1a;
+}
+
+/* Modal backdrop */
+.modal-backdrop.show {
+    opacity: 0.7;
+}
+
+/* Modal animation */
+.modal.fade .modal-dialog {
+    transform: scale(0.95);
+    transition: transform 0.3s ease;
+}
+
+.modal.show .modal-dialog {
+    transform: scale(1);
+}
+
+/* Scrollbar styling for modal */
+.modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: #fdbe33;
+    border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+    background: #f8a100;
+}
+
+/* Search input styling */
+.input-group {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.input-group .form-control {
+    border: 1px solid #eee;
+    padding: 10px 15px;
+}
+
+.input-group-append .btn {
+    border: none;
+    background-color: #030f27;
+    color: #fdbe33;
+}
+
+.input-group-append .btn:hover {
+    background-color: #fdbe33;
+    color: #030f27;
+}
+
+/* Status filter select styling */
+select.form-control {
+    border: 1px solid #eee;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+select.form-control:focus {
+    border-color: #fdbe33;
+    box-shadow: 0 0 5px rgba(253, 190, 51, 0.8);
+}
+
+/* Document download button styling */
+.btn-primary.btn-sm {
+    background-color: #030f27;
+    border-color: #fdbe33;
+    color: #fdbe33;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+}
+
+.btn-primary.btn-primary.btn-sm:hover {
+    background-color: #fdbe33;
+    color: #030f27;
+}
+
+/* Action buttons styling */
+.btn-info.btn-sm, .btn-danger.btn-sm {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    margin: 0 2px;
+}
+
+.btn-info.btn-sm {
+    background-color: #3e7eff;
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+.btn-info.btn-sm:hover {
+    background-color: #375792;
+    color: #ffffff;
+}
+
+.btn-danger.btn-sm {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger.btn-sm:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+/* Button group styling */
+.card-header .btn-group {
+    display: flex;
+    gap: 5px;
+}
+
+/* Modal header buttons container */
+.modal-header-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Download button styling */
+.btn-download {
+    background-color: #fff;
+    color: #1a1a1a;
+    border: none;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.btn-download:hover {
+    background-color: #1a1a1a;
+    color: #fdbe33;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn-download i {
+    font-size: 1rem;
+}
+
+/* Adjust close button */
+.modal-header .close {
+    margin: 0;
+    padding: 8px;
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.modal-header .close:hover {
+    background-color: rgba(0,0,0,0.2);
+    transform: rotate(90deg);
 }
