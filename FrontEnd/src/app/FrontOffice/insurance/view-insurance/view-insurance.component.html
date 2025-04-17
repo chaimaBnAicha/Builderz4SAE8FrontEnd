@@ -146,6 +146,9 @@
       <button class="download-pdf-btn" (click)="generatePDF()">
         <i class="fas fa-file-pdf"></i> Download PDF
       </button>
+      <button class="export-excel-btn" (click)="exportPaymentHistory()">
+        <i class="fas fa-file-excel"></i> View Payment History
+      </button>
     </div>
   </div>
 
@@ -177,9 +180,14 @@
             <span>Amount: {{ insurance.amount | currency }}</span>
           </div>
         </div>
-        <button class="download-card-btn" (click)="generateInsurancePDF(insurance)">
-          <i class="fas fa-download"></i> Download Details
-        </button>
+        <div class="card-actions">
+          <button class="download-card-btn" (click)="generateInsurancePDF(insurance)">
+            <i class="fas fa-download"></i> Download Details
+          </button>
+          <button class="payment-btn" (click)="proceedToPayment(insurance)">
+            <i class="fas fa-credit-card"></i> Pay Now
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -189,6 +197,101 @@
     <p>No insurances found matching your criteria</p>
   </div>
 </div> 
+
+<!-- Add this after the insurance cards section -->
+<div *ngIf="showPayPalButtons" class="paypal-container" id="paypal-section">
+  <div class="payment-summary">
+    <h3>Payment Summary</h3>
+    <div class="payment-details" *ngIf="selectedInsurance">
+      <div class="detail-row">
+        <span>Insurance Type:</span>
+        <span>{{ selectedInsurance.category }}</span>
+      </div>
+      <div class="detail-row">
+        <span>Coverage Period:</span>
+        <span>{{ selectedInsurance.start_Date | date:'mediumDate' }} to {{ selectedInsurance.end_Date | date:'mediumDate' }}</span>
+      </div>
+      <div class="detail-row total">
+        <span>Total Amount:</span>
+        <span>{{ selectedInsurance.amount | currency }}</span>
+      </div>
+    </div>
+    <div class="paypal-buttons" id="paypal-button-container">
+      <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+    </div>
+    <button class="cancel-payment-btn" (click)="showPayPalButtons = false">
+      <i class="fas fa-times"></i> Cancel Payment
+    </button>
+  </div>
+</div>
+
+<!-- Add Payment History Modal -->
+<div *ngIf="showPaymentHistory" class="payment-history-container">
+  <div class="payment-history-modal">
+    <div class="payment-history-header">
+      <div class="header-content">
+        <i class="fas fa-receipt header-icon"></i>
+        <h3>Payment History</h3>
+      </div>
+      <button class="close-btn" (click)="showPaymentHistory = false">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div class="payment-history-body">
+      <div *ngIf="paymentHistory.length > 0">
+        <div class="table-container">
+          <table class="payment-table">
+            <thead>
+              <tr>
+                <th><i class="fas fa-calendar-day me-2"></i>Date</th>
+                <th><i class="fas fa-shield-alt me-2"></i>Insurance Type</th>
+                <th><i class="fas fa-file-alt me-2"></i>Description</th>
+                <th><i class="fas fa-fingerprint me-2"></i>Transaction ID</th>
+                <th><i class="fas fa-dollar-sign me-2"></i>Amount</th>
+                <th><i class="fas fa-check-circle me-2"></i>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let payment of paymentHistory">
+                <td>{{ payment.date | date:'medium' }}</td>
+                <td>
+                  <span class="type-badge">{{ payment.insuranceType }}</span>
+                </td>
+                <td>
+                  <span class="description-text" [innerHTML]="payment.description"></span>
+                </td>
+                <td>
+                  <span class="transaction-id">{{ payment.transactionId }}</span>
+                </td>
+                <td>
+                  <span class="amount-value">{{ payment.amount | currency }}</span>
+                </td>
+                <td>
+                  <span class="payment-status" [ngClass]="payment.status.toLowerCase()">
+                    {{ payment.status }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="export-actions">
+          <button class="export-excel-btn" (click)="downloadExcel()">
+            <i class="fas fa-file-download me-2"></i> Download as CSV
+          </button>
+        </div>
+      </div>
+      <div *ngIf="paymentHistory.length === 0" class="no-history">
+        <div class="empty-state">
+          <i class="fas fa-search-dollar"></i>
+          <p>No payment history available yet</p>
+          <span>Your completed transactions will appear here</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
  <!-- Footer Start -->
  <div class="footer wow fadeIn" data-wow-delay="0.3s">
   <div class="container">

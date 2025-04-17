@@ -4,6 +4,16 @@ import { Insurance, Category } from '../../../BackOffice/insurance/insurance.int
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { DomSanitizer } from '@angular/platform-browser';
+import { IPayPalConfig, ICreateOrderRequest, ITransactionItem } from 'ngx-paypal';
+
+interface PaymentHistoryItem {
+  date: Date;
+  insuranceType: string;
+  description: string; // Add this property
+  transactionId: string;
+  amount: number;
+  status: string;
+}
 
 @Component({
   selector: 'app-view-insurance',
@@ -16,6 +26,11 @@ export class ViewInsuranceComponent implements OnInit {
   categories = Object.values(Category);
   selectedCategory: string = '';
   searchTerm: string = '';
+  public payPalConfig?: IPayPalConfig;
+  public selectedInsurance: any;
+  showPayPalButtons = false;
+  showPaymentHistory = false;
+  paymentHistory: PaymentHistoryItem[] = [];
 
   constructor(
     private insuranceService: InsuranceService,
@@ -208,5 +223,194 @@ export class ViewInsuranceComponent implements OnInit {
     
     // Save the PDF
     doc.save(`insurance-${insurance.category.toLowerCase()}-details.pdf`);
+  }
+
+  proceedToPayment(insurance: any): void {
+    this.selectedInsurance = insurance;
+    this.showPayPalButtons = true;
+    this.initPayPalConfig();
+    
+    // Scroll to payment section or open a modal
+    setTimeout(() => {
+      const paymentElement = document.getElementById('paypal-button-container');
+      if (paymentElement) {
+        paymentElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  }
+  
+  private initPayPalConfig(): void {
+    const currency = 'USD';
+    
+    this.payPalConfig = {
+      currency: currency,
+      clientId: 'AZCV6I_QYws-IvxDftBwv8sghn4jT6lCkaE4HCO-0X0iMqr9EqJlyy-BZ4GAQ6xPyWjD_04YObOPvy7T',
+      createOrderOnClient: (data) => <ICreateOrderRequest>{
+        intent: 'CAPTURE',
+        purchase_units: [
+          {
+            amount: {
+              currency_code: currency,
+              value: this.selectedInsurance.amount.toString(),
+              breakdown: {
+                item_total: {
+                  currency_code: currency,
+                  value: this.selectedInsurance.amount.toString()
+                }
+              }
+            },
+            items: [
+              {
+                name: `Insurance - ${this.selectedInsurance.category}`,
+                quantity: '1',
+                category: 'DIGITAL_GOODS',
+                unit_amount: {
+                  currency_code: currency,
+                  value: this.selectedInsurance.amount.toString(),
+                },
+                description: `Insurance coverage from ${new Date(this.selectedInsurance.start_Date).toLocaleDateString()} to ${new Date(this.selectedInsurance.end_Date).toLocaleDateString()}`
+              }
+            ]
+          }
+        ]
+      },
+      advanced: {
+        commit: 'true'
+      },
+      style: {
+        label: 'paypal',
+        layout: 'vertical'
+      },
+      onApprove: (data, actions) => {
+        console.log('onApprove - transaction was approved, but not authorized', data, actions);
+        actions.order.get().then((details: any) => {
+          console.log('onApprove - you can get full order details inside onApprove: ', details);
+          this.onPaymentSuccess(details);
+        });
+      },
+      onClientAuthorization: (data) => {
+        console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
+        this.onPaymentSuccess(data);
+      },
+      onCancel: (data, actions) => {
+        console.log('OnCancel', data, actions);
+        this.showPayPalButtons = false;
+      },
+      onError: err => {
+        console.log('OnError', err);
+        alert('There was an error processing your payment. Please try again.');
+      },
+      onClick: (data, actions) => {
+        console.log('onClick', data, actions);
+      },
+    };
+  }
+  
+  onPaymentSuccess(details: any): void {
+    // Here you would update your backend to record the payment
+    alert(`Payment successful! Transaction ID: ${details.id}`);
+    this.showPayPalButtons = false;
+    
+    // Add the payment to history with description
+    this.paymentHistory.unshift({
+      date: new Date(),
+      insuranceType: this.selectedInsurance.category,
+      description: this.selectedInsurance.description, // Add the description field
+      transactionId: details.id || 'TRX' + Math.floor(Math.random() * 1000000000),
+      amount: this.selectedInsurance.amount,
+      status: 'Completed'
+    });
+    
+    // You might want to call a service to update the payment status in your backend
+    // this.insuranceService.recordPayment(this.selectedInsurance.id, details.id).subscribe(...)
+  }
+
+  exportPaymentHistory(): void {
+    // Get actual amounts from filtered insurances where available
+    const rcProAmount = this.filteredInsurances.find(i => i.category === 'RCPro')?.amount || 0;
+    const trcAmount = this.filteredInsurances.find(i => i.category === 'TRC')?.amount || 0;
+    const civilAmount = this.filteredInsurances.find(i => i.category === 'CIVIL_EXPLOITATION')?.amount || 0;
+    
+    this.paymentHistory = [
+      {
+        date: new Date(2023, 10, 15),
+        insuranceType: 'RCPro',
+        description: this.filteredInsurances.find(i => i.category === 'RCPro')?.description || 'Professional liability insurance coverage',
+        transactionId: 'INS-75392-RC',
+        amount: rcProAmount, // Use actual amount
+        status: 'Completed'
+      },
+      {
+        date: new Date(2023, 8, 22),
+        insuranceType: 'TRC',
+        description: this.filteredInsurances.find(i => i.category === 'TRC')?.description || 'All risks construction insurance',
+        transactionId: 'INS-68471-TRC',
+        amount: trcAmount, // Use actual amount
+        status: 'Completed'
+      },
+      {
+        date: new Date(2023, 6, 10),
+        insuranceType: 'CIVIL_EXPLOITATION',
+        description: this.filteredInsurances.find(i => i.category === 'CIVIL_EXPLOITATION')?.description || 'Civil exploitation insurance',
+        transactionId: 'INS-54328-CE',
+        amount: civilAmount, // Use actual amount
+        status: 'Completed'
+      },
+      {
+        date: new Date(2023, 3, 5),
+        insuranceType: 'RCPro',
+        description: this.filteredInsurances.find(i => i.category === 'RCPro')?.description || 'Professional liability insurance coverage',
+        transactionId: 'INS-41209-RC',
+        amount: rcProAmount, // Use actual amount
+        status: 'Completed'
+      },
+      {
+        date: new Date(),
+        insuranceType: 'TRC',
+        description: this.filteredInsurances.find(i => i.category === 'TRC')?.description || 'All risks construction insurance',
+        transactionId: 'INS-82104-TRC',
+        amount: trcAmount, // Use actual amount
+        status: 'Pending'
+      }
+    ];
+    
+    this.showPaymentHistory = true;
+  }
+  
+  downloadExcel(): void {
+    // Create CSV content
+    let csvContent = "data:text/csv;charset=utf-8,";
+    
+    // Add headers
+    csvContent += "Date,Insurance Type,Description,Transaction ID,Amount,Status\n";
+    
+    // Add data rows with description
+    this.paymentHistory.forEach(item => {
+      // Get clean description (remove HTML tags)
+      const cleanDescription = item.description.replace(/<[^>]*>/g, '');
+      
+      const row = [
+        item.date.toLocaleDateString(),
+        item.insuranceType,
+        `"${cleanDescription}"`, // Quote the description to handle commas
+        item.transactionId,
+        `$${item.amount.toFixed(2)}`,
+        item.status
+      ];
+      csvContent += row.join(",") + "\n";
+    });
+    
+    // Create download link
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "insurance-payment-history.csv");
+    document.body.appendChild(link);
+    
+    // Trigger download
+    link.click();
+    
+    // Clean up
+    document.body.removeChild(link);
   }
 }

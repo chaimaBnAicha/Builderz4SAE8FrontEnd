@@ -1,26 +1,44 @@
 .card {
-  border-radius: 10px;
+  border-radius: 12px;
   border: none;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
 }
 
 .card-header {
+  background: linear-gradient(45deg, #3f51b5, #2196f3);
   border-bottom: none;
-  padding: 1rem 1.25rem;
-  border-radius: 10px 10px 0 0 !important;
-  font-weight: 600;
+  padding: 1.25rem 1.5rem;
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.card-header h5 {
+  font-size: 1.25rem;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.card-body {
+  padding: 1.5rem;
+  background-color: #fcfcfc;
 }
 
 .chart-container {
-  padding: 1rem;
+  position: relative;
   margin: 10px 0;
+  border-radius: 8px;
+  background-color: white;
+  padding: 15px;
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
 }
 
 .dashboard-charts {
@@ -34,17 +52,51 @@
 /* Add animation to charts on load */
 canvas {
   opacity: 0;
-  animation: fadeIn 1s ease-in-out forwards;
+  animation: fadeIn 1.2s ease-in-out forwards;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-/* Add responsive adjustments */
-@media (max-width: 768px) {
+/* Custom tooltip styling */
+.chart-tooltip {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Layout adjustments for better responsiveness */
+.row {
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
   .chart-container {
     height: 280px !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  .card-header {
+    padding: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .chart-container {
+    padding: 10px;
+    height: 250px !important;
   }
 }

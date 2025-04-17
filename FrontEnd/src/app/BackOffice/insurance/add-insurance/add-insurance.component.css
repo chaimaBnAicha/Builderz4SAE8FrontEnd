@@ -1,10 +1,7 @@
 .add-insurance-container {
-  max-width: 800px;
-  margin: 2rem auto;
   padding: 2rem;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
+  min-height: 100vh;
 }
 
 h2 {
@@ -14,6 +11,7 @@ h2 {
 }
 
 .insurance-form {
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -25,74 +23,164 @@ h2 {
   gap: 0.5rem;
 }
 
+.form-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  max-width: 1000px;
+  margin: 0 auto;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.form-header {
+  background: linear-gradient(135deg, #ffc107, #ffab00);
+  color: #212529;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #eaecef;
+}
+
+.form-header h2 {
+  font-size: 1.6rem;
+  margin: 0;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.form-section {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
 .form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-row .form-section {
+  flex: 1;
 }
 
 label {
+  display: block;
+  margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #34495e;
+  color: #344767;
+  font-size: 0.95rem;
 }
 
 .form-control {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  width: 100%;
+  padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+  border: 1px solid #dce1eb;
+  border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.2s;
+  transition: all 0.2s ease;
+  background-color: #f8f9fa;
 }
 
 .form-control:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.2);
   outline: none;
-  border-color: #3498db;
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
-.description-editor {
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.editor-container {
+  border: 1px solid #dce1eb;
+  border-radius: 8px;
   overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon i {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+select.form-control {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+}
+
+.form-error {
+  color: #e53e3e;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #edf2f7;
 }
 
-.btn {
+.btn-cancel, .btn-submit {
   padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  font-weight: 500;
+  border-radius: 8px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
   cursor: pointer;
-  transition: background-color 0.2s;
+  border: none;
 }
 
-.btn-primary {
-  background-color: #3498db;
-  color: white;
+.btn-cancel {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border: 1px solid #dce1eb;
 }
 
-.btn-primary:hover {
-  background-color: #2980b9;
+.btn-cancel:hover {
+  background-color: #e9ecef;
+  color: #495057;
+  transform: translateY(-2px);
 }
 
-.btn-secondary {
-  background-color: #95a5a6;
-  color: white;
+.btn-submit {
+  background: #ffc107;
+  color: #212529;
+  box-shadow: 0 4px 10px rgba(255, 193, 7, 0.3);
+  border: none;
 }
 
-.btn-secondary:hover {
-  background-color: #7f8c8d;
+.btn-submit:hover {
+  background: #ffab00;
+  box-shadow: 0 6px 15px rgba(255, 193, 7, 0.4);
+  transform: translateY(-2px);
 }
 
-.btn:disabled {
-  background-color: #bdc3c7;
+.btn-submit:disabled {
+  background: #e9ecef;
+  color: #adb5bd;
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 /* Error states */
@@ -104,4 +192,37 @@ label {
   color: #e74c3c;
   font-size: 0.875rem;
   margin-top: 0.25rem;
-} 
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .add-insurance-container {
+    padding: 1rem;
+  }
+
+  .form-card {
+    border-radius: 12px;
+  }
+
+  .form-header {
+    padding: 1.25rem;
+  }
+
+  .insurance-form {
+    padding: 1.25rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+
+  .btn-cancel, .btn-submit {
+    width: 100%;
+  }
+}

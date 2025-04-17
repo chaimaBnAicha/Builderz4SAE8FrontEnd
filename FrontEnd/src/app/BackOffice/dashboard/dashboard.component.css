@@ -1,0 +1,85 @@
+.analytics-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.5rem 0;
+}
+
+.analytics-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  position: relative;
+}
+
+.analytics-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.analytics-header {
+  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+  padding: 1.5rem;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.analytics-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPgogIDxkZWZzPgogICAgPHBhdHRlcm4gaWQ9InBhdHRlcm4iIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDQ1KSI+CiAgICAgIDxjaXJjbGUgY3g9IjEiIGN5PSIxIiByPSIxLjUiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPgogICAgPC9wYXR0ZXJuPgogIDwvZGVmcz4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIiAvPgo8L3N2Zz4=');
+  opacity: 0.3;
+}
+
+.analytics-title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.analytics-body {
+  padding: 1.5rem;
+  background-color: #fafafa;
+}
+
+/* Insurance Analytics specific styles */
+.analytics-card:nth-child(2) .analytics-header {
+  background: linear-gradient(135deg, #4a148c, #7b1fa2);
+}
+
+/* Media Queries for Responsive Layout */
+@media (min-width: 992px) {
+  .analytics-container {
+    flex-direction: row;
+  }
+  
+  .analytics-card {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-header {
+    padding: 1rem;
+  }
+  
+  .analytics-title {
+    font-size: 1.2rem;
+  }
+  
+  .analytics-body {
+    padding: 1rem;
+  }
+}

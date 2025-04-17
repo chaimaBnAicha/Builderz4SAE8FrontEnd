@@ -6,6 +6,8 @@ import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditorModule } from '@tinymce/tinymce-angular';
+import { InsuranceModule } from './FrontOffice/insurance/insurance.module';
+import { NgxPayPalModule } from 'ngx-paypal';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,7 +38,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { InsuranceChartsComponent } from './BackOffice/insurance/insurance-charts/insurance-charts.component';
 import { AddInsuranceComponent } from './BackOffice/insurance/add-insurance/add-insurance.component';
 import { UpdateInsuranceComponent } from './BackOffice/insurance/update-insurance/update-insurance.component';
-import { ViewInsuranceComponent } from './FrontOffice/insurance/view-insurance/view-insurance.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,6 @@ import { ViewInsuranceComponent } from './FrontOffice/insurance/view-insurance/v
     InsuranceChartsComponent,
     AddInsuranceComponent,
     UpdateInsuranceComponent,
-    ViewInsuranceComponent,
   ],
   imports: [
     BrowserModule,
@@ -76,7 +76,9 @@ import { ViewInsuranceComponent } from './FrontOffice/insurance/view-insurance/v
     SidebarModule,
     ReactiveFormsModule,
     EditorModule,
-    NgxChartsModule
+    NgxChartsModule,
+    InsuranceModule,
+    NgxPayPalModule
   ],
   providers: [],
   bootstrap: [AppComponent]

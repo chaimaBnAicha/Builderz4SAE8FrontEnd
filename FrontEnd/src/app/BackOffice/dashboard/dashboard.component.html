@@ -1,15 +1,26 @@
-<app-charts></app-charts>
 
-<!-- Insurance Charts Section -->
-<div class="row mt-4">
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header bg-primary text-white">
-        <h5 class="card-title mb-0">Insurance Analytics</h5>
-      </div>
-      <div class="card-body">
-        <app-insurance-charts></app-insurance-charts>
-      </div>
+<div class="analytics-container">
+  <!-- Offer Analytics Section -->
+  <div class="analytics-card">
+    <div class="analytics-header">
+      <h5 class="analytics-title">
+        <i class="fas fa-chart-line me-2"></i>Offer Analytics
+      </h5>
+    </div>
+    <div class="analytics-body">
+      <app-charts></app-charts>
+    </div>
+  </div>
+
+  <!-- Insurance Analytics Section -->
+  <div class="analytics-card">
+    <div class="analytics-header">
+      <h5 class="analytics-title">
+        <i class="fas fa-shield-alt me-2"></i>Insurance Analytics
+      </h5>
+    </div>
+    <div class="analytics-body">
+      <app-insurance-charts></app-insurance-charts>
     </div>
   </div>
 </div>
