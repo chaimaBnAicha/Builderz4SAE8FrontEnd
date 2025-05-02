@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EtapeService, Etape } from 'src/app/service/etape.service';
 import { TacheService, Tache } from 'src/app/service/tache.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-etape',
@@ -22,7 +23,8 @@ export class EtapeComponent implements OnInit {
 
   constructor(
     private etapeService: EtapeService,
-    private tacheService: TacheService
+    private tacheService: TacheService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -43,7 +45,16 @@ export class EtapeComponent implements OnInit {
   }
 
   chargerTaches(): void {
-    this.tacheService.getAllTache().subscribe({
+    const currentUser = this.authService.getCurrentUser();
+  
+    if (!currentUser || !currentUser.token) {
+      console.error('Token manquant pour charger les tâches');
+      return;
+    }
+  
+    const token = currentUser.token;
+  
+    this.tacheService.getAllTache(token).subscribe({
       next: (data: Tache[]) => {
         console.log('Taches loaded:', data);
         this.taches = data;
@@ -53,6 +64,7 @@ export class EtapeComponent implements OnInit {
       }
     });
   }
+  
 
   onSubmit(): void {
     if (this.selectedTacheId) {

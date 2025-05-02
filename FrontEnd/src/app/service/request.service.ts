@@ -68,7 +68,6 @@ export class RequestService {
       requestData,
       { 
         headers: this.createAuthHeaders(),
-        withCredentials: true 
       }
     ).pipe(
       catchError(this.handleError.bind(this))
@@ -78,7 +77,7 @@ export class RequestService {
   getUserInfo(): Observable<any> {
     return this.http.get(`${BASIC_URL}/api/users/1`, { headers: this.createAuthHeaders() });
   }
-
+  
   // Get all requests
   getAllRequest(): Observable<any> {
     return this.http.get(`${BASIC_URL}/api/AllRequest`, { headers: this.createAuthHeaders() });

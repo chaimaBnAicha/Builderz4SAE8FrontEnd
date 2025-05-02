@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -84,8 +84,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgChartsModule } from 'ng2-charts';
+import { SharedModule } from './shared/shared.module';
+
+
 
 @NgModule({
+  schemas: [ NO_ERRORS_SCHEMA ],
   declarations: [
     AppComponent,
     AboutComponent,
@@ -163,27 +167,27 @@ import { NgChartsModule } from 'ng2-charts';
     MatButtonModule,
     MatFormFieldModule,
     MatSelectModule,
-    DragDropModule ,
+    DragDropModule,
     MatDialogModule,
-    MatButtonModule,
     NgbModule,
-    FullCalendarModule,
+    FullCalendarModule, // This should now work correctly
     MatIconModule,
     NgxPaginationModule,
     NgChartsModule,
     EditorModule,
     ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right', // ← Essaye 'toast-bottom-right' ou autre si conflit
+      positionClass: 'toast-bottom-right',
       timeOut: 50000,
       closeButton: true,
       progressBar: true,
     }),
-    
+    SharedModule, // Moved to the end as it likely contains other modules
   ],
-  providers: [DatePipe,
-    {provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js'},
+  providers: [
+    DatePipe,
+    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
     LeaveStatisticsService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

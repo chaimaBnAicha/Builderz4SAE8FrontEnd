@@ -19,17 +19,25 @@ export class AuthService {
 
   // Login method with improved error handling
   login(credentials: {username: string, password: string}): Observable<any> {
+    console.log('Attempting login with credentials:', credentials);
     return this.http.post(`${this.apiUrl}/login`, credentials, {
-      withCredentials: true
+        withCredentials: true
     }).pipe(
-      tap((response: any) => {
-        if (response.token) {
-          localStorage.setItem('token', response.token);
-          localStorage.setItem('currentUser', JSON.stringify(response.user));
-        }
-      })
+        tap((response: any) => {
+            console.log('Login successful, response:', response);
+            if (response.token) {
+                localStorage.setItem('token', response.token);
+                localStorage.setItem('currentUser', JSON.stringify(response.user));
+            }
+        }),
+        catchError((error) => {
+            console.error('Login error details:', error);
+            throw error;
+        })
     );
-  }
+}
+  
+  
 
   // Forgot password method
   forgotPassword(email: string): Observable<any> {

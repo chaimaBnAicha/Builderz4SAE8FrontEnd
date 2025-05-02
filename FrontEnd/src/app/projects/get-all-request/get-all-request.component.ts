@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestService } from 'src/app/service/request.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-get-all-request',
@@ -16,24 +17,37 @@ export class GetAllRequestComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 5;
 
-  constructor(private requestService: RequestService) { }
-
+  constructor(
+    private requestService: RequestService,
+    private authService: AuthService
+  ) { }
   ngOnInit(): void {
     this.getAllRequest();
   }
 
-  getAllRequest(): void {
-    this.requestService.getAllRequest().subscribe(
-      (res: any[]) => {
-        this.requests = res.filter(request => request.status === 'Pending');
-        this.filteredRequests = [...this.requests];
-      },
-      (error) => {
-        console.error('Erreur lors de la récupération des requêtes:', error);
-      }
-    );
-  }
+getAllRequest(): void {
+  const currentUser = this.authService.getCurrentUser();
+  const currentUserId = currentUser?.user?.id;
 
+  console.log("Current User IDddddddd:", currentUserId);
+
+  this.requestService.getAllRequest().subscribe(
+    (res: any[]) => {
+    
+      this.requests = res.filter(
+        request => request.status === 'Pending' && request.user_id === currentUserId
+      );
+
+      this.filteredRequests = [...this.requests];
+    },
+    (error) => {
+      console.error('Erreur lors de la récupération des requêtes:', error);
+    }
+  );
+}
+
+
+  
   deleteRequest(id_projet: number): void {
     this.requestService.deleteRequest(id_projet).subscribe(
       () => {

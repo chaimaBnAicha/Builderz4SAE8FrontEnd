@@ -6,6 +6,7 @@ import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { EtapeService } from '../../service/etape.service';
 import { MeetingService } from '../../service/meeting.service';
+import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-get-all-tache',
   templateUrl: './get-all-tache.component.html',
@@ -31,6 +32,7 @@ export class GetAllTacheComponent implements OnInit {
     private router: Router,
     private tacheService: TacheService,
     private etapeService: EtapeService,private meetingService: MeetingService,
+    private authService : AuthService
   ) {}
 
   ngOnInit(): void {
@@ -39,7 +41,16 @@ export class GetAllTacheComponent implements OnInit {
 }
 
 getAllTache(): void {
-  this.tacheService.getAllTache().subscribe({
+  const currentUser = this.authService.getCurrentUser();
+
+  if (!currentUser || !currentUser.token) {
+    console.error('Token manquant pour charger les tâches');
+    return;
+  }
+
+  const token = currentUser.token;
+
+  this.tacheService.getAllTache(token).subscribe({
     next: (data) => {
       this.taches = data;
     },
@@ -48,6 +59,7 @@ getAllTache(): void {
     }
   });
 }
+
   /*deleteTacheComponent(id:number){
     this.tacheService.deleteTache(id).subscribe((data)=>{
       console.log("Tache supprimée avec succès",data);
@@ -105,7 +117,17 @@ deleteTacheComponent(tacheId: number) {
       switchMap(query => {
         this.isSearching = true;
         this.noResults = false;
-        return query ? this.tacheService.searchTaches(query) : this.tacheService.getAllTache();
+  
+        const currentUser = this.authService.getCurrentUser();
+  
+        if (!currentUser || !currentUser.token) {
+          console.error('Token manquant pour effectuer la recherche');
+          return of([]); // Retourne une liste vide en cas d'absence de token
+        }
+  
+        const token = currentUser.token;
+  
+        return query ? this.tacheService.searchTaches(query, token) : this.tacheService.getAllTache(token);
       }),
       catchError(error => {
         console.error('Erreur de recherche:', error);
@@ -118,6 +140,7 @@ deleteTacheComponent(tacheId: number) {
       this.currentPage = 1;
     });
   }
+  
 
   generatePDF(tache: Tache) {
     this.tacheService.generatePDF(tache);

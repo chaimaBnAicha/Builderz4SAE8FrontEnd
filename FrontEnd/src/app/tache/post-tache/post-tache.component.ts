@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TacheService, Tache } from 'src/app/service/tache.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AbstractControl } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-post-tache',
@@ -14,9 +15,11 @@ export class PostTacheComponent implements OnInit {
   tache: Tache | null = null;
   isProcessing: boolean = false;
   processingMessage: string = '';
+  ; // Assuming you have an AuthService to manage authentication
 
   constructor(
     private tacheService: TacheService,
+    private authService: AuthService,
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute
@@ -122,16 +125,34 @@ export class PostTacheComponent implements OnInit {
   
   postTache() {
     console.log('Données envoyées :', this.postTacheForm.value);
-    this.tacheService.postTache(this.postTacheForm.value).subscribe(
-      (data) => {
+    
+    const token = this.authService.getToken();
+    
+    if (!token) {
+      console.error('No authentication token available.');
+      return;
+    }
+    
+    this.tacheService.postTache(this.postTacheForm.value, token).subscribe({
+      next: (data) => {
         console.log('Tâche créée avec succès', data);
         this.router.navigateByUrl("/get-all-tache");
       },
-      (error) => {
+      error: (error) => {
         console.error('Erreur lors de la création de la tâche', error);
+        // Show user-friendly error message
+        alert(`Erreur lors de la création: ${error.message}`);
       }
-    );
+    });
   }
+  
+  private handleSubmissionError(error: any) {
+    if (error.status === 401 || error.status === 403) {
+      this.router.navigate(['/login']);
+    }
+    // Add more specific error handling if needed
+  }
+  
   onChangeStatus(id: number) {
     this.tacheService.changeStatus(id).subscribe({
       next: (data) => {

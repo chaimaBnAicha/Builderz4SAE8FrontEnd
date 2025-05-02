@@ -76,6 +76,7 @@ export class KanbanComponent implements OnInit {
 import { Component, OnInit } from '@angular/core';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { TacheService } from 'src/app/service/tache.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 // Ajouter un type alias pour les statuts
 type StatutTache = 'A_FAIRE' | 'EN_COURS' | 'TERMINEE';
@@ -103,7 +104,9 @@ export class KanbanComponent implements OnInit {
     TERMINEE: [] 
   };
 
-  constructor(private tacheService: TacheService) {}
+  constructor(private tacheService: TacheService,
+    private authService : AuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadTaches();
@@ -116,19 +119,29 @@ export class KanbanComponent implements OnInit {
       });
     });
   }*/
- loadTaches(): void {
-    this.tacheService.getAllTache().subscribe({
-      next: (data: Tache[]) => {
-        console.log('Données reçues:', data); // Debug
-        this.statuts.forEach(statut => {
-          this.taches[statut] = data.filter(t => t.statut === statut);
+    loadTaches(): void {
+      const currentUser = this.authService.getCurrentUser();
+    
+      if (currentUser && currentUser.token) {
+        const token = currentUser.token;
+    
+        this.tacheService.getAllTache(token).subscribe({
+          next: (data: Tache[]) => {
+            console.log('Données reçues:', data);
+            this.statuts.forEach(statut => {
+              this.taches[statut] = data.filter(t => t.statut === statut);
+            });
+          },
+          error: (err) => {
+            console.error('Erreur de chargement:', err);
+          }
         });
-      },
-      error: (err) => {
-        console.error('Erreur de chargement:', err); // Debug des erreurs
+    
+      } else {
+        console.error('Token manquant pour charger les tâches');
       }
-    });
-  }
+    }
+    
 
  /* drop(event: CdkDragDrop<Tache[]>, newStatut: StatutTache) {
     if (event.previousContainer === event.container) {

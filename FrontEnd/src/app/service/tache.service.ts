@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, of } from 'rxjs';
+import { Observable, Subject, of, throwError } from 'rxjs';
 import { tap, catchError, map, delay } from 'rxjs/operators';
+import { AuthService } from '../services/auth.service';
+import { Token } from '@angular/compiler';
 
 
 
@@ -63,19 +65,59 @@ interface TaskAnalysis {
 })
 export class TacheService {
   private refreshNeeded = new Subject<void>();
+  handleError: any;
 
   get refreshNeeded$() {
     return this.refreshNeeded.asObservable();
   }
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private authService: AuthService // Injecter AuthService
+  ) {}
 
-  postTache(tache: any): Observable<any> {
-    return this.http.post(`${BASIC_URL}/TachePost`, tache);
+  postTache(tache: any, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post(`${BASIC_URL}/TachePost`, tache, { headers }).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error creating task:', error);
+        let errorMessage = 'An unknown error occurred';
+        
+        if (error.error instanceof ErrorEvent) {
+          // Client-side error
+          errorMessage = `Error: ${error.error.message}`;
+        } else {
+          // Server-side error
+          errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+        }
+        
+        return throwError(() => new Error(errorMessage));
+      })
+    );
   }
 
-  acceptTask(taskId: number): Observable<any> {
-    return this.http.put(`${BASIC_URL}/tasks/${taskId}/accept`, {}); // Ajout d'un body vide
+  acceptTask(taskId: number, token: string): Observable<any> {
+    console.log('token : ', token);
+    console.log('Accepting task with ID:', taskId);
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  
+    // Fix the URL - remove any curly braces
+    return this.http.put(`${BASIC_URL}/tasks/${taskId}/respond/oui`, {}, { headers }  ).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error('Error accepting task:', error);
+        let errorMessage = 'Failed to accept task';
+        if (error.status === 403) {
+          errorMessage = 'You do not have permission to perform this action';
+        }
+        return throwError(() => new Error(errorMessage));
+      })
+    );
   }
   changeStatus(id: number): Observable<any> {
     return this.http.put(`${BASIC_URL}/api/taches/${id}/change-status`, {});
@@ -86,25 +128,28 @@ export class TacheService {
     return this.http.put(`${BASIC_URL}/tasks/${taskId}/decline`, {}); // Ajout d'un body vide
   }
 
-  getAllTache(): Observable<Tache[]> {
-
-    return this.http.get<Tache[]>(`${BASIC_URL}/Taches`).pipe(
+  getAllTache(token: string): Observable<Tache[]> {
+    console.log('Token for getAllTache:', token);
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  
+    return this.http.get<Tache[]>(`${BASIC_URL}/Taches`, { headers }).pipe(
       tap(response => {
         console.log('Raw API response:', response);
       }),
       map(response => {
-        // Handle null or undefined response
         if (!response) {
           console.warn('Empty response received from server');
           return [];
         }
-    
-        // If response is already an array, return it
+  
         if (Array.isArray(response)) {
           return response;
         }
-    
-        // If response is wrapped in a data property (common after adding related entities)
+  
         if (typeof response === 'object') {
           const possibleArrays = [
             (response as any).taches,
@@ -112,14 +157,14 @@ export class TacheService {
             (response as any).data,
             Object.values(response)[0]
           ];
-    
+  
           for (const arr of possibleArrays) {
             if (Array.isArray(arr)) {
               return arr;
             }
           }
         }
-    
+  
         console.error('Unexpected response format:', response);
         return [];
       }),
@@ -132,7 +177,7 @@ export class TacheService {
       })
     );
   }
-
+  
   getTacheById(id: number): Observable<any> {
     return this.http.get(`${BASIC_URL}/Tache/${id}`);
   }
@@ -196,9 +241,19 @@ updateStatut(id: number, statut: string): Observable<Tache> {
     );
   }
 
+  
   // Ajouter cette méthode pour forcer le rafraîchissement
   refreshTasks(): Observable<Tache[]> {
-    return this.getAllTache().pipe(
+    const currentUser = this.authService.getCurrentUser();
+  
+    if (!currentUser || !currentUser.token) {
+      console.error('Token manquant pour rafraîchir les tâches');
+      return of([]); // Or throw an error if preferred
+    }
+  
+    const token = currentUser.token;
+  
+    return this.getAllTache(token).pipe(
       tap(() => console.log('Données rafraîchies')),
       catchError(error => {
         console.error('Erreur lors du rafraîchissement des tâches:', error);
@@ -207,6 +262,7 @@ updateStatut(id: number, statut: string): Observable<Tache> {
       map((data: any[]) => data as Tache[])
     );
   }
+  
 
   public triggerRefresh() {
     this.refreshNeeded.next();
@@ -214,20 +270,37 @@ updateStatut(id: number, statut: string): Observable<Tache> {
 
 
 
-  searchTaches(query: string): Observable<Tache[]> {
-    if (!query.trim()) {
-        return this.getAllTache();
+  searchTaches(query: string, token: any): Observable<Tache[]> {
+    const currentUser = this.authService.getCurrentUser();
+  
+    if (!currentUser || !currentUser.token) {
+      console.error('Token manquant pour rechercher les tâches');
+      return of([]);
     }
+  
+ 
+  
+    if (!query.trim()) {
+      return this.getAllTache(token);
+    }
+  
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  
     return this.http.get<Tache[]>(`${BASIC_URL}/taches/search`, {
-        params: { query: query.trim() }
+      params: { query: query.trim() },
+      headers: headers
     }).pipe(
-        map(taches => this.sortSearchResults(taches, query)),
-        catchError(error => {
-            console.error('Erreur lors de la recherche:', error);
-            return of([]);
-        })
+      map(taches => this.sortSearchResults(taches, query)),
+      catchError(error => {
+        console.error('Erreur lors de la recherche:', error);
+        return of([]);
+      })
     );
   }
+  
 
   private sortSearchResults(taches: Tache[], query: string): Tache[] {
     const queryLower = query.toLowerCase();
@@ -423,50 +496,49 @@ updateStatut(id: number, statut: string): Observable<Tache> {
 
   // Méthode pour calculer les statistiques
   getTaskStatistics(): Observable<TacheStats> {
-    return this.getAllTache().pipe(
+    const currentUser = this.authService.getCurrentUser();
+  
+    if (!currentUser || !currentUser.token) {
+      console.error('Token manquant pour récupérer les statistiques des tâches');
+      return of({
+        totalTaches: 0,
+        parStatut: { 'A_FAIRE': 0, 'EN_COURS': 0, 'TERMINEE': 0 },
+        parPriorite: { 'BASSE': 0, 'MOYENNE': 0, 'HAUTE': 0 },
+        tauxCompletion: 0,
+        delaiMoyen: 0,
+        performanceParJour: []
+      });
+    }
+  
+    const token = currentUser.token;
+  
+    return this.getAllTache(token).pipe(
       map(taches => {
         const stats: TacheStats = {
           totalTaches: taches.length,
-          parStatut: {
-            'A_FAIRE': 0,
-            'EN_COURS': 0,
-            'TERMINEE': 0
-          },
-          parPriorite: {
-            'BASSE': 0,
-            'MOYENNE': 0,
-            'HAUTE': 0
-          },
+          parStatut: { 'A_FAIRE': 0, 'EN_COURS': 0, 'TERMINEE': 0 },
+          parPriorite: { 'BASSE': 0, 'MOYENNE': 0, 'HAUTE': 0 },
           tauxCompletion: 0,
           delaiMoyen: 0,
           performanceParJour: []
         };
-
-        // Calcul des statistiques
+  
         taches.forEach(tache => {
-          // Comptage par statut
           stats.parStatut[tache.statut]++;
-          
-          // Comptage par priorité
           stats.parPriorite[tache.priorite]++;
-
-          // Calcul du délai moyen pour les tâches terminées
           if (tache.statut === 'TERMINEE') {
             const debut = new Date(tache.dateDebut).getTime();
             const fin = new Date(tache.dateFin).getTime();
-            stats.delaiMoyen += (fin - debut) / (1000 * 60 * 60 * 24); // en jours
+            stats.delaiMoyen += (fin - debut) / (1000 * 60 * 60 * 24); // jours
           }
         });
-
-        // Calcul du taux de complétion
+  
         stats.tauxCompletion = (stats.parStatut['TERMINEE'] / stats.totalTaches) * 100;
-        
-        // Calcul du délai moyen final
+  
         if (stats.parStatut['TERMINEE'] > 0) {
           stats.delaiMoyen /= stats.parStatut['TERMINEE'];
         }
-
-        // Analyse de la performance par jour
+  
         const performanceMap = new Map<string, number>();
         taches
           .filter(t => t.statut === 'TERMINEE')
@@ -474,15 +546,16 @@ updateStatut(id: number, statut: string): Observable<Tache> {
             const dateStr = new Date(t.dateFin).toISOString().split('T')[0];
             performanceMap.set(dateStr, (performanceMap.get(dateStr) || 0) + 1);
           });
-
+  
         stats.performanceParJour = Array.from(performanceMap.entries())
           .map(([date, completed]) => ({ date, completed }))
           .sort((a, b) => a.date.localeCompare(b.date));
-
+  
         return stats;
       })
     );
   }
+  
 
   // Méthode pour prédire la date de fin d'une tâche
   predictTaskCompletion(tache: Tache): Observable<Date> {
@@ -508,44 +581,50 @@ updateStatut(id: number, statut: string): Observable<Tache> {
 
   // Méthode pour suggérer une priorité basée sur l'analyse
   suggestTaskPriority(description: string): Observable<'HAUTE' | 'MOYENNE' | 'BASSE'> {
+    const currentUser = this.authService.getCurrentUser();
+  
+    if (!currentUser || !currentUser.token) {
+      console.error('Token manquant pour suggérer la priorité');
+      return of('MOYENNE');
+    }
+  
+    const token = currentUser.token;
     const urgentKeywords = ['urgent', 'immédiat', 'critique', 'important'];
     const lowPriorityKeywords = ['optionnel', 'plus tard', 'quand possible'];
-    
-    return this.getAllTache().pipe(
+  
+    return this.getAllTache(token).pipe(
       map(taches => {
         const descriptionLower = description.toLowerCase();
-        
-        // Vérification des mots-clés d'urgence
+  
         if (urgentKeywords.some(keyword => descriptionLower.includes(keyword))) {
           return 'HAUTE';
         }
-        
-        // Vérification des mots-clés de basse priorité
+  
         if (lowPriorityKeywords.some(keyword => descriptionLower.includes(keyword))) {
           return 'BASSE';
         }
-        
-        // Analyse des tâches similaires
-        const similarTasks = taches.filter(t => 
+  
+        const similarTasks = taches.filter(t =>
           this.calculateSimilarity(t.description, description) > 0.5
         );
-        
+  
         if (similarTasks.length > 0) {
           const priorityCounts = similarTasks.reduce((acc, task) => {
             acc[task.priorite] = (acc[task.priorite] || 0) + 1;
             return acc;
           }, {} as Record<string, number>);
-          
+  
           const maxPriority = Object.entries(priorityCounts)
             .reduce((a, b) => a[1] > b[1] ? a : b)[0] as 'HAUTE' | 'MOYENNE' | 'BASSE';
-          
+  
           return maxPriority;
         }
-        
+  
         return 'MOYENNE';
       })
     );
   }
+  
 
   // Méthode utilitaire pour calculer la similarité entre deux textes
   private calculateSimilarity(text1: string, text2: string): number {

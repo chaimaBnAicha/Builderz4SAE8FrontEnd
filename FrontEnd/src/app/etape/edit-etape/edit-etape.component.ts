@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EtapeService, Etape } from 'src/app/service/etape.service';
 import { TacheService, Tache } from 'src/app/service/tache.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-edit-etape',
@@ -23,7 +24,8 @@ export class EditEtapeComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private etapeService: EtapeService,
-    private tacheService: TacheService
+    private tacheService: TacheService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -35,13 +37,23 @@ export class EditEtapeComponent implements OnInit {
   }
 
   loadTaches(): void {
-    this.tacheService.getAllTache().subscribe({
+    const currentUser = this.authService.getCurrentUser();
+  
+    if (!currentUser || !currentUser.token) {
+      console.error('Token manquant pour charger les tâches');
+      return;
+    }
+  
+    const token = currentUser.token;
+  
+    this.tacheService.getAllTache(token).subscribe({
       next: (data: Tache[]) => {
         this.taches = data;
       },
       error: (error) => console.error('Error loading taches:', error)
     });
   }
+  
 
   loadEtape(id: number): void {
     this.etapeService.getEtapeById(id).subscribe({

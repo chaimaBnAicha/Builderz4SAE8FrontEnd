@@ -2,6 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import { EtapeService, Etape } from 'src/app/service/etape.service';
 import { TacheService, Tache } from 'src/app/service/tache.service';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-list-etape',
@@ -16,6 +17,7 @@ export class ListEtapeComponent implements OnInit, OnChanges {
   constructor(
     private etapeService: EtapeService,
     private tacheService: TacheService,
+    private authService: AuthService,
     private route: ActivatedRoute
   ) {}
 /*
@@ -111,7 +113,16 @@ filterEtapesByTache(tacheId: number) {
   });
 }
 loadTaches(): void {
-  this.tacheService.getAllTache().subscribe({
+  const currentUser = this.authService.getCurrentUser();
+
+  if (!currentUser || !currentUser.token) {
+    console.error('Token manquant pour charger les tâches');
+    return;
+  }
+
+  const token = currentUser.token;
+
+  this.tacheService.getAllTache(token).subscribe({
     next: (data: Tache[]) => {
       this.taches = data;
     },
@@ -119,7 +130,18 @@ loadTaches(): void {
       console.error('Error loading taches:', error);
     }
   });
-} loadEtapesForTache(tacheId: number) {
+}
+
+loadEtapesForTache(tacheId: number) {
+  const currentUser = this.authService.getCurrentUser();
+
+  if (!currentUser || !currentUser.token) {
+    console.error('Token manquant pour charger les étapes');
+    return;
+  }
+
+  const token = currentUser.token;
+
   this.etapeService.getEtapesByTacheId(tacheId).subscribe({
     next: (data: Etape[]) => {
       console.log(`Loading etapes for tache ${tacheId}:`, data);
@@ -131,6 +153,7 @@ loadTaches(): void {
     }
   });
 }
+
 
   getTacheName(tacheId: number | undefined): string {
     if (!tacheId) return 'N/A';

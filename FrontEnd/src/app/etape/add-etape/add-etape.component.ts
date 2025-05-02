@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EtapeService, Etape } from 'src/app/service/etape.service';
 import { TacheService, Tache } from 'src/app/service/tache.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-add-etape',
@@ -20,7 +21,8 @@ export class AddEtapeComponent implements OnInit {
 
   constructor(
     private etapeService: EtapeService,
-    private tacheService: TacheService
+    private tacheService: TacheService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -28,16 +30,23 @@ export class AddEtapeComponent implements OnInit {
   }
 
   loadTaches(): void {
-    this.tacheService.getAllTache().subscribe({
+    const currentUser = this.authService.getCurrentUser();
+  
+    if (!currentUser || !currentUser.token) {
+      console.error('Token manquant pour charger les tâches');
+      return;
+    }
+  
+    const token = currentUser.token;
+  
+    this.tacheService.getAllTache(token).subscribe({
       next: (data: Tache[]) => {
         this.taches = data;
-        console.log('Taches loaded:', this.taches);
       },
-      error: (error: Error) => {
-        console.error('Error loading taches:', error);
-      }
+      error: (error) => console.error('Error loading taches:', error)
     });
   }
+  
 
   getTacheName(tacheId: number | undefined): string {
     if (!tacheId) return 'N/A';

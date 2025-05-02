@@ -56,6 +56,8 @@ import { BarChartComponent } from './BackOffice/AdvanceCharts/bar-chart/bar-char
 import { SinusoidalComponent } from './BackOffice/AdvanceCharts/sinusoidal/sinusoidal.component';
 import { LeaveBackComponent } from './BackOffice/Leave/leave-back/leave-back.component';
 import { LeaveCalendarComponent } from './BackOffice/Leave/leave-calendar/leave-calendar.component';
+import { StockComponent } from './BackOffice/stock/stock.component';
+import { StockEditComponent } from './BackOffice/stock/stock-edit/stock-edit.component';
 
 // Define your routes
 const routes: Routes = [
@@ -135,6 +137,9 @@ const routes: Routes = [
          {path:'app-sinusoidal',component:SinusoidalComponent},
          { path: 'leaves', component: LeaveBackComponent },
          { path: 'leave-calendar', component: LeaveCalendarComponent },
+         { path: 'stock',          component: StockComponent },
+         { path: 'stock/edit/:id', component: StockEditComponent },
+         { path: 'bill',           loadChildren: () => import('./BackOffice/bill/bill.module').then(m => m.BillModule) },
        
       // Add other backoffice child routes here
       { path: '', redirectTo: 'home', pathMatch: 'full' }, // Default route under admin layout
