@@ -42,12 +42,12 @@ By following this project, you will learn:
 
 
 
-
+#Esprit_school_of_engineering
 ##Contributors
 
 Oumayma Hasnaoui : Task Management Module 
 
-Oumayma Hasnaoui : Stage Management Module 
+Oumayma Hasnaoui : Step Management Module 
 
 Chaima Ben Aicha : Project Request Management Module 
 
